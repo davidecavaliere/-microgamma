@@ -3,6 +3,7 @@ import test from 'ava';
 import { getLambdaMetadata, getLambdaMetadataFromClass, Lambda, LambdaOptions } from './lambda.decorator';
 import { Endpoint } from '../../';
 import { bootstrap } from '../index';
+import { Injectable } from '@microgamma/digator';
 
 const option1: LambdaOptions = {
   method: 'get',
@@ -19,7 +20,9 @@ const option2: LambdaOptions = {
 @Endpoint({
   name: 'endpoint'
 })
+@Injectable()
 class TestClass {
+
   public readonly toTestAccessToInstance: string = 'base';
 
   @Lambda(option1)

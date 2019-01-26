@@ -4,6 +4,7 @@ import 'reflect-metadata';
 import { APIGatewayEvent } from 'aws-lambda';
 import { getArguments } from '../utils';
 import { getDebugger } from '@microgamma/loggator';
+import { getSingleton } from '@microgamma/digator';
 
 const d = getDebugger('microgamma:apigator:lambda');
 
@@ -54,7 +55,6 @@ export function Lambda(options: LambdaOptions) {
     const originalFunction = descriptor.value;
     const functionArgumentsNames = getArguments(originalFunction);
 
-    // real framework that is being used to ran the function
     descriptor.value = async function () {
       const args = arguments;
 
@@ -94,7 +94,7 @@ export function Lambda(options: LambdaOptions) {
        */
       d('actual args are: ', args);
 
-      const instance = this;
+      const instance = getSingleton(target.constructor);
       d('current instance is:', instance);
 
       const methodMetadata = getLambdaMetadata(instance);

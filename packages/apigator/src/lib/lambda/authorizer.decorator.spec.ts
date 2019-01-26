@@ -20,7 +20,9 @@ const option2: LambdaOptions = {
 @Endpoint({
   name: 'endpoint'
 })
+@Injectable()
 class TestClass {
+
   public readonly toTestAccessToInstance: string = 'base';
 
   @Lambda(option1)

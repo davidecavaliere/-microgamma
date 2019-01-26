@@ -24,6 +24,11 @@ export function Inject(classDef): PropertyDecorator {
 
 export function getSingleton(className) {
 
+  const name = typeof className === 'string' ? className : className.name;
+
+  d('searching singleton for', className);
+
+
   if (!singletons[className.name]) {
     d( `${className.name} singleton not found. creating....`);
     singletons[className.name] = new className();

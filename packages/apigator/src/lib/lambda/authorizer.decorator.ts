@@ -3,6 +3,7 @@
 import 'reflect-metadata';
 import { CustomAuthorizerEvent, CustomAuthorizerResult } from 'aws-lambda';
 import { getDebugger } from '@microgamma/loggator';
+import { getSingleton } from '@microgamma/digator';
 
 const d = getDebugger('microgamma:apigator:authorizer');
 
@@ -15,8 +16,7 @@ export interface AuthorizerOptions {
 export function Authorizer(options?: AuthorizerOptions) {
   d('constructing a class decorator', options);
   return (target: any, key: string, descriptor) => {
-    d('decorating method');
-    d('target', target);
+    d('target', target.constructor.name);
     d('function name', key);
     d('descriptor', descriptor);
 
@@ -31,7 +31,7 @@ export function Authorizer(options?: AuthorizerOptions) {
       const args = arguments;
 
       try {
-        const instance = this;
+        const instance = getSingleton(target.constructor);
         d('current instance is:', instance);
 
         d('original args are', args);
