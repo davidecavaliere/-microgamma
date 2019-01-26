@@ -1,6 +1,6 @@
 {
   "name": "@microgamma/digator",
-  "version": "1.10.8",
+  "version": "1.10.10",
   "description": "run your api code everywhere",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
