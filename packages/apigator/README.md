@@ -2,20 +2,34 @@
 
 This project is mean to make more elegant api endpoint using typescript classes and decorators.
 
-This is still under heavy development.  Anything may change at any time!
+## What is does
+
+- extracts variables from `event`. Doesn't matter if they're in the body or in the header or path: just put the variable's name you wan to retrieve as an argument of the function.
+- bear in mind that the option object passed to the @Lambda decorator do not have any effect if you don't use the serverless framework.  
 
 
-Any help is very welcome. If you'd like to contribute please get in touch <cavaliere.davide@gmail.com>
+## How to use
+`npm i -S @microgamma/apigator`
 
-Ideas:
-  - define your endpoints as a class annotating it to provide configuration
-  - define lambdas as methods of a class and annotate them to provide configuration
-  - lambdas are automatically wrapped into a promise
-  - automatic error handling
-  - path and query parameters are automatically injected into the lambda
-  - support for parameters validation
+```
+// handler.ts
 
+export class MyService {
 
+  @Lambda({
+    name: 'findAll',
+    path: '/{name}',
+    method: 'GET'
+  })
+  public async hello(name) {
+    return `Hello ${name}`;
+  }
+}
 
+module.exports = new MyService();
 
+// in this case handler would be handler.hello
+```
+
+compile your ts file and upload it to aws.
 
