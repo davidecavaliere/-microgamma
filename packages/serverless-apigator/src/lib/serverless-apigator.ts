@@ -29,44 +29,14 @@ export class ServerlessApigator {
     'before:info:info': () => {
       debug('offline:init');
       return this.configureFunctions();
-    },
-
-    'before:package:createDeploymentArtifacts': () => {
-      debug('this runs before packaging');
-      if (this.serverless.service.custom.npmModulePath) {
-        this.serverless.config.servicePath = this.serverless.service.custom.npmModulePath;
-        debug('servicePath set to', this.serverless.config.servicePath);
-      }
-    },
-    'after:package:createDeploymentArtifacts': () => {
-      debug('this runs after packaging');
-
-      // now zip package has been created in npmModulePath. need to move it to
-      // original servicePath
-
-      if (this.serverless.service.custom.npmModulePath) {
-        this.serverless.config.servicePath = this.servicePath;
-        debug('servicePath set to', this.serverless.config.servicePath);
-        debug('package path', this.serverless.service.package.path);
-
-        return this.copyPackages();
-      }
-
-      return true;
-    },
-
-    'after:package:finalize': () => {
-      debug('this runs after package:finalize');
-      debug('servicePath set to', this.serverless.config.servicePath);
-
     }
+
   };
 
   private servicePath: string;
   private entrypoint: string;
   private serviceName: string;
   private buildFolder: string;
-  private serviceDef: string;
 
   constructor(private serverless: any, private options: any = {}) {
 
@@ -78,9 +48,6 @@ export class ServerlessApigator {
 
     this.buildFolder = customOptions.buildFolder;
     debug('build folder', this.buildFolder);
-
-    this.serviceDef = customOptions.service;
-    debug('service def', this.serviceDef);
 
     const awsService = serverless.service.service;
     this.serviceName = awsService;
@@ -94,10 +61,6 @@ export class ServerlessApigator {
     this.entrypoint = serverless.service.custom.entrypoint;
     debug('entrypoint', this.entrypoint);
 
-  }
-
-  public async copyPackages() {
-    await fs.copy(this.serverless.service.custom.npmModulePath + '/.serverless', this.servicePath + '/.serverless');
   }
 
   public async configureFunctions(forDeployment = false) {
