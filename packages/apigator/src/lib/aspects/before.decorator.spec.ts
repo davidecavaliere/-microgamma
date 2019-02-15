@@ -1,41 +1,47 @@
 // tslint:disable:no-expression-statement no-object-mutation
-import { Permission, PermissionOptions } from './permission.decorator';
 
-const option1: PermissionOptions = {
-  allow: async (arg1, arg2, arg3) => {
-    console.log('checking permission', arg1, arg2, arg3);
-    return true;
-  }
-};
+import { getDebugger } from '@microgamma/loggator';
+
+const d = getDebugger('microgamma:aspects:before:spec');
+
+import { Before } from './before.decorator';
 
 class TestClass {
-  public readonly toTestAccessToInstance: string = 'base';
 
-  @Permission(option1)
+  @Before(TestClass.beforeFindAll)
   public async findAll(arg1, arg2, arg3) {
-    // console.log('running original findAll()');
-    return this.toTestAccessToInstance + arg1 + arg2 + arg3;
+    d('running findAll()');
+    d('arguments are', arg1, arg2, arg3);
+    return arg1 + 'a' + arg2 + 'b' + arg3 + 'c';
   }
 
-  // @Permission(option2)
-  // public async findOne() {
-  //   return 1;
-  // }
+  public static async beforeFindAll(arg1, arg2, arg3) {
+
+    d('running beforeFindAll()');
+    d('arguments are', arg1, arg2, arg3);
+    return ['a' + arg1, 'b' + arg2, 'c' + arg3];
+  }
+
 }
 
 
-describe('permission decorator', () => {
+describe('before decorator', () => {
   let instance: TestClass;
 
   beforeEach(() => {
     instance = new TestClass();
+    spyOn(instance, 'findAll').and.callThrough();
   });
 
-  it('findAll method should return 2: promised', async () => {
+  it('findAll method should ', async () => {
 
     const retValue = await instance.findAll.apply(instance, [1, 2, 3]);
 
-    expect(retValue).toEqual('base123');
+    // apparently the spy still sees the function to be called with the original
+    // arguments!
+    expect(instance.findAll).toHaveBeenCalledWith(1, 2, 3);
+
+    expect(retValue).toEqual('a1ab2bc3c');
   });
 
 
@@ -58,12 +64,12 @@ describe('permission decorator', () => {
 
 // test('should store some metadata', t => {
 //
-//   t.deepEqual(getPermissionMetadata(instance), [option1, option2]);
+//   t.deepEqual(getBeforeMetadata(instance), [option1, option2]);
 //
 // });
 //
 // test('should get metadata from class', (t) => {
 //
-//   t.deepEqual(getPermissionMetadataFromClass(TestClass), [option1, option2]);
+//   t.deepEqual(getBeforeMetadataFromClass(TestClass), [option1, option2]);
 //
 // });

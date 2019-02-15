@@ -38,6 +38,7 @@
   "dependencies": {
     "@microgamma/apigator": "^1.10.10",
     "@microgamma/loggator": "^1.10.3",
+    "@types/aws-sdk": "^2.7.0",
     "fs-extra": "^7.0.1",
     "reflect-metadata": "^0.1.12"
   },

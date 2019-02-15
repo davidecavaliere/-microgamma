@@ -1055,44 +1055,6 @@
     libnpm "^2.0.1"
     write-file-atomic "^2.3.0"
 
-"@microgamma/apigator@file:packages/apigator":
-  version "1.10.8"
-  dependencies:
-    "@microgamma/digator" "^1.10.8"
-    "@microgamma/loggator" "^1.10.3"
-    "@types/aws-lambda" "^8.10.11"
-    reflect-metadata "^0.1.12"
-    rxjs "^6.3.3"
-
-"@microgamma/datagator@file:packages/datagator":
-  version "1.10.8"
-  dependencies:
-    "@microgamma/loggator" "^1.10.3"
-    "@types/mongodb" "^3.1.18"
-    mongodb "^3.1.10"
-    reflect-metadata "^0.1.12"
-
-"@microgamma/digator@file:packages/digator":
-  version "1.10.8"
-  dependencies:
-    "@microgamma/loggator" "^1.10.3"
-    reflect-metadata "^0.1.12"
-
-"@microgamma/loggator@file:packages/loggator":
-  version "1.10.3"
-  dependencies:
-    "@types/debug" "^0.0.30"
-    debug "^4.1.1"
-    reflect-metadata "^0.1.12"
-
-"@microgamma/serverless-apigator@file:packages/serverless-apigator":
-  version "1.10.8"
-  dependencies:
-    "@microgamma/apigator" "^1.10.8"
-    "@microgamma/loggator" "^1.10.3"
-    fs-extra "^7.0.1"
-    reflect-metadata "^0.1.12"
-
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@mrmlnc/readdir-enhanced/-/readdir-enhanced-2.2.1.tgz#524af240d1a360527b730475ecfa1344aa540dde"
@@ -1162,6 +1124,13 @@
   version "8.10.17"
   resolved "https://registry.yarnpkg.com/@types/aws-lambda/-/aws-lambda-8.10.17.tgz#bbe458225bab095c3e313115182f31f072474940"
   integrity sha512-KV/9fMAvv5428/v4+AP4nDOfSB4sJIBOGgBtv5YbuQVaAEapL1/Bc8IyACZ48Q3hYukVFjzAdVFq94zTxyd5Yw==
+
+"@types/aws-sdk@^2.7.0":
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/@types/aws-sdk/-/aws-sdk-2.7.0.tgz#83588b3d14ebdca1d4ce5e023387577568ce82f3"
+  integrity sha1-g1iLPRTr3KHUzl4CM4dXdWjOgvM=
+  dependencies:
+    aws-sdk "*"
 
 "@types/bson@*":
   version "1.0.11"
@@ -1827,6 +1796,21 @@ ava@^1.0.0-beta.5.1:
     trim-right "^1.0.1"
     unique-temp-dir "^1.0.0"
     update-notifier "^2.5.0"
+
+aws-sdk@*:
+  version "2.395.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.395.0.tgz#637e5fa06d69bfb923b17bde24a8bd2a74dedab3"
+  integrity sha512-ldTTjctniZT4E2lq2z3D8Y2u+vpkp+laoEnDkXgjKXTKbiJ0QEtfWsUdx/IQ7awCt8stoxyqZK47DJOxIbRNoA==
+  dependencies:
+    buffer "4.9.1"
+    events "1.1.1"
+    ieee754 "1.1.8"
+    jmespath "0.15.0"
+    querystring "0.2.0"
+    sax "1.2.1"
+    url "0.10.3"
+    uuid "3.3.2"
+    xml2js "0.4.19"
 
 aws-sdk@^2.373.0:
   version "2.387.0"
