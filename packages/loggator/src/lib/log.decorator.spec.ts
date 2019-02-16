@@ -40,6 +40,10 @@ class TestClassNS3 {
   constructor() {
     this.$l.d('test 3nd ns');
   }
+
+  public logAnObject() {
+    return this.$l.d('this is an object', { a: 'a', b: 'b' });
+  }
 }
 
 let instance3: TestClassNS3;
