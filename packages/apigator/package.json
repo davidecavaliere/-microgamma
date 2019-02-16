@@ -1,6 +1,6 @@
 {
   "name": "@microgamma/apigator",
-  "version": "1.10.13",
+  "version": "1.10.14",
   "description": "run your api code everywhere",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -32,8 +32,8 @@
     "prepare-release": "run-s all version doc:publish"
   },
   "dependencies": {
-    "@microgamma/digator": "^1.10.13",
-    "@microgamma/loggator": "^1.10.13",
+    "@microgamma/digator": "^1.10.14",
+    "@microgamma/loggator": "^1.10.14",
     "@types/aws-lambda": "^8.10.11",
     "reflect-metadata": "^0.1.12",
     "rxjs": "^6.3.3"

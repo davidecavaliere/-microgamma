@@ -1,6 +1,6 @@
 {
   "name": "@microgamma/datagator",
-  "version": "1.10.13",
+  "version": "1.10.14",
   "description": "> TODO: description",
   "author": "Davide Cavaliere <cavaliere.davide@gmail.com>",
   "homepage": "https://github.com/davidecavaliere/apigator#readme",
@@ -57,7 +57,7 @@
     "node": ">=8.9"
   },
   "dependencies": {
-    "@microgamma/loggator": "^1.10.13",
+    "@microgamma/loggator": "^1.10.14",
     "@types/mongodb": "^3.1.18",
     "mongodb": "^3.1.10",
     "reflect-metadata": "^0.1.12"
