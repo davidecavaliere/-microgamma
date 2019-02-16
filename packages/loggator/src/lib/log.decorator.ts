@@ -27,7 +27,7 @@ export function Log(subspace?: string) {
         const loggerFn: IDebugger = getDebugger(ns);
 
         // @ts-ignore
-        return loggerFn.apply(null, args);
+        return loggerFn.apply(null, ...args);
       }
     };
   }
