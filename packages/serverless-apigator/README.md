@@ -1,4 +1,4 @@
-# serverless-apigator
+# @microgamma/serverless-apigator
 
 Serverless plugin to simplify and make more elegant aws lambda development in typescript and automatically handle serverless' configuration file.
 

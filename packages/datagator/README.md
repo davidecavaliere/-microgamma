@@ -1,4 +1,4 @@
-# `datagator`
+# @microgamma/datagator
 
 > TODO: description
 
