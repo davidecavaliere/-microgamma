@@ -1,6 +1,6 @@
 {
   "name": "@microgamma/apigator",
-  "version": "1.10.17",
+  "version": "1.10.18",
   "description": "syntactic sugar for λ",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -18,7 +18,13 @@
   },
   "homepage": "https://github.com/davidecavaliere/-microgamma/tree/master/packages/apigator",
   "license": "MIT",
-  "keywords": ["typescript", "decorator", "lambda", "api", "endpoint"],
+  "keywords": [
+    "typescript",
+    "decorator",
+    "lambda",
+    "api",
+    "endpoint"
+  ],
   "scripts": {
     "prebuild": "run-s clean",
     "build": "tsc -p tsconfig.json",

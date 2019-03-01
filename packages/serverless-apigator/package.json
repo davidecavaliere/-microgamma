@@ -1,6 +1,6 @@
 {
   "name": "@microgamma/serverless-apigator",
-  "version": "1.10.17",
+  "version": "1.10.18",
   "description": "serverless plugin to write configuration using typescript's decorators",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -12,7 +12,14 @@
     "lib"
   ],
   "license": "MIT",
-  "keywords": ["serverless", "serverless framework", "typescript", "decorator", "inversion of control", "ioc"],
+  "keywords": [
+    "serverless",
+    "serverless framework",
+    "typescript",
+    "decorator",
+    "inversion of control",
+    "ioc"
+  ],
   "author": {
     "email": "cavaliere.davide@gmail.com",
     "name": "Davide Cavaliere",

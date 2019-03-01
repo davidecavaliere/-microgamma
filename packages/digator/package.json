@@ -1,6 +1,6 @@
 {
   "name": "@microgamma/digator",
-  "version": "1.10.16",
+  "version": "1.10.18",
   "description": "easiest simplest dependency injection container around",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -12,7 +12,12 @@
     "lib"
   ],
   "license": "MIT",
-  "keywords": ["typescirpt", "decorator", "dependency injection", "di container"],
+  "keywords": [
+    "typescirpt",
+    "decorator",
+    "dependency injection",
+    "di container"
+  ],
   "author": {
     "email": "cavaliere.davide@gmail.com",
     "name": "Davide Cavaliere",

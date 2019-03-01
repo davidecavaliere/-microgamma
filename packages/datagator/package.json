@@ -1,6 +1,6 @@
 {
   "name": "@microgamma/datagator",
-  "version": "1.10.17",
+  "version": "1.10.18",
   "description": "syntactic sugar for mongodb",
   "author": {
     "email": "cavaliere.davide@gmail.com",
@@ -12,7 +12,12 @@
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "module": "lib/index.js",
-  "keywords": ["typescript", "mongodb", "decorator", "orm"],
+  "keywords": [
+    "typescript",
+    "mongodb",
+    "decorator",
+    "orm"
+  ],
   "scripts": {
     "info": "npm-scripts-info",
     "build": "run-s clean && run-p build:*",
