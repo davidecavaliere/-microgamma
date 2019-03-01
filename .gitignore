@@ -4,6 +4,7 @@ node_modules
 packages/*/lib
 packages/**/coverage
 packages/**/.nyc_output
+packages/**/coverage.*
 lerna-debug.log
 packages/**/yarn-error.log
 yarn-error.log
