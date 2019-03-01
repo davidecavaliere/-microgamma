@@ -9,7 +9,7 @@
     "info": "npm-scripts-info",
     "prebuild": "run-s clean",
     "build": "tsc -b packages/*",
-    "clean": "trash packages/*/lib",
+    "clean": "trash packages/*/lib coverage",
     "pretest": "run-s build",
     "test": "run-s test:lint test:unit",
     "test:unit": "jest --coverage",
@@ -82,8 +82,8 @@
       "default"
     ],
     "coverageReporters": [
-      "json",
-      "html"
+      "html",
+      "lcov"
     ],
     "collectCoverageFrom": [
       "**/*.ts",
