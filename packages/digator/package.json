@@ -1,7 +1,7 @@
 {
   "name": "@microgamma/digator",
   "version": "1.10.16",
-  "description": "run your api code everywhere",
+  "description": "easiest simplest dependency injection container around",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "module": "lib/index.js",
@@ -12,7 +12,13 @@
     "lib"
   ],
   "license": "MIT",
-  "keywords": [],
+  "keywords": ["typescirpt", "decorator", "dependency injection", "di container"],
+  "author": {
+    "email": "cavaliere.davide@gmail.com",
+    "name": "Davide Cavaliere",
+    "url": "www.dcsoftware.io"
+  },
+  "homepage": "https://github.com/davidecavaliere/-microgamma/tree/master/packages/apigator",
   "scripts": {
     "prebuild": "run-s clean",
     "build": "tsc -p tsconfig.json",

@@ -1,7 +1,7 @@
 {
   "name": "@microgamma/apigator",
   "version": "1.10.17",
-  "description": "run your api code everywhere",
+  "description": "syntactic sugar for λ",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "module": "lib/index.js",
@@ -11,8 +11,14 @@
   "files": [
     "lib"
   ],
+  "author": {
+    "email": "cavaliere.davide@gmail.com",
+    "name": "Davide Cavaliere",
+    "url": "www.dcsoftware.io"
+  },
+  "homepage": "https://github.com/davidecavaliere/-microgamma/tree/master/packages/apigator",
   "license": "MIT",
-  "keywords": [],
+  "keywords": ["typescript", "decorator", "lambda", "api", "endpoint"],
   "scripts": {
     "prebuild": "run-s clean",
     "build": "tsc -p tsconfig.json",

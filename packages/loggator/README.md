@@ -1,1 +1,1 @@
-# loggator
+# loggator [![npm version](https://badge.fury.io/js/%40microgamma%2Floggator.svg)](https://badge.fury.io/js/%40microgamma%2Floggator)

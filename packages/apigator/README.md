@@ -1,4 +1,4 @@
-# @microgamma/apigator
+# @microgamma/apigator [![npm version](https://badge.fury.io/js/%40microgamma%2Fapigator.svg)](https://badge.fury.io/js/%40microgamma%2Fapigator)
 
 This project is mean to make more elegant api endpoint using typescript classes and decorators.
 

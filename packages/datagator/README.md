@@ -1,4 +1,4 @@
-# @microgamma/datagator
+# @microgamma/datagator [![npm version](https://badge.fury.io/js/%40microgamma%2Fdatagator.svg)](https://badge.fury.io/js/%40microgamma%2Fdatagator)
 
 > TODO: description
 

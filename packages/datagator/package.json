@@ -1,17 +1,18 @@
 {
   "name": "@microgamma/datagator",
   "version": "1.10.17",
-  "description": "> TODO: description",
-  "author": "Davide Cavaliere <cavaliere.davide@gmail.com>",
-  "homepage": "https://github.com/davidecavaliere/apigator#readme",
+  "description": "syntactic sugar for mongodb",
+  "author": {
+    "email": "cavaliere.davide@gmail.com",
+    "name": "Davide Cavaliere",
+    "url": "www.dcsoftware.io"
+  },
+  "homepage": "https://github.com/davidecavaliere/-microgamma/tree/master/packages/datagator",
   "license": "MIT",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "module": "lib/index.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/davidecavaliere/apigator.git"
-  },
+  "keywords": ["typescript", "mongodb", "decorator", "orm"],
   "scripts": {
     "info": "npm-scripts-info",
     "build": "run-s clean && run-p build:*",

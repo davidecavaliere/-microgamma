@@ -1,7 +1,7 @@
 {
   "name": "@microgamma/loggator",
   "version": "1.10.16",
-  "description": "typescript decorator for easy log",
+  "description": "visionmedia/debug wrapped like a candy for typescript",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "module": "lib/index.js",
@@ -12,7 +12,13 @@
     "lib"
   ],
   "license": "MIT",
-  "keywords": [],
+  "keywords": ["log", "debug", "typescript", "decorator"],
+  "author": {
+    "email": "cavaliere.davide@gmail.com",
+    "name": "Davide Cavaliere",
+    "url": "www.dcsoftware.io"
+  },
+  "homepage": "https://github.com/davidecavaliere/-microgamma/tree/master/packages/loggator",
   "scripts": {
     "info": "npm-scripts-info",
     "build": "run-s clean && run-p build:*",
