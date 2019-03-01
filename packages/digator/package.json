@@ -22,7 +22,7 @@
     "test:watch": "jest --watch",
     "test:unit:debug": "node --inspect  jest --watch",
     "watch": "run-s clean build && run-p \"build -- -w\" \"test:watch\"",
-    "cov": "run-s build test:unit cov:html && opn coverage/index.html",
+    "cov:send": "codecov -F digator",
     "doc": "run-s doc:html && opn build/docs/index.html",
     "doc:html": "typedoc src/ --target ES6 --mode file --out build/docs",
     "doc:json": "typedoc src/ --target ES6 --mode file --json build/docs/typedoc.json",

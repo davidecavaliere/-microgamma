@@ -16,7 +16,8 @@
     "test:unit": "lerna run test:unit --parallel",
     "prerelease": "run-s build",
     "release": "lerna version",
-    "publish:changed": "lerna publish from-package"
+    "publish:changed": "lerna publish from-package",
+    "cov:send": "lerna run cov:send"
   },
   "engines": {
     "node": ">=8.9"
