@@ -2,7 +2,6 @@
 
 import { ServerlessApigator } from './serverless-apigator';
 import { Authorizer, bootstrap, Endpoint, EndpointOptions, Lambda, LambdaOptions } from '@microgamma/apigator';
-import * as Sinon from 'sinon';
 
 const d = console.log;
 
@@ -66,8 +65,7 @@ describe('ServerlessApigator Plugin', () => {
 
     plugin = new ServerlessApigator(serverless, { stage: 'test' });
 
-    // @ts-ignore
-    Sinon.stub(plugin, 'importModule').callsFake(async () => {
+    spyOn(plugin, 'importModule').and.callFake(async () => {
       return { default: TestClass };
 
     });
@@ -85,7 +83,7 @@ describe('ServerlessApigator Plugin', () => {
     expect(plugin.serviceName).toEqual(serverless.service.service);
   });
 
-  it('should set entrypoint path', () => {
+  it('should set entry point path', () => {
     expect(plugin.entrypoint).toEqual(serverless.service.custom.entrypoint);
   });
 
