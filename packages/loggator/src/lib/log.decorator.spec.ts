@@ -1,7 +1,5 @@
 // tslint:disable:no-expression-statement, max-classes-per-file
 import { Log, setNamespace } from './log.decorator';
-import 'reflect-metadata';
-import test from 'ava';
 
 
 setNamespace('myNamespace');
@@ -46,15 +44,21 @@ class TestClassNS3 {
   }
 }
 
-let instance3: TestClassNS3;
+describe('@Log', () => {
 
-test.beforeEach(() => {
-  instance = new TestClass();
-  instance2 = new TestClassNS2();
-  instance3 = new TestClassNS3();
-});
+  let instance3: TestClassNS3;
 
-test('log decorator', t => {
-  t.is(true, true);
+  beforeEach(() => {
+    instance = new TestClass();
+    instance2 = new TestClassNS2();
+    instance3 = new TestClassNS3();
+  });
+
+  it('log decorator', () => {
+    expect(instance).toBeTruthy();
+    expect(instance2).toBeTruthy();
+    expect(instance3).toBeTruthy();
+
+  });
 
 });

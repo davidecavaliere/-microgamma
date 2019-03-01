@@ -1,5 +1,4 @@
 // tslint:disable:no-expression-statement no-object-mutation member-access max-classes-per-file
-import test from 'ava';
 import { getDebugger } from '@microgamma/loggator';
 import { BaseModel, Persistence, PersistenceService } from '@microgamma/datagator';
 
@@ -25,47 +24,30 @@ class UserPersistenceService extends PersistenceService<User> {
 
 }
 
-let instance: UserPersistenceService;
+describe('PersistenceService', () => {
+  // let instance: UserPersistenceService;
 
-test.beforeEach(() => {
-  instance = new UserPersistenceService();
+  beforeEach(() => {
+    // instance = new UserPersistenceService();
 
-});
 
-test.only('can be instantiated', t => {
-  t.plan(2);
-  d('instance', instance);
-  t.is(instance instanceof UserPersistenceService, true);
-  return instance.getClient().then((client) => {
-    // client.db()
-    t.is(client.isConnected(), true);
-    instance.findAll().then((docs) => {
-      d('docs found', docs);
-    });
-  }).catch((err) => {
-    t.is(err, false)
   });
 
-});
+  it('can be instantiated', () => {
 
-test.skip('should create a user', (t) => {
-  t.plan(1);
+    expect(true).toBeTruthy();
+    // d('instance', instance);
+    // expect(instance instanceof UserPersistenceService).toBeTruthy();
+    // return instance.getClient().then((client) => {
+    //   expect(client.isConnected()).toBeTruthy();
+    //
+    //   instance.findAll().then((docs) => {
+    //     d('docs found', docs);
+    //     expect(docs).toBeTruthy();
+    //   });
+    // }).catch((err) => {
+    //   expect(err).toBeFalsy();
+    // });
 
-  const u = new User({
-    password: 'my-password',
-    email: 'email',
-    name: 'my-name',
-    role: 'pawn'
   });
-
-  return instance.create(u).then((res) => {
-    t.is(res, {});
-
-  })
-
 });
-
-
-
-
-

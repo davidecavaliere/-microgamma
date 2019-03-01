@@ -1,6 +1,5 @@
 // tslint:disable:no-expression-statement no-object-mutation
 
-import test from 'ava';
 import { ServerlessApigator } from './serverless-apigator';
 import { Authorizer, bootstrap, Endpoint, EndpointOptions, Lambda, LambdaOptions } from '@microgamma/apigator';
 import * as Sinon from 'sinon';
@@ -22,10 +21,6 @@ const serverless = {
     functions: {}
   }
 };
-
-let plugin;
-
-let myModule;
 
 
 const options: EndpointOptions = {
@@ -59,109 +54,115 @@ class TestClass {
 }
 
 
-test.beforeEach((t) => {
-  myModule = bootstrap(TestClass);
 
-  plugin = new ServerlessApigator(serverless, { stage: 'test' });
+describe('ServerlessApigator Plugin', () => {
 
-  // @ts-ignore
-  Sinon.stub(plugin, 'importModule').callsFake(async () => {
-    return { default: TestClass };
+  let plugin;
 
-  });
-});
+  let myModule;
 
-test('serverless-apigator', (t) => {
-  t.is(plugin instanceof ServerlessApigator, true);
-});
+  beforeEach(() => {
+    myModule = bootstrap(TestClass);
 
-test('should set the servicePath', (t) => {
-  t.deepEqual(plugin.servicePath, serverless.config.servicePath);
-});
+    plugin = new ServerlessApigator(serverless, { stage: 'test' });
 
-test('should set service name', (t) => {
-  t.deepEqual(plugin.serviceName, serverless.service.service);
-});
+    // @ts-ignore
+    Sinon.stub(plugin, 'importModule').callsFake(async () => {
+      return { default: TestClass };
 
-test('should set entrypoint path', (t) => {
-  t.deepEqual(plugin.entrypoint, serverless.service.custom.entrypoint);
-});
-
-test('#addFunctionToService', (t) => {
-  plugin.addFunctionToService({
-    name: 'my-endpoint',
-    basePath: 'root'
-  }, {
-    method: 'get',
-    name: 'my-lambda',
-    path: '/:id'
+    });
   });
 
-  t.deepEqual(serverless.service.functions['my-lambda'], {
-    name: 'my-service-test-my-lambda',
-    handler: 'my-entrypoint.my-lambda',
-    events: [{
-      http: {
-        path: 'root/:id',
-        method: 'get',
-        integration: 'lambda',
-        cors: true,
-        private: false
-      }
-    }]
+  it('serverless-apigator', () => {
+    expect(plugin instanceof ServerlessApigator).toBeTruthy();
   });
-});
 
-test('#configureFunctions', (t) => {
-  t.plan(1);
-  return plugin.configureFunctions().then(() => {
+  it('should set the servicePath', () => {
+    expect(plugin.servicePath).toEqual(serverless.config.servicePath);
+  });
 
-    d('here we have the functions');
-    t.deepEqual(serverless.service.functions['lambda-name-1'], {
-      name: 'my-service-test-lambda-name-1',
-      handler: 'my-entrypoint.lambda-name-1',
+  it('should set service name', () => {
+    expect(plugin.serviceName).toEqual(serverless.service.service);
+  });
+
+  it('should set entrypoint path', () => {
+    expect(plugin.entrypoint).toEqual(serverless.service.custom.entrypoint);
+  });
+
+  it('#addFunctionToService', () => {
+    plugin.addFunctionToService({
+      name: 'my-endpoint',
+      basePath: 'root'
+    }, {
+      method: 'get',
+      name: 'my-lambda',
+      path: '/:id'
+    });
+
+    expect(serverless.service.functions['my-lambda']).toEqual({
+      name: 'my-service-test-my-lambda',
+      handler: 'my-entrypoint.my-lambda',
       events: [{
         http: {
-          path: '/',
+          path: 'root/:id',
           method: 'get',
           integration: 'lambda',
           cors: true,
           private: false
         }
       }]
-    })
-
-  }).catch((err) => {
-    console.log(err);
+    });
   });
-});
 
-test('function with only name should have empty event array', (t) => {
-  t.plan(1);
-  return plugin.configureFunctions().then(() => {
+  it('#configureFunctions', (done) => {
+    return plugin.configureFunctions().then(() => {
 
-    t.deepEqual(serverless.service.functions['name'], {
-      name: 'my-service-test-name',
-      handler: 'my-entrypoint.name',
-      events: []
-    })
-
-  }).catch((err) => {
-    console.log(err);
-  });
-});
-
-test('authorizer function should be configured', (t) => {
-  t.plan(1);
-  return plugin.configureFunctions().then(() => {
-
-    t.deepEqual(serverless.service.functions['authorizer'], {
-      name: 'my-service-test-authorizer',
-      handler: 'my-entrypoint.authorizer',
-      events: []
+      d('here we have the functions');
+      expect(serverless.service.functions['lambda-name-1']).toEqual({
+        name: 'my-service-test-lambda-name-1',
+        handler: 'my-entrypoint.lambda-name-1',
+        events: [{
+          http: {
+            path: '/',
+            method: 'get',
+            integration: 'lambda',
+            cors: true,
+            private: false
+          }
+        }]
+      });
+      done();
     });
 
-  }).catch((err) => {
-    console.log(err);
   });
+
+  it('function with only name should have empty event array', (done) => {
+    return plugin.configureFunctions().then(() => {
+
+      expect(serverless.service.functions['name']).toEqual({
+        name: 'my-service-test-name',
+        handler: 'my-entrypoint.name',
+        events: []
+      });
+      done();
+
+    });
+
+  });
+
+  it('authorizer function should be configured', (done) => {
+    return plugin.configureFunctions().then(() => {
+
+      expect(serverless.service.functions['authorizer']).toEqual({
+        name: 'my-service-test-authorizer',
+        handler: 'my-entrypoint.authorizer',
+        events: []
+      });
+      done();
+    });
+  });
+
+
 });
+
+

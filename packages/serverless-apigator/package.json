@@ -17,10 +17,10 @@
     "info": "npm-scripts-info",
     "clean": "trash lib",
     "build": "tsc -p tsconfig.json",
-    "test": "run-s test:*",
+    "test": "jest --coverage",
+    "test:unit": "jest --coverage",
+    "test:watch": "jest --watch",
     "test:lint": "tslint --project . ",
-    "test:unit": "nyc --silent ava",
-    "watch": "run-s clean build && run-p \"build:main -- -w\" \"test:unit -- --watch\"",
     "cov": "run-s build test:unit cov:html && opn coverage/index.html",
     "cov:html": "nyc report --reporter=html",
     "cov:json": "nyc report --reporter=json > coverage/coverage.json",
@@ -42,29 +42,44 @@
     "fs-extra": "^7.0.1",
     "reflect-metadata": "^0.1.12"
   },
-  "ava": {
-    "files": [
-      "./lib/**/*.spec.js"
-    ],
-    "compileEnhanments": false,
-    "extensions": [
-      "ts"
-    ],
-    "require": [
-      "ts-node/register"
-    ]
-  },
   "config": {
     "commitizen": {
       "path": "cz-conventional-changelog"
     }
   },
-  "nyc": {
-    "exclude": [
-      "**/*.spec.js"
-    ]
-  },
   "peerDependencies": {
     "serverless": "^1.30.1"
+  },
+  "jest": {
+    "roots": [
+      "<rootDir>/src"
+    ],
+    "transform": {
+      "^.+\\.ts?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.ts?$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
+    "moduleNameMapper": {
+      "@(microgamma/)(.*)$": "<rootDir>/../$2/src"
+    },
+    "reporters": [
+      "default"
+    ],
+    "coverageReporters": [
+      "json",
+      "html"
+    ],
+    "collectCoverageFrom": [
+      "**/*.ts",
+      "!**/index.ts"
+    ]
   }
+
 }

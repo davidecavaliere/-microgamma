@@ -1,5 +1,4 @@
 // tslint:disable:no-expression-statement no-object-mutation
-import test from 'ava';
 import { Entity, EntityOptions, getEntityMetadata } from './entity.decorator';
 import { getDebugger } from '@microgamma/loggator';
 import { Column, getColumnMetadata } from '../model/column.decorator';
@@ -28,29 +27,27 @@ class TestClass {
   private email: string;
 }
 
-let instance: TestClass;
 
-test.beforeEach(() => {
-  instance = new TestClass();
+describe('@Entity', () => {
+  let instance: TestClass;
 
-});
+  beforeEach(() => {
 
-test('entity decorator', t => {
-  t.is(instance instanceof TestClass, true);
+    instance = new TestClass();
 
-  t.deepEqual(getColumnMetadata(instance), {
-    name: undefined,
-    email: undefined
   });
+
+  it('should create an instance', () => {
+    expect(instance instanceof TestClass).toBeTruthy();
+
+    expect(getColumnMetadata(instance)).toEqual({
+      name: undefined,
+      email: undefined
+    });
+  });
+
+  it('should store some metadata', () => {
+    expect(getEntityMetadata(instance)).toEqual(options);
+  });
+
 });
-
-
-
-test('should store some metadata', t => {
-  t.is(getEntityMetadata(instance), options);
-});
-
-
-
-
-

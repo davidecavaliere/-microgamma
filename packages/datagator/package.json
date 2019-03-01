@@ -19,11 +19,10 @@
     "fix": "run-s fix:*",
     "fix:prettier": "prettier \"src/**/*.ts\" --write",
     "fix:tslint": "tslint --fix --project .",
-    "test": "run-s test:*",
-    "test:unit": "nyc --silent ava",
-    "test:watch": "ava-ts --watch",
+    "test": "jest --coverage",
+    "test:unit": "jest --coverage",
+    "test:watch": "jest --watch",
     "test:lint": "tslint --project . ",
-    "watch": "run-s clean build:main && run-p \"build:main -- -w\" \"test:unit -- --watch\"",
     "cov": "run-s build test:unit cov:html && opn coverage/index.html",
     "cov:html": "nyc report --reporter=html",
     "cov:send": "nyc report --reporter=lcov > coverage.lcov && codecov -F datagator",
@@ -62,27 +61,10 @@
     "mongodb": "^3.1.10",
     "reflect-metadata": "^0.1.12"
   },
-  "ava": {
-    "files": [
-      "./lib/**/*.spec.js"
-    ],
-    "compileEnhanments": false,
-    "extensions": [
-      "ts"
-    ],
-    "require": [
-      "ts-node/register"
-    ]
-  },
   "config": {
     "commitizen": {
       "path": "cz-conventional-changelog"
     }
-  },
-  "nyc": {
-    "exclude": [
-      "**/*.spec.js"
-    ]
   },
   "jest": {
     "roots": [
@@ -91,7 +73,7 @@
     "transform": {
       "^.+\\.ts?$": "ts-jest"
     },
-    "testRegex": "(/__tests__/.*|(\\.|/)(test))\\.ts?$",
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.ts?$",
     "moduleFileExtensions": [
       "ts",
       "tsx",
@@ -100,8 +82,19 @@
       "json",
       "node"
     ],
+    "moduleNameMapper": {
+      "@(microgamma/)(.*)$": "<rootDir>/../$2/src"
+    },
     "reporters": [
       "default"
+    ],
+    "coverageReporters": [
+      "json",
+      "html"
+    ],
+    "collectCoverageFrom": [
+      "**/*.ts",
+      "!**/index.ts"
     ]
   }
 }

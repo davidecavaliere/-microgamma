@@ -1,11 +1,6 @@
 // tslint:disable:no-expression-statement no-object-mutation
-import test from 'ava';
-import { getDebugger } from '@microgamma/loggator';
 import { Column, getColumnMetadata } from './column.decorator';
 import { BaseModel } from './model';
-
-const d = getDebugger('microgamma:column.decorator');
-
 
 
 type MyString = string;
@@ -24,36 +19,42 @@ class TestClass extends BaseModel {
   public password: string;
 }
 
-let instance: TestClass;
+describe('@Column', () => {
+  let instance: TestClass;
 
-test.beforeEach(() => {
-  instance = new TestClass({
-    name: 'a-name',
-    email: 'an-email',
-    password: 'a-password'
+  beforeEach(() => {
+    instance = new TestClass({
+      name: 'a-name',
+      email: 'an-email',
+      password: 'a-password'
+    });
+
   });
-});
 
-test('should store metadata', (t) => {
+  it('should store metadata', () => {
 
-  t.deepEqual(getColumnMetadata(instance), {
-    email: undefined,
-    name: undefined,
-    password: {
-      private: true
-    }
-  })
-});
-
-test('should serialize to json', (t) => {
-  const json = instance.toJson();
-  t.deepEqual(json, {
-    name: 'a-name',
-    email: 'an-email'
+    expect(getColumnMetadata(instance)).toEqual({
+      email: undefined,
+      name: undefined,
+      password: {
+        private: true
+      }
+    });
   });
+
+  it('should serialize to json', () => {
+    const json = instance.toJson();
+    expect(json).toEqual({
+      name: 'a-name',
+      email: 'an-email'
+    });
+  });
+
+  it('should add getter and setter', ()=> {
+    instance.email = 'my-email';
+    expect(instance.email).toEqual('my-email');
+  });
+
 });
 
-test('should add getter and setter', (t)=> {
-  instance.email = 'my-email';
-  t.is(instance.email, 'my-email');
-});
+

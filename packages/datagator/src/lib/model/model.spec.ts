@@ -1,9 +1,6 @@
 // tslint:disable:no-expression-statement no-object-mutation
-import test from 'ava';
 import { BaseModel } from './model';
-import { getDebugger } from '@microgamma/loggator';
 
-const d = getDebugger('microgamma:model:spec');
 
 class MyModel extends BaseModel {
 
@@ -11,19 +8,23 @@ class MyModel extends BaseModel {
 
 }
 
-let instance: MyModel;
-
-test.beforeEach(() => {
-  instance = new MyModel({
-    name: 'my-name'
-  })
-});
-
-test.skip('Model', t => {
+describe('Model', () => {
+  let instance: MyModel;
 
 
-  t.deepEqual(instance, {
-    name: 'my-name'
+  beforeEach(() => {
+    instance = new MyModel({
+      name: 'my-name'
+    })
+  });
+
+  it('should set inner fields', () => {
+
+    expect(instance).toEqual({
+      name: 'my-name'
+    });
+
   });
 
 });
+

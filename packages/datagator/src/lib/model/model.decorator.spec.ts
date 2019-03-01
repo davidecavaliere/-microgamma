@@ -1,5 +1,4 @@
 // tslint:disable:no-expression-statement no-object-mutation
-import test from 'ava';
 import { getModelMetadata, Model, ModelOptions } from '@microgamma/datagator';
 
 const options: ModelOptions = {
@@ -14,15 +13,21 @@ class TestClass {
   }
 }
 
-let instance: TestClass;
+describe('@Model', () => {
+  let instance: TestClass;
 
-test.beforeEach(() => {
-  instance = new TestClass();
+  beforeEach(() => {
+    instance = new TestClass();
+
+
+  });
+
+
+  it('should store metadata', () => {
+
+
+    expect(getModelMetadata(instance)).toEqual(options);
+
+  });
 });
 
-test('model decorator', t => {
-
-
-  t.is(getModelMetadata(instance), options);
-
-});

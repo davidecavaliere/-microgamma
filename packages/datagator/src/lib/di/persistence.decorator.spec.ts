@@ -1,9 +1,6 @@
 // tslint:disable:no-expression-statement no-object-mutation member-access max-classes-per-file
 import test from 'ava';
-import { getDebugger } from '@microgamma/loggator';
 import { BaseModel, getPersistenceMetadata, Persistence, PersistenceService } from '@microgamma/datagator';
-
-const d = getDebugger('microgamma:persistence:decorator:spec');
 
 class User extends BaseModel {
   password;
@@ -26,17 +23,23 @@ class UserPersistenceService extends PersistenceService<User> {
 
 }
 
-let instance: UserPersistenceService;
 
-test.beforeEach(() => {
-  instance = new UserPersistenceService();
+describe('@Persistence', () => {
+  let instance: UserPersistenceService;
+
+  beforeEach(() => {
+
+    instance = new UserPersistenceService();
+
+  });
+
+  it('should store metadata', () => {
+    expect(getPersistenceMetadata(instance)).toEqual(metadata);
+  })
 
 });
 
 
-test.only('should store metadata', (t) => {
-  t.is(getPersistenceMetadata(instance), metadata);
 
-});
 
 

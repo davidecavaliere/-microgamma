@@ -17,13 +17,10 @@
     "info": "npm-scripts-info",
     "build": "run-s clean && run-p build:*",
     "build:main": "tsc -p tsconfig.json",
-    "fix": "run-s fix:*",
-    "fix:prettier": "prettier \"src/**/*.ts\" --write",
-    "fix:tslint": "tslint --fix --project .",
-    "test": "run-s test:*",
-    "test:unit": "nyc --silent ava",
+    "test": "jest --coverage",
+    "test:unit": "jest --coverage",
+    "test:watch": "jest --watch",
     "test:lint": "tslint --project . ",
-    "watch": "run-s clean build:main && run-p \"build:main -- -w\" \"test:unit -- --watch\"",
     "cov": "run-s build test:unit cov:html && opn coverage/index.html",
     "cov:html": "nyc report --reporter=html",
     "cov:send": "nyc report --reporter=lcov > coverage.lcov && codecov -F loggator",
@@ -58,19 +55,36 @@
     "debug": "^4.1.1",
     "reflect-metadata": "^0.1.12"
   },
-  "ava": {
-    "files": [
-      "./lib/**/*.spec.js"
+  "jest": {
+    "roots": [
+      "<rootDir>/src"
     ],
-    "compileEnhanments": false,
-    "extensions": [
-      "ts"
+    "transform": {
+      "^.+\\.ts?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.ts?$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
     ],
-    "require": [
-      "ts-node/register"
+    "moduleNameMapper": {
+      "@(microgamma/)(.*)$": "<rootDir>/../$2/src"
+    },
+    "reporters": [
+      "default"
+    ],
+    "coverageReporters": [
+      "json",
+      "html"
+    ],
+    "collectCoverageFrom": [
+      "**/*.ts",
+      "!**/index.ts"
     ]
-  },
-  "prettier": {
-    "singleQuote": true
   }
+
 }
