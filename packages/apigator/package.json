@@ -32,8 +32,8 @@
     "prepare-release": "run-s all version doc:publish"
   },
   "dependencies": {
-    "@microgamma/digator": "^1.10.14",
-    "@microgamma/loggator": "^1.10.14",
+    "@microgamma/digator": "file:../digator",
+    "@microgamma/loggator": "file:../loggator",
     "@types/aws-lambda": "^8.10.11",
     "reflect-metadata": "^0.1.12",
     "rxjs": "^6.3.3"
