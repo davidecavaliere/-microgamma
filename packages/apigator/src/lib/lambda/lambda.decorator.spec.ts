@@ -1,8 +1,6 @@
 // tslint:disable:no-expression-statement no-object-mutation
-import test from 'ava';
 import { getLambdaMetadata, getLambdaMetadataFromClass, Lambda, LambdaOptions } from './lambda.decorator';
 import { Endpoint } from '../../';
-import { bootstrap } from '../index';
 import { Injectable } from '@microgamma/digator';
 
 const option1: LambdaOptions = {

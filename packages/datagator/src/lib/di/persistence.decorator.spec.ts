@@ -1,5 +1,4 @@
 // tslint:disable:no-expression-statement no-object-mutation member-access max-classes-per-file
-import test from 'ava';
 import { BaseModel, getPersistenceMetadata, Persistence, PersistenceService } from '@microgamma/datagator';
 
 class User extends BaseModel {
