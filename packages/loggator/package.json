@@ -1,6 +1,6 @@
 {
   "name": "@microgamma/loggator",
-  "version": "1.10.14",
+  "version": "1.10.15",
   "description": "typescript decorator for easy log",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -83,5 +83,4 @@
       "!**/index.ts"
     ]
   }
-
 }
