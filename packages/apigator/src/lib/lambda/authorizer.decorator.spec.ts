@@ -25,7 +25,6 @@ class TestClass {
 
   @Lambda(option1)
   public findAll(arg1, arg2, arg3) {
-    // console.log('running original findAll()');
     return this.toTestAccessToInstance + arg1 + arg2 + arg3;
   }
 

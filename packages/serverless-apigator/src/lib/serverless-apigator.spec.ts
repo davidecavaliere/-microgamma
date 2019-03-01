@@ -2,12 +2,13 @@
 
 import { ServerlessApigator } from './serverless-apigator';
 import { Authorizer, bootstrap, Endpoint, EndpointOptions, Lambda, LambdaOptions } from '@microgamma/apigator';
+import { getDebugger } from '@microgamma/loggator';
 
-const d = console.log;
+const d = getDebugger('microgamma:serverless-apigator.spec');
 
 const serverless = {
   cli: {
-    log: console.log
+    log: d
   },
   config: {
     servicePath: 'my-path',

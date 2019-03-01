@@ -11,13 +11,14 @@
     "build": "tsc -b packages/*",
     "clean": "trash packages/*/lib",
     "pretest": "run-s build",
-    "test": "run-s test:*",
-    "test:lint": "lerna run test:lint --parallel",
-    "test:unit": "lerna run test:unit",
+    "test": "run-s test:lint test:unit",
+    "test:unit": "jest --coverage",
+    "test:watch": "jest --watch",
+    "test:lint": "tslint --project . ",
+    "cov:send": "codecov",
     "prerelease": "run-s build",
     "release": "lerna version",
-    "publish:changed": "lerna publish from-package --yes",
-    "cov:send": "lerna run cov:send"
+    "publish:changed": "lerna publish from-package --yes"
   },
   "engines": {
     "node": ">=8.9"
@@ -53,5 +54,41 @@
     "@microgamma/digator": "file:packages/digator",
     "@microgamma/loggator": "file:packages/loggator",
     "@microgamma/serverless-apigator": "file:packages/serverless-apigator"
+  },
+  "jest": {
+    "roots": [
+      "<rootDir>/packages/apigator/src",
+      "<rootDir>/packages/datagator/src",
+      "<rootDir>/packages/digator/src",
+      "<rootDir>/packages/loggator/src",
+      "<rootDir>/packages/serverless-apigator/src"
+    ],
+    "transform": {
+      "^.+\\.ts?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.ts?$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
+    "moduleNameMapper": {
+      "@(microgamma/)(.*)$": "<rootDir>/packages/$2/src"
+    },
+    "reporters": [
+      "default"
+    ],
+    "coverageReporters": [
+      "json",
+      "html"
+    ],
+    "collectCoverageFrom": [
+      "**/*.ts",
+      "!**/index.ts"
+    ],
+    "coverageDirectory": "coverage/"
   }
 }

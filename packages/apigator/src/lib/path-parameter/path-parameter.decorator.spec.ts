@@ -6,7 +6,6 @@ class TestClass {
   public readonly toTestAccessToInstance: string = 'base';
 
   public findAll(@PathParameter() arg1, arg2, arg3) {
-    // console.log('running original findAll()');
     return this.toTestAccessToInstance + arg1 + arg2 + arg3;
   }
 

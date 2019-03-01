@@ -10,9 +10,8 @@ export interface EndpointOptions {
 }
 
 export function Endpoint(options: EndpointOptions): ClassDecorator {
-  // console.log('constructing a class decorator', options)
+
   return <TFunction extends Function>(target: TFunction) => {
-    // console.log('decorating a class', target);
 
     Reflect.metadata(EndpointMetadata, options)(target);
   };

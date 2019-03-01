@@ -4,6 +4,8 @@
 import { bootstrap, Endpoint, Lambda } from '../';
 import { Injectable } from '@microgamma/digator';
 
+
+
 @Endpoint({
   name: 'test-service'
 })
@@ -15,7 +17,7 @@ class TestClass {
     path: '/'
   })
   public manifest() {
-    console.log('manifest');
+    return 'this is the manifest';
   }
 }
 

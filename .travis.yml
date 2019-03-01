@@ -6,11 +6,10 @@ cache: yarn
 
 install:
   - yarn global add lerna jest
+  - yarn install
   - lerna bootstrap
 
 script:
-  - yarn install
-  - yarn lerna link convert
   - yarn test
   - yarn build
 
