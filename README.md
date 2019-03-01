@@ -1,4 +1,4 @@
-# Microgamma (µγ) [![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lernajs.io/)[![Build Status](https://travis-ci.org/davidecavaliere/-microgamma.svg?branch=master)](https://travis-ci.org/davidecavaliere/-microgamma)
+# Microgamma (µγ) [![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lernajs.io/) [![Build Status](https://travis-ci.org/davidecavaliere/-microgamma.svg?branch=master)](https://travis-ci.org/davidecavaliere/-microgamma)
 
 Microgamma is a collection of npm packages for the serverless developer.
 Please bear in mind that the following packages are under heavy development and should not be used on production environments.
