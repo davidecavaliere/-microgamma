@@ -17,10 +17,10 @@
     "prebuild": "run-s clean",
     "build": "tsc -p tsconfig.json",
     "test": "jest --coverage",
-    "test:unit": "jest --coverage",
+    "test:unit": "jest",
     "test:watch": "jest --watch",
     "test:lint": "tslint --project . ",
-    "cov:send": "codecov -F apigator",
+    "cov:send": "jest --coverage && codecov -F apigator",
     "doc": "run-s doc:html && opn build/docs/index.html",
     "doc:html": "typedoc src/ --target ES6 --mode file --out build/docs",
     "doc:json": "typedoc src/ --target ES6 --mode file --json build/docs/typedoc.json",
@@ -69,6 +69,7 @@
     "collectCoverageFrom": [
       "**/*.ts",
       "!**/index.ts"
-    ]
+    ],
+    "coverageDirectory": "./coverage/"
   }
 }

@@ -20,10 +20,10 @@
     "fix:prettier": "prettier \"src/**/*.ts\" --write",
     "fix:tslint": "tslint --fix --project .",
     "test": "jest --coverage",
-    "test:unit": "jest --coverage",
+    "test:unit": "jest",
     "test:watch": "jest --watch",
     "test:lint": "tslint --project . ",
-    "cov:send": "codecov -F datagator",
+    "cov:send": "jest --coverage && codecov -F datagator",
     "doc": "run-s doc:html && opn build/docs/index.html",
     "doc:html": "typedoc src/ --target ES6 --mode file --out build/docs",
     "doc:json": "typedoc src/ --target ES6 --mode file --json build/docs/typedoc.json",
@@ -92,6 +92,7 @@
     "collectCoverageFrom": [
       "**/*.ts",
       "!**/index.ts"
-    ]
+    ],
+    "coverageDirectory": "./coverage/"
   }
 }
