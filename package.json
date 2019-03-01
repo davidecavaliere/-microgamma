@@ -12,11 +12,11 @@
     "clean": "trash packages/*/lib",
     "pretest": "run-s build",
     "test": "run-s test:*",
-    "test:lint": "lerna run test:lint",
+    "test:lint": "lerna run test:lint --parallel",
     "test:unit": "lerna run test:unit --parallel",
     "prerelease": "run-s build",
     "release": "lerna version",
-    "publish:all": "lerna exec npm publish"
+    "publish:changed": "lerna publish from-package"
   },
   "engines": {
     "node": ">=8.9"
