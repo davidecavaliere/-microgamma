@@ -59,6 +59,9 @@
       "json",
       "node"
     ],
+    "moduleNameMapper": {
+      "@(microgamma/)(.*)$": "<rootDir>/../$2/src"
+    },
     "reporters": [
       "default"
     ],
