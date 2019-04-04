@@ -18,7 +18,11 @@
     "cov:send": "codecov",
     "prerelease": "run-s build",
     "release": "lerna version",
-    "publish:changed": "lerna publish from-package --yes"
+    "publish:changed": "lerna publish from-package --yes",
+    "doc": "run-s doc:html && opn build/docs/index.html",
+    "doc:html": "typedoc packages/**/src/lib --target ES6 --mode modules --out docs --exclude \"**/*+(index|.spec|.e2e).ts\" --external-modulemap '.*packages/(.+)/.*'",
+    "doc:json": "typedoc packages/**/src --target ES6 --mode modules --json build/docs/typedoc.json --exclude \"**/*+(index|.spec|.e2e).ts\" ",
+    "doc:publish": "gh-pages -m \"[ci skip] Updates\" -d build/docs"
   },
   "engines": {
     "node": ">=8.9"
@@ -45,6 +49,7 @@
     "tslint-config-prettier": "^1.17.0",
     "tslint-immutable": "^4.5.4",
     "typedoc": "^0.11.1",
+    "typedoc-plugin-monorepo": "^0.1.0",
     "typescript": "^3.2.2",
     "yarn": "^1.12.3"
   },

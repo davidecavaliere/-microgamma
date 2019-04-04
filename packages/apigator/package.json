@@ -44,8 +44,7 @@
     "@microgamma/digator": "file:../digator",
     "@microgamma/loggator": "file:../loggator",
     "@types/aws-lambda": "^8.10.11",
-    "reflect-metadata": "^0.1.12",
-    "rxjs": "^6.3.3"
+    "reflect-metadata": "^0.1.12"
   },
   "config": {
     "commitizen": {
