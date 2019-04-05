@@ -137,7 +137,7 @@ export class ServerlessApigator {
     const authorizer = lambda.hasOwnProperty('authorizer') ? lambda.authorizer : null;
 
     const httpEvent: LambdaOptions & { integration: string } = {
-      integration: 'lambda',
+      integration: lambda.integration || 'lambda',
       cors: corsOption,
       private: privateLambda
     };
