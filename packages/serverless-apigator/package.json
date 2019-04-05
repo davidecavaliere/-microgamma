@@ -47,7 +47,6 @@
     "@microgamma/apigator": "file:../apigator",
     "@microgamma/loggator": "file:../loggator",
     "@types/aws-sdk": "^2.7.0",
-    "fs-extra": "^7.0.1",
     "reflect-metadata": "^0.1.12"
   },
   "config": {
