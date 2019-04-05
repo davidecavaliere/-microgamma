@@ -41,8 +41,8 @@
     "prepare-release": "run-s all version doc:publish"
   },
   "dependencies": {
-    "@microgamma/digator": "file:../digator",
-    "@microgamma/loggator": "file:../loggator",
+    "@microgamma/digator": ">=1.10",
+    "@microgamma/loggator": ">=1.10",
     "@types/aws-lambda": "^8.10.11",
     "reflect-metadata": "^0.1.12"
   },

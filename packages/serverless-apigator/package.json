@@ -44,8 +44,8 @@
     "node": ">=8.9"
   },
   "dependencies": {
-    "@microgamma/apigator": "file:../apigator",
-    "@microgamma/loggator": "file:../loggator",
+    "@microgamma/apigator": ">=1.10",
+    "@microgamma/loggator": ">=1.10",
     "@types/aws-sdk": "^2.7.0",
     "reflect-metadata": "^0.1.12"
   },

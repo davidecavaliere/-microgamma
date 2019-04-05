@@ -557,17 +557,17 @@
     write-file-atomic "^2.3.0"
 
 "@microgamma/apigator@file:packages/apigator":
-  version "1.10.19"
+  version "1.10.22"
   dependencies:
-    "@microgamma/digator" "file:../../.cache/yarn/v1/npm-@microgamma/digator"
-    "@microgamma/loggator" "file:../../.cache/yarn/v1/npm-@microgamma/loggator"
+    "@microgamma/digator" "file:../../.cache/yarn/v4/npm-@microgamma-apigator-1.10.22-0ea81911-de9e-42e3-b3cb-4c19667ba232-1554468554528/node_modules/@microgamma/digator"
+    "@microgamma/loggator" "file:../../.cache/yarn/v4/npm-@microgamma-apigator-1.10.22-0ea81911-de9e-42e3-b3cb-4c19667ba232-1554468554528/node_modules/@microgamma/loggator"
     "@types/aws-lambda" "^8.10.11"
     reflect-metadata "^0.1.12"
 
 "@microgamma/datagator@file:packages/datagator":
   version "1.10.18"
   dependencies:
-    "@microgamma/loggator" "file:../../.cache/yarn/v1/npm-@microgamma/loggator"
+    "@microgamma/loggator" "file:../../.cache/yarn/v4/npm-@microgamma-datagator-1.10.18-fb012643-e6c5-4d96-a58e-ad36f443e115-1554468554537/node_modules/@microgamma/loggator"
     "@types/mongodb" "^3.1.18"
     mongodb "^3.1.10"
     reflect-metadata "^0.1.12"
@@ -575,7 +575,7 @@
 "@microgamma/digator@file:packages/digator":
   version "1.10.19"
   dependencies:
-    "@microgamma/loggator" "file:../../.cache/yarn/v1/npm-@microgamma/loggator"
+    "@microgamma/loggator" "file:../../.cache/yarn/v4/npm-@microgamma-digator-1.10.19-037fdaa1-b055-4455-a30f-8f459474fc08-1554468554533/node_modules/@microgamma/loggator"
     reflect-metadata "^0.1.12"
 
 "@microgamma/loggator@file:packages/loggator":
@@ -586,12 +586,11 @@
     reflect-metadata "^0.1.12"
 
 "@microgamma/serverless-apigator@file:packages/serverless-apigator":
-  version "1.10.19"
+  version "1.10.22"
   dependencies:
-    "@microgamma/apigator" "file:../../.cache/yarn/v1/npm-@microgamma/apigator"
-    "@microgamma/loggator" "file:../../.cache/yarn/v1/npm-@microgamma/loggator"
+    "@microgamma/apigator" "file:../../.cache/yarn/v4/npm-@microgamma-serverless-apigator-1.10.22-14ac6186-8daa-44e4-9cc1-11e70afe7150-1554468554550/node_modules/@microgamma/apigator"
+    "@microgamma/loggator" "file:../../.cache/yarn/v4/npm-@microgamma-serverless-apigator-1.10.22-14ac6186-8daa-44e4-9cc1-11e70afe7150-1554468554550/node_modules/@microgamma/loggator"
     "@types/aws-sdk" "^2.7.0"
-    fs-extra "^7.0.1"
     reflect-metadata "^0.1.12"
 
 "@mrmlnc/readdir-enhanced@^2.2.1":
@@ -2974,7 +2973,7 @@ fs-extra@^5.0.0:
     jsonfile "^4.0.0"
     universalify "^0.1.0"
 
-fs-extra@^7.0.0, fs-extra@^7.0.1:
+fs-extra@^7.0.0:
   version "7.0.1"
   resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-7.0.1.tgz#4f189c44aa123b895f722804f55ea23eadc348e9"
   dependencies:

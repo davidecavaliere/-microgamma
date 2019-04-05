@@ -41,7 +41,7 @@
     "prepare-release": "run-s all version doc:publish"
   },
   "dependencies": {
-    "@microgamma/loggator": "file:../loggator",
+    "@microgamma/loggator": ">=1.10",
     "reflect-metadata": "^0.1.12"
   },
   "jest": {
