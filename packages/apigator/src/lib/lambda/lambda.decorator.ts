@@ -165,11 +165,18 @@ export function Lambda(options: LambdaOptions) {
 
         d('something is going on', e);
 
-        if (e.message.match(/^\[[0-9]{3,}\](.)+/)) {
-          throw Error(e);
+        if (e instanceof Error) {
+          if (e.message.match(/^\[[0-9]{3,}\](.)+/)) {
+            throw e;
+          } else {
+            throw Error(`[500] ${e.message}`);
+          }
+
         }
 
-        throw Error(`[500] ${e}`);
+        // encapsulate any other type of error
+        throw Error(e);
+
       }
 
 
