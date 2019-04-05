@@ -12,7 +12,8 @@ const option1: LambdaOptions = {
 const option2: LambdaOptions = {
   method: 'get',
   name: 'lambda-name-2',
-  path: ':id'
+  path: ':id',
+  integration: 'lambda-proxy'
 };
 
 @Endpoint({
@@ -66,6 +67,24 @@ describe('lambda.decorator', () => {
     ]);
 
     expect(resp).toEqual('base123');
+
+  });
+
+  it('should resolve pathParameters field if integration is "lambda-proxy"', async () => {
+    const resp = await instance.findOne.apply(instance, [
+      { // when serverless integration is set to lambda-proxy
+        // path contains the path as a string
+        // pathParameters contains the mapped parameters
+        pathParameters: {
+          arg1: 1,
+          arg2: 2,
+          arg3: 3
+        }
+      },
+      { context: 'a' } // context
+    ]);
+
+    expect(resp).toEqual(1);
 
   });
 });

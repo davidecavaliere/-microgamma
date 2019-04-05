@@ -21,25 +21,31 @@ export interface LambdaOptions {
   description?: string;
 }
 
-function getApiGatewayEvent(args): APIGatewayEvent {
-  // TODO add check
-  return args[0];
-}
 
-function extractBody(args) {
-
-  return getApiGatewayEvent(args).body;
-}
-
-function extractPathParams(args) {
-  return getApiGatewayEvent(args).path;
-}
-
-function extractHeaderParams(args) {
-  return getApiGatewayEvent(args).headers;
-}
 
 export function Lambda(options: LambdaOptions) {
+
+  // serverless-apigator sets integration = 'lambda' if integration is not define
+  options.integration = options.integration || 'lambda';
+
+  function getApiGatewayEvent(args): APIGatewayEvent {
+    // TODO add check
+    return args[0];
+  }
+
+  function extractBody(args) {
+
+    return getApiGatewayEvent(args).body;
+  }
+
+  function extractPathParams(args) {
+
+    return options.integration === 'lambda' ? getApiGatewayEvent(args).path : getApiGatewayEvent(args).pathParameters;
+  }
+
+  function extractHeaderParams(args) {
+    return getApiGatewayEvent(args).headers;
+  }
 
   return (target: any, key: string, descriptor) => {
     d('target', target);
