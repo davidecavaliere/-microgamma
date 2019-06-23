@@ -1,6 +1,6 @@
 // tslint:disable:no-expression-statement no-object-mutation
 import { Column, getColumnMetadata } from './column.decorator';
-import { BaseModel } from './model';
+import { BaseModel } from './base-model';
 
 
 type MyString = string;

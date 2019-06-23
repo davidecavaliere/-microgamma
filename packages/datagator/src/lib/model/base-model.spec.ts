@@ -1,5 +1,5 @@
 // tslint:disable:no-expression-statement no-object-mutation
-import { BaseModel } from './model';
+import { BaseModel } from './base-model';
 
 
 class MyModel extends BaseModel {
