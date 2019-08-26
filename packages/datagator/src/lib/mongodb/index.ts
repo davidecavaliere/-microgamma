@@ -1,2 +1,2 @@
 // export * from './collection';
-export * from './persistence.service';
+export * from './mongodb.service';

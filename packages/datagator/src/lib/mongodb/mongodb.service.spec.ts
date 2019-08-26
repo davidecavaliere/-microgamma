@@ -1,6 +1,6 @@
 // tslint:disable:no-expression-statement no-object-mutation member-access max-classes-per-file
 import { getDebugger } from '@microgamma/loggator';
-import { BaseModel, Persistence, PersistenceService } from '@microgamma/datagator';
+import { BaseModel, Persistence, MongodbService } from '@microgamma/datagator';
 
 const d = getDebugger('microgamma:persistence.service.spec');
 
@@ -20,7 +20,7 @@ class User extends BaseModel {
   collection: 'users',
   model: User
 })
-class UserPersistenceService extends PersistenceService<User> {
+class UserPersistenceService extends MongodbService<User> {
 
 }
 

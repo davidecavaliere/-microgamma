@@ -6,11 +6,11 @@ import { BaseModel, getPersistenceMetadata } from '@microgamma/datagator';
 const d = getDebugger('microgamma:persistence:service');
 
 
-interface MongoQuery {
+interface Query {
   [k: string]: string;
 }
 
-export abstract class PersistenceService<T extends BaseModel> {
+export abstract class MongodbService<T extends BaseModel> {
 
   protected uri: string;
   protected options: MongoClientOptions;
@@ -50,7 +50,7 @@ export abstract class PersistenceService<T extends BaseModel> {
   }
 
 
-  public async findAll(query?: MongoQuery) {
+  public async findAll(query?: Query) {
     const docs = await (await this.getCollection()).find(query).toArray();
 
     const parsedDocs: any[] = [];
