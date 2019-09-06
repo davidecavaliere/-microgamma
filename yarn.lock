@@ -5302,15 +5302,7 @@ mongodb-memory-server-core@5.2.1:
   optionalDependencies:
     mongodb ">=3.2.7"
 
-mongodb-memory-server-global-3.4@^5.2.0:
-  version "5.2.1"
-  resolved "https://registry.yarnpkg.com/mongodb-memory-server-global-3.4/-/mongodb-memory-server-global-3.4-5.2.1.tgz#c25794ea907fadd04184963e4db127b0ba6dbbab"
-  integrity sha512-7lW9XjgvCHZRq5LnFd3w6wFg96I6bD0OmpgQ9rOgly3pubq54jqOSYAR9vXpuDSxlv7ns/fOWFLHfc8Vp2jj7w==
-  dependencies:
-    mongodb-memory-server "5.2.1"
-    os "^0.1.1"
-
-mongodb-memory-server@5.2.1:
+mongodb-memory-server@^5.2.1:
   version "5.2.1"
   resolved "https://registry.yarnpkg.com/mongodb-memory-server/-/mongodb-memory-server-5.2.1.tgz#f9c9ab3c271f03ed2e6f53e3838d9eb33cf20124"
   integrity sha512-+0st4Uvp0mh3MtOOMXkR+CYVrq2wG/x3MFGoZc0KbpMJo2lbRb5UQ0ONUenkCuIwTtmnUjq+fxLsdlPhVRuFOA==
@@ -5834,11 +5826,6 @@ os-shim@^0.1.2:
 os-tmpdir@^1.0.0, os-tmpdir@^1.0.1, os-tmpdir@~1.0.1, os-tmpdir@~1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/os-tmpdir/-/os-tmpdir-1.0.2.tgz#bbe67406c79aa85c5cfec766fe5734555dfa1274"
-
-os@^0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/os/-/os-0.1.1.tgz#208845e89e193ad4d971474b93947736a56d13f3"
-  integrity sha1-IIhF6J4ZOtTZcUdLk5R3NqVtE/M=
 
 osenv@0, osenv@^0.1.0, osenv@^0.1.4, osenv@^0.1.5:
   version "0.1.5"

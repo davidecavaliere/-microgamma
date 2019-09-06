@@ -1,5 +1,5 @@
 // tslint:disable:max-classes-per-file
-import { MongoMemoryServer } from 'mongodb-memory-server-global-3.4';
+import { MongoMemoryServer } from 'mongodb-memory-server';
 import { BaseModel, Column } from '../model';
 import { Persistence } from '../persistence';
 import { MongodbService } from './mongodb.service';
