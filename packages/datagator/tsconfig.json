@@ -6,7 +6,6 @@
     "types": ["node", "jest"],
     "strictFunctionTypes": false
   },
-  "include": ["src/**/*.ts"],
   "references": [
     { "path": "../loggator" }
   ]

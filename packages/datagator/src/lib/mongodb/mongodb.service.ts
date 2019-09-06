@@ -30,15 +30,18 @@ export abstract class MongodbService<T extends BaseModel> {
 
 
     if (!this._client) {
-      const metadata = getPersistenceMetadata(this);
+      const metadata = getPersistenceMetadata(this) as MongoDBPersistenceOptions;
       d('got metadata', metadata);
 
       this.uri = metadata.uri;
       this.dbName = metadata.dbName;
       this.collectionName = metadata.collection;
-      this.options = metadata.options;
+      this.options = {
+        ...metadata.options,
+        useNewUrlParser: true
+      };
 
-      this._client = await connect(this.uri, this.options);
+      this._client = await MongoClient.connect(this.uri, this.options);
       this._collection = this._client.db(this.dbName).collection(this.collectionName);
     }
 
@@ -66,8 +69,6 @@ export abstract class MongodbService<T extends BaseModel> {
   public async findOne(id: string) {
     d(`searching document by id ${id}`);
     const objId = new ObjectID(id);
-
-    // TODO hide not public fields in model
 
     const doc = await (await this.getCollection()).findOne({_id: objId});
 

@@ -5,6 +5,9 @@ const d = getDebugger('microgamma:model');
 
 export class BaseModel {
 
+  public id?;
+  public _id?;
+
   constructor(arg) {
     Object.assign(this, arg);
   }
