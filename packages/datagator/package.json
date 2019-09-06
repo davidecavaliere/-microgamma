@@ -26,9 +26,11 @@
     "fix:prettier": "prettier \"src/**/*.ts\" --write",
     "fix:tslint": "tslint --fix --project .",
     "start:dynamodb": "node ../../scripts/start-dynamodb-local.js",
-    "test": "start-server-and-test start:dynamodb http://localhost:8080/shell 'jest --coverage'",
-    "test:unit": "start-server-and-test start:dynamodb http://localhost:8080/shell 'jest'",
-    "test:watch": "start-server-and-test start:dynamodb http://localhost:8080/shell 'jest --watch'",
+    "test": "run-s test:unit test:integration",
+    "test:unit": "jest",
+    "test:unit:watch": "jest --watch",
+    "test:integration": "start-server-and-test start:dynamodb http://localhost:8080/shell 'jest --testRegex integration.test'",
+    "test:integration:watch": "start-server-and-test start:dynamodb http://localhost:8080/shell 'jest --watch'",
     "test:lint": "tslint --project . ",
     "cov:send": "jest --coverage && codecov -F datagator",
     "doc": "run-s doc:html && opn build/docs/index.html",
@@ -74,7 +76,7 @@
     "transform": {
       "^.+\\.ts?$": "ts-jest"
     },
-    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.ts?$",
+    "testRegex": "(/__tests__/.*|(\\.|/)(spec))\\.ts?$",
     "moduleFileExtensions": [
       "ts",
       "tsx",
