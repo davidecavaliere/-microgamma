@@ -13,8 +13,8 @@
   "typings": "lib/index.d.ts",
   "module": "lib/index.js",
   "keywords": [
-    "typescript",
     "mongodb",
+    "dynamodb",
     "decorator",
     "orm"
   ],
