@@ -72,7 +72,7 @@ describe('mongodb integration test', () => {
 
     let mongod;
 
-    beforeAll(async () => {
+    beforeAll(async (done) => {
 
       mongod = new MongoMemoryServer({
         instance: {
@@ -81,8 +81,10 @@ describe('mongodb integration test', () => {
         }
       });
 
-      d(await mongod.getConnectionString());
+      const connection = await mongod.getConnectionString();
+      d('connection', connection);
 
+      done();
     });
 
     it('should return empty array', async () => {
@@ -122,9 +124,11 @@ describe('mongodb integration test', () => {
 
     });
 
-    afterAll(async () => {
+    afterAll(async (done) => {
       d('cleaning up');
       await mongod.stop();
+      d('server stopped');
+      done();
     });
   });
 
