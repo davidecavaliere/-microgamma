@@ -25,9 +25,10 @@
     "fix": "run-s fix:*",
     "fix:prettier": "prettier \"src/**/*.ts\" --write",
     "fix:tslint": "tslint --fix --project .",
-    "test": "jest --coverage",
-    "test:unit": "jest",
-    "test:watch": "jest --watch",
+    "start:dynamodb": "node ../../scripts/start-dynamodb-local.js",
+    "test": "start-server-and-test start:dynamodb http://localhost:8080/shell 'jest --coverage'",
+    "test:unit": "start-server-and-test start:dynamodb http://localhost:8080/shell 'jest'",
+    "test:watch": "start-server-and-test start:dynamodb http://localhost:8080/shell 'jest --watch'",
     "test:lint": "tslint --project . ",
     "cov:send": "jest --coverage && codecov -F datagator",
     "doc": "run-s doc:html && opn build/docs/index.html",
@@ -38,9 +39,6 @@
     "clean": "trash lib",
     "all": "run-s reset test cov:check doc:html",
     "prepare-release": "run-s all version doc:publish"
-  },
-  "bugs": {
-    "url": "https://github.com/davidecavaliere/apigator/issues"
   },
   "scripts-info": {
     "info": "Display information about the package scripts",
