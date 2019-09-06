@@ -588,43 +588,6 @@
     libnpm "^2.0.1"
     write-file-atomic "^2.3.0"
 
-"@microgamma/apigator@file:packages/apigator":
-  version "1.10.23"
-  dependencies:
-    "@microgamma/digator" "^1.10.23"
-    "@microgamma/loggator" ">=1.10"
-    "@types/aws-lambda" "^8.10.11"
-    reflect-metadata "^0.1.12"
-
-"@microgamma/datagator@file:packages/datagator":
-  version "1.11.0"
-  dependencies:
-    "@microgamma/loggator" ">=1.10"
-    "@types/mongodb" "^3.1.18"
-    mongodb "^3.1.10"
-    reflect-metadata "^0.1.12"
-
-"@microgamma/digator@file:packages/digator":
-  version "1.10.23"
-  dependencies:
-    "@microgamma/loggator" ">=1.10"
-    reflect-metadata "^0.1.12"
-
-"@microgamma/loggator@file:packages/loggator":
-  version "1.10.18"
-  dependencies:
-    "@types/debug" "^0.0.30"
-    debug "^4.1.1"
-    reflect-metadata "^0.1.12"
-
-"@microgamma/serverless-apigator@file:packages/serverless-apigator":
-  version "1.10.23"
-  dependencies:
-    "@microgamma/apigator" "^1.10.23"
-    "@microgamma/loggator" ">=1.10"
-    "@types/aws-sdk" "^2.7.0"
-    reflect-metadata "^0.1.12"
-
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@mrmlnc/readdir-enhanced/-/readdir-enhanced-2.2.1.tgz#524af240d1a360527b730475ecfa1344aa540dde"

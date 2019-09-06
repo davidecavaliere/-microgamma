@@ -55,13 +55,6 @@
     "typescript": "^3.2.2",
     "yarn": "^1.12.3"
   },
-  "dependencies": {
-    "@microgamma/apigator": "file:packages/apigator",
-    "@microgamma/datagator": "file:packages/datagator",
-    "@microgamma/digator": "file:packages/digator",
-    "@microgamma/loggator": "file:packages/loggator",
-    "@microgamma/serverless-apigator": "file:packages/serverless-apigator"
-  },
   "jest": {
     "roots": [
       "<rootDir>/packages/apigator/src",
