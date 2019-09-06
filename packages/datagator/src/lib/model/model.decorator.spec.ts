@@ -1,6 +1,6 @@
 // tslint:disable:no-expression-statement no-object-mutation
-import { getModelMetadata, Model, ModelOptions } from '@microgamma/datagator';
 import { getDebugger } from '@microgamma/loggator';
+import { getModelMetadata, Model, ModelOptions } from './model.decorator';
 
 const d = getDebugger('microgamma:model.decorator.spec');
 
@@ -21,13 +21,10 @@ describe('@Model', () => {
 
   beforeEach(() => {
     instance = new TestClass();
-
-
   });
 
 
   it('should store metadata', () => {
-
 
     expect(getModelMetadata(instance)).toEqual(options);
 

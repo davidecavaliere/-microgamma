@@ -1,13 +1,13 @@
 // tslint:disable:no-expression-statement no-object-mutation member-access max-classes-per-file
-import { BaseModel, getPersistenceMetadata, Persistence, PersistenceService } from '@microgamma/datagator';
+import { MongodbService } from '../mongodb';
+import { BaseModel } from '../model';
+import { getPersistenceMetadata, Persistence } from './persistence.decorator';
 
 class User extends BaseModel {
   password;
   name;
   email;
   role;
-
-
 }
 
 const metadata =  {
@@ -18,10 +18,7 @@ const metadata =  {
 };
 
 @Persistence(metadata)
-class UserPersistenceService extends PersistenceService<User> {
-
-}
-
+class UserPersistenceService extends MongodbService<User> {}
 
 describe('@Persistence', () => {
   let instance: UserPersistenceService;
@@ -37,8 +34,3 @@ describe('@Persistence', () => {
   })
 
 });
-
-
-
-
-
