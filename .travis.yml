@@ -2,6 +2,10 @@ language: node_js
 node_js:
   - '8'
 
+env:
+  - aws_access_key_id=anything
+  - aws_secret_access_key=anything
+
 cache: yarn
 
 install:
@@ -11,6 +15,7 @@ install:
 
 script:
   - yarn test
+  - yarn test:integration
   - yarn build
 
 after_success:
