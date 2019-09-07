@@ -3,7 +3,6 @@ import { config, DynamoDB } from 'aws-sdk';
 import { BaseModel } from '../model';
 import { DynamoDBPersistenceOptions, getPersistenceMetadata } from '../persistence';
 import { ObjectID } from 'bson';
-import { UpdateExpression } from 'aws-sdk/clients/dynamodb';
 
 const d = getDebugger('microgamma:datagator:dynamodb.service');
 
@@ -11,27 +10,25 @@ export abstract class DynamodbService<T extends BaseModel> {
 
   private metadata: DynamoDBPersistenceOptions;
 
-  private tableName: string;
+  public tableName: string;
 
   private _ddb: DynamoDB.DocumentClient;
+
   public get ddb() {
     return this._ddb;
   }
 
   private dynamo: DynamoDB;
 
-
   protected modelFactory(doc): T {
     const model = this.metadata.model;
     return new model(doc);
   }
 
-
   constructor() {
     this.metadata = getPersistenceMetadata(this) as DynamoDBPersistenceOptions;
     this.tableName =  this.metadata.tableName;
 
-    config.update({ region: "us-east-1" });
     this.dynamo = new DynamoDB(this.metadata.options);
     this._ddb = new DynamoDB.DocumentClient(this.metadata.options);
 

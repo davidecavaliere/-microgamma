@@ -10,10 +10,6 @@ const d = getDebugger('microgamma:datagator:dynamodb.integration');
 
 describe('DynamoDB integration test', () => {
 
-  config.update({
-    region: 'eu-west-1'
-  });
-
   class User extends BaseModel {
 
     @Column()
@@ -47,7 +43,8 @@ describe('DynamoDB integration test', () => {
     tableName: 'users',
     model: User,
     options: {
-      endpoint: 'http://localhost:8080'
+      endpoint: 'http://localhost:8080',
+      region: 'localhost'
     }
   };
 

@@ -34,7 +34,8 @@ describe('DynamodbService', () => {
     tableName: 'users_table',
     model: User,
     options: {
-      endpoint: 'http://localhost:8080'
+      endpoint: 'http://localhost:8080',
+      region: 'localhost'
     }
   };
 
