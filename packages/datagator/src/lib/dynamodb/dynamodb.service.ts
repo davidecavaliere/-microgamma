@@ -79,14 +79,16 @@ export abstract class DynamodbService<T extends BaseModel> {
 
   public async create(doc: T) {
 
+    // const parsedDoc = this.modelFactory(doc);
     // TODO add doc validation
 
     const id = new ObjectID().toHexString();
 
     const item = {
-      ...doc,
-      id
+      id,
+      ...doc
     };
+
     d('putting item', item);
     const resp = await this.ddb.put({
       TableName: this.tableName,
@@ -94,9 +96,10 @@ export abstract class DynamodbService<T extends BaseModel> {
 
     }).promise();
 
+    const parsedDoc = this.modelFactory(item).toJson();
     d('item put. resp:', resp);
 
-    return item;
+    return parsedDoc;
 
   }
 

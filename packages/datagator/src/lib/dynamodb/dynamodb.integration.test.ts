@@ -58,10 +58,10 @@ describe('DynamoDB integration test', () => {
 
   beforeAll(() => {
     instance = new UserPersistenceService();
-    config.update({ region: "us-east-1" });
 
     dynamo = new DynamoDB({
-      endpoint: 'http://localhost:8080'
+      endpoint: 'http://localhost:8080',
+      region: 'localhost'
     });
 
     d('dynamo endpoint', dynamo.endpoint);
@@ -102,28 +102,27 @@ describe('DynamoDB integration test', () => {
   });
 
   it('should create a user', async () => {
-    const resp = await instance.create({
+    const user = {
       name: 'name_',
       email: 'email_',
-      password: 'password_',
       role: 'role_',
       settings: {}
+    };
+
+    const resp = await instance.create({
+      ...user,
+      password: 'password_'
     });
 
     const expected = {
+      ...user,
       id: expect.anything(),
-      name: 'name_',
-      email: 'email_',
-      role: 'role_',
-      hashedPassword: 'password_password_',
-      settings: expect.anything()
+      settings: {},
+      hashedPassword: 'password_password_'
     };
 
     expect(resp).toEqual(expected);
 
-    const users = await instance.findAll();
-
-    expect(users).toEqual([expected]);
   });
 
   describe('#update', () => {

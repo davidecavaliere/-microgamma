@@ -4,13 +4,10 @@ import { BaseModel, Column } from '../model';
 import { Persistence } from '../persistence';
 import { DynamodbService } from './dynamodb.service';
 import { config } from 'aws-sdk';
-import { setFlagsFromString } from 'v8';
 
 const d = getDebugger('microgamma:datagator:dynamodb.service.spec');
 
 describe('DynamodbService', () => {
-
-  config.update({ region: 'eu-west-2'});
 
 
   class User extends BaseModel {
@@ -138,19 +135,19 @@ describe('DynamodbService', () => {
 
   describe('#create', () => {
     it('should call put', async () => {
-      const resp = await instance.create({
+      const expected = {
         name: 'name1',
         email: 'email1',
         role: 'role1',
         password: 'password1'
-      });
+      };
+
+      await instance.create(expected);
 
       expect(instance.ddb.put).toHaveBeenCalledWith({
         Item: {
-          email: 'email1',
           id: expect.anything(),
-          name: 'name1',
-          role: 'role1'
+          ...expected
         },
         TableName: persistenceMetadata.tableName
       });
