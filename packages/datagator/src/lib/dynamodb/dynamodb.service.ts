@@ -78,16 +78,13 @@ export abstract class DynamodbService<T extends BaseModel> {
   }
 
   public async create(doc: T) {
-    const parsedDoc = this.modelFactory(doc).toJson();
 
-    d('parsedDoc', parsedDoc);
-    // d('uuid', new ObjectID());
-
+    // TODO add doc validation
 
     const id = new ObjectID().toHexString();
 
     const item = {
-      ...parsedDoc,
+      ...doc,
       id
     };
     d('putting item', item);
