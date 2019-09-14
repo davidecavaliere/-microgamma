@@ -19,11 +19,7 @@ describe('DynamoDB integration test', () => {
     private hashedPassword?: string;
 
     public set password(password: string) {
-      d('this in setter function is', this);
-      d('setting password', password);
       this.hashedPassword = password.repeat(2);
-      d('encryptedPassword', this.hashedPassword);
-
     };
 
     @Column()
@@ -74,11 +70,11 @@ describe('DynamoDB integration test', () => {
     await dynamo.createTable({
       TableName: 'users',
       KeySchema: [{
-        AttributeName: 'id',
+        AttributeName: '_id',
         KeyType: 'HASH'
       }],
       AttributeDefinitions: [{
-        AttributeName: 'id',
+        AttributeName: '_id',
         AttributeType: 'S'
       }],
       BillingMode: 'PAY_PER_REQUEST'
@@ -101,28 +97,31 @@ describe('DynamoDB integration test', () => {
     expect(users).toEqual([]);
   });
 
-  it('should create a user', async () => {
-    const user = {
-      name: 'name_',
-      email: 'email_',
-      role: 'role_',
-      settings: {}
-    };
+  describe('#create', () => {
 
-    const resp = await instance.create({
-      ...user,
-      password: 'password_'
+    it('should create a user', async () => {
+      const user = {
+        name: 'name_',
+        email: 'email_',
+        role: 'role_',
+        settings: {}
+      };
+
+      const resp = await instance.create({
+        ...user,
+        password: 'password_'
+      });
+
+      const expected = {
+        ...user,
+        id: expect.anything(),
+        settings: {},
+        hashedPassword: 'password_password_'
+      };
+
+      expect(resp).toEqual(new User(expected));
+
     });
-
-    const expected = {
-      ...user,
-      id: expect.anything(),
-      settings: {},
-      hashedPassword: 'password_password_'
-    };
-
-    expect(resp).toEqual(expected);
-
   });
 
   describe('#update', () => {
@@ -137,10 +136,10 @@ describe('DynamoDB integration test', () => {
         role: 'role_',
         settings: {}
       });
-
     });
 
     it('should update an existing user', async () => {
+
 
       const resp = await instance.update({
         id: doc.id,
@@ -150,14 +149,14 @@ describe('DynamoDB integration test', () => {
         password: 'newpassword'
       });
 
-      expect(resp).toEqual({
+      expect(resp).toEqual(new User({
         id: doc.id,
         name: 'name2',
         email: 'email2',
         role: 'role2',
         hashedPassword: 'newpasswordnewpassword',
         settings: expect.anything()
-      });
+      }));
     });
 
     it('should updated an existing user -> nested objects', async () => {
@@ -177,7 +176,7 @@ describe('DynamoDB integration test', () => {
         }
       });
 
-      expect(resp).toEqual({
+      expect(resp).toEqual(new User({
         id: doc.id,
         name: 'name_',
         email: 'email_',
@@ -189,7 +188,12 @@ describe('DynamoDB integration test', () => {
             value: 3
           }
         }
-      });
+      }));
+
+      // const db = await instance.findAll();
+
+      // expect(db).toEqual([]);
+
     });
   });
 

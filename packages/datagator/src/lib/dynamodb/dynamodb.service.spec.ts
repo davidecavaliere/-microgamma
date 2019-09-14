@@ -135,18 +135,20 @@ describe('DynamodbService', () => {
 
   describe('#create', () => {
     it('should call put', async () => {
-      const expected = {
+      const user = {
         name: 'name1',
         email: 'email1',
         role: 'role1',
         password: 'password1'
       };
 
+      const expected = new User(user);
+
       await instance.create(expected);
 
       expect(instance.ddb.put).toHaveBeenCalledWith({
         Item: {
-          id: expect.anything(),
+          _id: expect.anything(),
           ...expected
         },
         TableName: persistenceMetadata.tableName

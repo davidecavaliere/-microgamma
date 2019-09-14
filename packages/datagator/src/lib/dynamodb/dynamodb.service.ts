@@ -51,7 +51,7 @@ export abstract class DynamodbService<T extends BaseModel> {
     const parsedDocs: any[] = [];
 
     for (const doc of docs) {
-      parsedDocs.push(this.modelFactory(doc).toJson());
+      parsedDocs.push(this.modelFactory(doc));
     }
 
     d('parsedDocs', parsedDocs);
@@ -73,7 +73,7 @@ export abstract class DynamodbService<T extends BaseModel> {
       throw new Error('document not found');
     } else {
       d('found document', data);
-      return this.modelFactory(data).toJson();
+      return this.modelFactory(data);
     }
   }
 
@@ -84,22 +84,20 @@ export abstract class DynamodbService<T extends BaseModel> {
 
     const id = new ObjectID().toHexString();
 
-    const item = {
+    const item = this.modelFactory({
       id,
       ...doc
-    };
+    });
 
     d('putting item', item);
-    const resp = await this.ddb.put({
+    await this.ddb.put({
       TableName: this.tableName,
       Item: item
 
     }).promise();
 
-    const parsedDoc = this.modelFactory(item).toJson();
-    d('item put. resp:', resp);
 
-    return parsedDoc;
+    return item;
 
   }
 
@@ -116,30 +114,30 @@ export abstract class DynamodbService<T extends BaseModel> {
     const suffix = '_PlAcEhOlDeR';
     
     d('doc', doc);
-    const {
-      id,
-      ...parsedDoc
-    } = this.modelFactory(doc).toJson();
-    d('parsedDoc', parsedDoc);
 
+    const parsedDoc = this.modelFactory(doc);
+
+    d('parsedDoc', parsedDoc);
 
     const updateExpression: string[] = [];
     const attributeValues = {};
     const expressionAttributeNames = {};
 
-    Object.keys(parsedDoc).forEach((field) => {
-      const value = parsedDoc[field];
+    Object.keys(parsedDoc)
+      .filter((field) => field !== '_id')
+      .forEach((field) => {
+        const value = parsedDoc[field];
 
-      if (!value) {
-        // if value is falsy don't create update instructions
-        return;
-      }
+        if (!value) {
+          // if value is falsy don't create update instructions
+          return;
+        }
 
-      updateExpression.push(`#${field} = :${field}${suffix}`);
-      
-      expressionAttributeNames[`#${field}`] = field;
-      attributeValues[`:${field}${suffix}`] = value;
-    });
+        updateExpression.push(`#${field} = :${field}${suffix}`);
+
+        expressionAttributeNames[`#${field}`] = field;
+        attributeValues[`:${field}${suffix}`] = value;
+      });
 
     d('update expression', updateExpression.join(', '));
     d('attributeValues', attributeValues);
@@ -150,7 +148,7 @@ export abstract class DynamodbService<T extends BaseModel> {
     } = await this.ddb.update({
       TableName: this.tableName,
       Key: {
-        id
+        _id: doc.id
       },
       UpdateExpression: `SET ${updateExpression.join(', ')}`,
       ExpressionAttributeValues: attributeValues,
@@ -159,14 +157,14 @@ export abstract class DynamodbService<T extends BaseModel> {
     }).promise();
 
 
-    return this.modelFactory(Attributes).toJson();
+    return this.modelFactory(Attributes);
   }
 
   public async delete(id) {
     return this.ddb.delete({
       TableName: this.tableName,
       Key: {
-        id
+        _id: id
       }
     }).promise();
   }
