@@ -87,7 +87,8 @@
     ],
     "collectCoverageFrom": [
       "**/*.ts",
-      "!**/index.ts"
+      "!**/index.ts",
+      "!**/*.integration.test.ts"
     ],
     "coverageDirectory": "coverage/"
   }
