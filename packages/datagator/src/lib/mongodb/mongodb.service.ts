@@ -11,7 +11,7 @@ interface Query {
   [k: string]: string;
 }
 
-export abstract class MongodbService<T extends BaseModel> {
+export abstract class MongodbService<T extends BaseModel<Object>> {
 
   protected uri: string;
   protected options: MongoClientOptions;
@@ -60,7 +60,7 @@ export abstract class MongodbService<T extends BaseModel> {
     const parsedDocs: any[] = [];
 
     for (const doc of docs) {
-      parsedDocs.push(this.modelFactory(doc).toJson());
+      parsedDocs.push(this.modelFactory(doc));
     }
 
     return parsedDocs;
@@ -76,7 +76,7 @@ export abstract class MongodbService<T extends BaseModel> {
     if (!doc) {
       throw new Error('[404] document not found');
     } else {
-      return this.modelFactory(doc).toJson();
+      return this.modelFactory(doc);
     }
   }
 

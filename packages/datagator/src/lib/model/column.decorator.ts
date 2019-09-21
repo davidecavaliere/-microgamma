@@ -6,36 +6,15 @@ export const ColumnMetadata = Symbol('Column');
 
 export interface ColumnOptions {
   regex?: RegExp;
-  /**
-   * if set to true the field will not be returned when .toJson the Model
-   */
-  private: boolean;
+  private?: boolean;
+  primaryKey?: boolean;
 }
 
 export function Column(options?: ColumnOptions): PropertyDecorator {
 
   return <TFunction extends Function>(target: TFunction, propertyKey: string) => {
 
-    // tslint:disable: object-literal-shorthand
-    Object.defineProperty(target, propertyKey, {
-      get: function() {
-        // d('getting through getter');
-        return this['_' + propertyKey];
-      },
-      set: function(value) {
-        // d('setting through setter');
-        
-        // if (value) {
-        //   throw Error('@Column: invalid value.');
-        // }
-        
-        this['_' + propertyKey] = value;
-      },
-      enumerable: true,
-      configurable: true
-    });
-
-
+    d('target', target);
     d('property key', propertyKey);
     d('typeof', typeof propertyKey);
 
@@ -47,7 +26,7 @@ export function Column(options?: ColumnOptions): PropertyDecorator {
   };
 }
 
-export function getColumnMetadata(instance): { [k: string]: {} } {
+export function getColumnMetadata(instance): { [k: string]: ColumnOptions } {
   const metadata = Reflect.getMetadata(ColumnMetadata, instance);
   return metadata || {};
 }

@@ -12,10 +12,12 @@ const d = getDebugger('microgamma:datagator:mongodb.integration');
 describe('mongodb integration test', () => {
 
 
-  class GroupModel extends BaseModel {
+  class GroupModel extends BaseModel<GroupModel> {
 
-    @Column()
-    public _id: string;
+    @Column({
+      primaryKey: true
+    })
+    public id: string;
 
     @Column()
     public name: string;

@@ -1,6 +1,5 @@
 // tslint:disable:no-expression-statement no-object-mutation member-access max-classes-per-file
 import { getDebugger } from '@microgamma/loggator';
-import { config } from 'aws-sdk';
 import { BaseModel, Column } from '../model';
 import { Persistence } from '../persistence';
 import { DynamodbService } from './dynamodb.service';
@@ -10,13 +9,17 @@ const d = getDebugger('microgamma:datagator:dynamodb.integration');
 
 describe('DynamoDB integration test', () => {
 
-  class User extends BaseModel {
+  class User extends BaseModel<User> {
 
-    @Column()
-    id?;
+    @Column({
+      primaryKey: true
+    })
+    id;
 
-    @Column()
-    private hashedPassword?: string;
+    @Column({
+      private: true
+    })
+    public hashedPassword: string;
 
     public set password(password: string) {
       this.hashedPassword = password.repeat(2);
@@ -30,7 +33,7 @@ describe('DynamoDB integration test', () => {
     role;
 
     @Column()
-    settings?: {
+    settings: {
       [k: string]: any
     };
   }
@@ -70,11 +73,11 @@ describe('DynamoDB integration test', () => {
     await dynamo.createTable({
       TableName: 'users',
       KeySchema: [{
-        AttributeName: '_id',
+        AttributeName: 'id',
         KeyType: 'HASH'
       }],
       AttributeDefinitions: [{
-        AttributeName: '_id',
+        AttributeName: 'id',
         AttributeType: 'S'
       }],
       BillingMode: 'PAY_PER_REQUEST'
@@ -154,7 +157,7 @@ describe('DynamoDB integration test', () => {
         name: 'name2',
         email: 'email2',
         role: 'role2',
-        hashedPassword: 'newpasswordnewpassword',
+        hashedPassword: '',
         settings: expect.anything()
       }));
     });
@@ -213,7 +216,7 @@ describe('DynamoDB integration test', () => {
 
     it('should delete an existing user', async () => {
 
-      const resp = await instance.delete(doc.id);
+      const resp = await instance.delete(doc);
 
       expect(resp).toEqual({});
 

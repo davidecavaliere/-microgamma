@@ -1,12 +1,12 @@
 import { getDebugger } from '@microgamma/loggator';
-import { config, DynamoDB } from 'aws-sdk';
+import { DynamoDB } from 'aws-sdk';
 import { BaseModel } from '../model';
 import { DynamoDBPersistenceOptions, getPersistenceMetadata } from '../persistence';
 import { ObjectID } from 'bson';
 
 const d = getDebugger('microgamma:datagator:dynamodb.service');
 
-export abstract class DynamodbService<T extends BaseModel> {
+export abstract class DynamodbService<T extends BaseModel<any>> {
 
   private metadata: DynamoDBPersistenceOptions;
 
@@ -77,18 +77,17 @@ export abstract class DynamodbService<T extends BaseModel> {
     }
   }
 
-  public async create(doc: T) {
+  public async create(doc: Partial<T>) {
 
     // const parsedDoc = this.modelFactory(doc);
     // TODO add doc validation
 
     const id = new ObjectID().toHexString();
-
-    const item = this.modelFactory({
-      id,
-      ...doc
-    });
-
+    d('doc', doc);
+    const item = this.modelFactory(doc);
+    d('item', item);
+    item.primaryKey = id;
+    d('item.primaryKey', item.primaryKey);
     d('putting item', item);
     await this.ddb.put({
       TableName: this.tableName,
@@ -110,7 +109,7 @@ export abstract class DynamodbService<T extends BaseModel> {
    * @param doc
    * @param returnValueType
    */
-  public async update(doc: T, returnValueType = 'ALL_NEW') {
+  public async update(doc: Partial<T>, returnValueType = 'ALL_NEW') {
     const suffix = '_PlAcEhOlDeR';
     
     d('doc', doc);
@@ -124,7 +123,7 @@ export abstract class DynamodbService<T extends BaseModel> {
     const expressionAttributeNames = {};
 
     Object.keys(parsedDoc)
-      .filter((field) => field !== '_id')
+      .filter((field) => field !== parsedDoc.primaryKeyFieldName)
       .forEach((field) => {
         const value = parsedDoc[field];
 
@@ -143,13 +142,18 @@ export abstract class DynamodbService<T extends BaseModel> {
     d('attributeValues', attributeValues);
     d('expressionAttributeNames', expressionAttributeNames);
 
+
+    const keyCondition = {
+      [parsedDoc.primaryKeyFieldName]: parsedDoc.primaryKey
+    };
+
+    d('keyCondition', keyCondition);
+    
     const {
       Attributes
     } = await this.ddb.update({
       TableName: this.tableName,
-      Key: {
-        _id: doc.id
-      },
+      Key: keyCondition,
       UpdateExpression: `SET ${updateExpression.join(', ')}`,
       ExpressionAttributeValues: attributeValues,
       ExpressionAttributeNames: expressionAttributeNames,
@@ -160,12 +164,19 @@ export abstract class DynamodbService<T extends BaseModel> {
     return this.modelFactory(Attributes);
   }
 
-  public async delete(id) {
+  public async delete(doc: Partial<T>) {
+    const _doc = this.modelFactory(doc);
+    d('_doc', _doc);
+
+    const keyCondition = {
+      [_doc.primaryKeyFieldName]: _doc.primaryKey
+    };
+
+    d('keyCondition', keyCondition);
+
     return this.ddb.delete({
       TableName: this.tableName,
-      Key: {
-        _id: id
-      }
+      Key: keyCondition
     }).promise();
   }
 }

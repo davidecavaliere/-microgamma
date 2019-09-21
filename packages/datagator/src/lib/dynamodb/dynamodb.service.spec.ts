@@ -10,10 +10,12 @@ const d = getDebugger('microgamma:datagator:dynamodb.service.spec');
 describe('DynamodbService', () => {
 
 
-  class User extends BaseModel {
+  class User extends BaseModel<User> {
 
-    @Column()
-    id?;
+    @Column({
+      primaryKey: true
+    })
+    id;
 
     @Column({
       private: true
@@ -147,10 +149,10 @@ describe('DynamodbService', () => {
       await instance.create(expected);
 
       expect(instance.ddb.put).toHaveBeenCalledWith({
-        Item: {
-          _id: expect.anything(),
+        Item: new User({
+          id: expect.anything(),
           ...expected
-        },
+        }),
         TableName: persistenceMetadata.tableName
       });
     });

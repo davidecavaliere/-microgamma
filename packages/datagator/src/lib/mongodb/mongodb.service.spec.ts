@@ -8,7 +8,7 @@ import { MongodbService } from './mongodb.service';
 const d = getDebugger('microgamma:persistence.service.spec');
 
 
-class User extends BaseModel {
+class User extends BaseModel<User> {
   @Column({
     private: true
   })

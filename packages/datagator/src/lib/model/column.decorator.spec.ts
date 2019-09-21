@@ -16,7 +16,11 @@ class TestClass extends BaseModel {
   @Column({
     private: true
   })
-  public password: string;
+  public hashedPassword: string;
+
+  public set password(password) {
+    this.hashedPassword = password.repeat(2);
+  }
 }
 
 describe('@Column', () => {
@@ -36,23 +40,10 @@ describe('@Column', () => {
     expect(getColumnMetadata(instance)).toEqual({
       email: undefined,
       name: undefined,
-      password: {
+      hashedPassword: {
         private: true
       }
     });
-  });
-
-  it('should serialize to json', () => {
-    const json = instance.toJson();
-    expect(json).toEqual({
-      name: 'a-name',
-      email: 'an-email'
-    });
-  });
-
-  it('should add getter and setter', ()=> {
-    instance.email = 'my-email';
-    expect(instance.email).toEqual('my-email');
   });
 
 });

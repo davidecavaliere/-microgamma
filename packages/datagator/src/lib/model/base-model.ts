@@ -1,30 +1,56 @@
-import { getColumnMetadata } from './column.decorator';
 import { getDebugger } from '@microgamma/loggator';
+import { getColumnMetadata } from './column.decorator';
 
 const d = getDebugger('microgamma:model');
 
-export class BaseModel {
+export class BaseModel<T extends Object> {
 
-  public id?;
-  public _id?;
+  constructor(props: Partial<T>) {
 
-  constructor(arg) {
-    Object.assign(this, arg);
-  }
+    d('this', this);
+    // d('T', T);
 
-  public toJson?(): any {
+    Object.assign(this, props);
+
     const columns = getColumnMetadata(this);
     d('columns meta', columns);
 
-    const json = {};
+    // tslint:disable-next-line:forin
+    for (const field in columns) {
+      const options = columns[field];
 
-    for (const key in columns) {
-      if (!(columns[key] && columns[key]['private'])) {
-        json[key] = this[key];
+      if (options) {
+        d(`setting ${field} enumerable ${!!options.private}`);
+        Object.defineProperty(this, field, {
+          enumerable: !options.private,
+          writable: true
+        })
+      }
+    }
+  }
+
+  public get primaryKeyFieldName() {
+    const colums = getColumnMetadata(this);
+
+    let primaryKey;
+
+    // tslint:disable-next-line:forin
+    for (const field in colums) {
+      const options = colums[field];
+      if (options && options.primaryKey) {
+        primaryKey = field;
       }
     }
 
-    return json;
+    return primaryKey;
   }
 
+  public get primaryKey() {
+    return this[this.primaryKeyFieldName];
+
+  }
+
+  public set primaryKey(value) {
+    this[this.primaryKeyFieldName] = value;
+  }
 }
