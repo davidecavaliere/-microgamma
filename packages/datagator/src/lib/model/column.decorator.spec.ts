@@ -5,7 +5,7 @@ import { BaseModel } from './base-model';
 
 type MyString = string;
 
-class TestClass extends BaseModel {
+class TestClass extends BaseModel<TestClass> {
 
   @Column()
   public name: MyString;

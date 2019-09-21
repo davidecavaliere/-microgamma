@@ -3,7 +3,6 @@ import { getDebugger } from '@microgamma/loggator';
 import { BaseModel, Column } from '../model';
 import { Persistence } from '../persistence';
 import { DynamodbService } from './dynamodb.service';
-import { config } from 'aws-sdk';
 
 const d = getDebugger('microgamma:datagator:dynamodb.service.spec');
 
@@ -144,15 +143,12 @@ describe('DynamodbService', () => {
         password: 'password1'
       };
 
-      const expected = new User(user);
+      const user1 = new User(user);
 
-      await instance.create(expected);
+      const result = await instance.create(user1);
 
       expect(instance.ddb.put).toHaveBeenCalledWith({
-        Item: new User({
-          id: expect.anything(),
-          ...expected
-        }),
+        Item: result,
         TableName: persistenceMetadata.tableName
       });
     });
