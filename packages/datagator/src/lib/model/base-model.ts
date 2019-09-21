@@ -1,11 +1,12 @@
 import { getDebugger } from '@microgamma/loggator';
 import { getColumnMetadata } from './column.decorator';
 
+
 const d = getDebugger('microgamma:model');
 
-export class BaseModel<T extends Object> {
+export class BaseModel {
 
-  constructor(props: Partial<T>) {
+  constructor(props: Partial<ThisType<BaseModel>>) {
 
     d('this', this);
     // d('T', T);

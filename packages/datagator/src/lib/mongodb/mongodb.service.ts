@@ -11,7 +11,7 @@ interface Query {
   [k: string]: string;
 }
 
-export abstract class MongodbService<T extends BaseModel<Object>> {
+export abstract class MongodbService<T extends BaseModel> {
 
   protected uri: string;
   protected options: MongoClientOptions;

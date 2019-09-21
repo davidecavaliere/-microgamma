@@ -12,7 +12,7 @@ const d = getDebugger('microgamma:datagator:mongodb.integration');
 describe('mongodb integration test', () => {
 
 
-  class GroupModel extends BaseModel<GroupModel> {
+  class GroupModel extends BaseModel {
 
     @Column({
       primaryKey: true

@@ -9,7 +9,7 @@ const d = getDebugger('microgamma:datagator:dynamodb.service.spec');
 describe('DynamodbService', () => {
 
 
-  class User extends BaseModel<User> {
+  class User extends BaseModel {
 
     @Column({
       primaryKey: true

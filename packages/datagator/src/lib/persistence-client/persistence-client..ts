@@ -1,7 +1,6 @@
 import { BaseModel } from '../model';
-import { Function } from 'aws-sdk/clients/greengrass';
 
-export interface PersistenceClient<M extends BaseModel<Function>> {
+export interface PersistenceClient<M extends BaseModel> {
 
   findAll: (query?) => Promise<M[]>;
   findOne: (id: string) => Promise<M>;

@@ -2,7 +2,7 @@
 import { BaseModel } from './base-model';
 import { Column } from './column.decorator';
 
-class MyModel extends BaseModel<MyModel> {
+class MyModel extends BaseModel {
 
   @Column({
     primaryKey: true

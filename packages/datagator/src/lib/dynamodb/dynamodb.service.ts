@@ -6,7 +6,7 @@ import { ObjectID } from 'bson';
 
 const d = getDebugger('microgamma:datagator:dynamodb.service');
 
-export abstract class DynamodbService<T extends BaseModel<any>> {
+export abstract class DynamodbService<T extends BaseModel> {
 
   private metadata: DynamoDBPersistenceOptions;
 
