@@ -157,8 +157,8 @@ describe('DynamoDB integration test', () => {
         name: 'name2',
         email: 'email2',
         role: 'role2',
-        hashedPassword: '',
-        settings: expect.anything()
+        hashedPassword: 'newpasswordnewpassword',
+        settings: {}
       }));
     });
 

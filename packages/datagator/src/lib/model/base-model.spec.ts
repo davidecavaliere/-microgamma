@@ -38,7 +38,8 @@ describe('Model', () => {
     // password field does not get serialized but it is still accessible
 
     expect(instance).toEqual({
-      name: 'my-name'
+      name: 'my-name',
+      password: 'password'
     });
 
     expect(instance.password).toEqual('password');

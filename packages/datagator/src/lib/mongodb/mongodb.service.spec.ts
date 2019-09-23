@@ -114,6 +114,7 @@ describe('MongodbService', () => {
           toArray: jasmine.createSpy('toArray').and.returnValue([])
         }),
         findOne: jasmine.createSpy('findOne').and.returnValue({
+          id: 'anything',
           password: 'password',
           name: 'name',
           email: 'email',
@@ -143,10 +144,12 @@ describe('MongodbService', () => {
 
         d('resp', resp);
         
-        expect(resp).toEqual(({
+        expect(resp).toEqual(new User({
+            id: expect.anything(),
             name: 'name',
             email: 'email',
-            role: 'role'
+            role: 'role',
+            password: 'password'
           })
         );
         expect(collection.findOne).toHaveBeenCalledWith({

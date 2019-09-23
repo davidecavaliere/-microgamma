@@ -47,13 +47,14 @@ describe('DynamodbService', () => {
   const scanMock = jest.fn().mockReturnValue({
     promise: jest.fn().mockResolvedValue({
       Items: [
-        { name: 'name', email: 'email', role: 'role', password: 'password'}
+        {id: 'id', name: 'name', email: 'email', role: 'role', password: 'password'}
       ]
     })
   });
 
   const getMock = jest.fn().mockReturnValue({
     promise: jest.fn().mockResolvedValue({
+      id: 'id',
       name: 'name',
       email: 'email',
       role: 'role',
@@ -92,11 +93,13 @@ describe('DynamodbService', () => {
         TableName: persistenceMetadata.tableName
       });
 
-      expect(resp).toEqual([{
+      expect(resp).toEqual([new User({
+        id: 'id',
         name: 'name',
         email: 'email',
-        role: 'role'
-      }]);
+        role: 'role',
+        password: 'password'
+      })]);
     });
   });
 
@@ -111,11 +114,13 @@ describe('DynamodbService', () => {
         }
       });
 
-      expect(resp).toEqual({
+      expect(resp).toEqual(new User({
+        id: 'id',
         name: 'name',
         email: 'email',
-        role: 'role'
-      });
+        role: 'role',
+        password: 'password'
+      }));
     });
 
     it('should throw an error in case of no document found', async() => {

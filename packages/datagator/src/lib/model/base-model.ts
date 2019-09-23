@@ -9,25 +9,10 @@ export class BaseModel {
   constructor(props: Partial<ThisType<BaseModel>>) {
 
     d('this', this);
-    // d('T', T);
+    d('Type of props', typeof props);
 
     Object.assign(this, props);
 
-    const columns = getColumnMetadata(this);
-    d('columns meta', columns);
-
-    // tslint:disable-next-line:forin
-    for (const field in columns) {
-      const options = columns[field];
-
-      if (options) {
-        d(`setting ${field} enumerable ${!!options.private}`);
-        Object.defineProperty(this, field, {
-          enumerable: !options.private,
-          writable: true
-        })
-      }
-    }
   }
 
   public get primaryKeyFieldName() {
@@ -48,10 +33,27 @@ export class BaseModel {
 
   public get primaryKey() {
     return this[this.primaryKeyFieldName];
-
   }
 
   public set primaryKey(value) {
     this[this.primaryKeyFieldName] = value;
+  }
+
+  public toJSON() {
+    const columns = getColumnMetadata(this);
+
+    const retvalue: Partial<ThisType<this>> = {};
+    // tslint:disable-next-line:forin
+    for (const field in columns) {
+      const options = columns[field];
+
+      d(`setting ${field}: ${this[field]},`, options);
+      if (!options || (options && !options.private)) {
+        retvalue[field] = this[field];
+      }
+
+    }
+
+    return retvalue;
   }
 }
