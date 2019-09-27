@@ -54,11 +54,13 @@ describe('DynamodbService', () => {
 
   const getMock = jest.fn().mockReturnValue({
     promise: jest.fn().mockResolvedValue({
-      id: 'id',
-      name: 'name',
-      email: 'email',
-      role: 'role',
-      password: 'password'
+      Item: {
+        id: 'id',
+        name: 'name',
+        email: 'email',
+        role: 'role',
+        password: 'password'
+      }
     })
   });
 
@@ -110,7 +112,7 @@ describe('DynamodbService', () => {
       expect(instance.ddb.get).toHaveBeenCalledWith({
         TableName: persistenceMetadata.tableName,
         Key: {
-          HashKey: 'id'
+          id: 'id'
         }
       });
 

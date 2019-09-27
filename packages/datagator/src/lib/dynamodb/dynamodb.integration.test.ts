@@ -4,6 +4,7 @@ import { BaseModel, Column } from '../model';
 import { Persistence } from '../persistence';
 import { DynamodbService } from './dynamodb.service';
 import DynamoDB = require('aws-sdk/clients/dynamodb');
+import anything = jasmine.anything;
 
 const d = getDebugger('microgamma:datagator:dynamodb.integration');
 
@@ -94,10 +95,49 @@ describe('DynamoDB integration test', () => {
     expect(instance).toBeTruthy();
   });
 
-  it('should get users', async () => {
-    const users = await instance.findAll();
+  describe('#findAll', () => {
+    it('should get users', async () => {
+      const users = await instance.findAll();
 
-    expect(users).toEqual([]);
+      expect(users).toEqual([]);
+    });
+
+  });
+
+  describe('#findOne', () => {
+    let userId;
+
+    beforeEach(async () => {
+      const user = {
+        name: 'name_',
+        email: 'email_',
+        role: 'role_',
+        settings: {}
+      };
+
+      const resp = await instance.create({
+        ...user,
+        password: 'password_'
+      });
+
+      userId = resp.primaryKey;
+    });
+
+    it('should find a user by primary key', async () => {
+
+      const {id, ...user} = await instance.findOne(userId);
+
+      expect(id).toEqual(anything());
+
+      expect(user).toEqual({
+        email: 'email_',
+        name: 'name_',
+        role: 'role_',
+        settings: {},
+        hashedPassword: 'password_password_'
+      });
+
+    });
   });
 
   describe('#create', () => {
@@ -200,7 +240,6 @@ describe('DynamoDB integration test', () => {
     });
   });
 
-
   describe('#delete', () => {
     let doc;
 
@@ -226,7 +265,6 @@ describe('DynamoDB integration test', () => {
       expect(users).toEqual([]);
     });
   });
-
 
   afterEach(async () => {
 

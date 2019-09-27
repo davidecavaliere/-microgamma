@@ -62,10 +62,13 @@ export abstract class DynamodbService<T extends BaseModel> {
   public async findOne(id: string) {
     d(`searching document by id ${id}`);
 
+    // TODO have a better solution
+    const emptyModel = this.modelFactory({});
+
     const data = await this.ddb.get({
       TableName: this.tableName,
       Key: {
-        HashKey: id
+        [emptyModel.primaryKeyFieldName]: id
       }
     }).promise();
 
@@ -73,7 +76,7 @@ export abstract class DynamodbService<T extends BaseModel> {
       throw new Error('document not found');
     } else {
       d('found document', data);
-      return this.modelFactory(data);
+      return this.modelFactory(data.Item);
     }
   }
 
