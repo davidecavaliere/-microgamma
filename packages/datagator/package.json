@@ -1,6 +1,6 @@
 {
   "name": "@microgamma/datagator",
-  "version": "1.11.8",
+  "version": "1.11.9",
   "description": "syntactic sugar for mongodb",
   "author": {
     "email": "cavaliere.davide@gmail.com",
