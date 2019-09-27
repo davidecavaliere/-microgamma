@@ -65,12 +65,15 @@ export abstract class DynamodbService<T extends BaseModel> {
     // TODO have a better solution
     const emptyModel = this.modelFactory({});
 
-    const data = await this.ddb.get({
+    const query = {
       TableName: this.tableName,
       Key: {
         [emptyModel.primaryKeyFieldName]: id
       }
-    }).promise();
+    };
+    d('query', query);
+
+    const data = await this.ddb.get(query).promise();
 
     if (!data) {
       throw new Error('document not found');
