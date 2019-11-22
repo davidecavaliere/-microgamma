@@ -10,12 +10,9 @@ install:
   - lerna bootstrap
 
 script:
-  - yarn test
+  - yarn test && yarn cov:send
   - yarn test:integration
   - yarn build
-
-after_success:
-  - yarn cov:send
 
 before_deploy:
   - echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" >> $HOME/.npmrc 2> /dev/null
