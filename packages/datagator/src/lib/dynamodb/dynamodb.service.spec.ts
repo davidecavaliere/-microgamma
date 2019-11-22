@@ -87,12 +87,18 @@ describe('DynamodbService', () => {
   beforeEach(() => {
     instance = new UserPersistenceService();
 
-    // @ts-ignore
     jest.spyOn(instance, 'ddb', 'get').mockReturnValue({
       scan: scanMock,
       get: getMock,
       put: putMock,
-      query: queryMock
+      query: queryMock,
+      delete: jest.fn(),
+      batchGet: jest.fn(),
+      batchWrite: jest.fn(),
+      createSet: jest.fn(),
+      transactGet: jest.fn(),
+      transactWrite: jest.fn(),
+      update: jest.fn()
     });
 
   });
@@ -146,11 +152,20 @@ describe('DynamodbService', () => {
 
     it('should throw an error in case of no document found', async() => {
 
-      // @ts-ignore
       jest.spyOn(instance, 'ddb', 'get').mockReturnValue({
         query: jest.fn().mockReturnValue({
           promise: jest.fn().mockResolvedValue(undefined)
-        })
+        }),
+        delete: jest.fn(),
+        batchGet: jest.fn(),
+        batchWrite: jest.fn(),
+        createSet: jest.fn(),
+        transactGet: jest.fn(),
+        transactWrite: jest.fn(),
+        update: jest.fn(),
+        get: jest.fn(),
+        scan: jest.fn(),
+        put: jest.fn()
       });
 
       try {
