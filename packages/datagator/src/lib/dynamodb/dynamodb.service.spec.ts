@@ -87,6 +87,7 @@ describe('DynamodbService', () => {
   beforeEach(() => {
     instance = new UserPersistenceService();
 
+    // @ts-ignore
     jest.spyOn(instance, 'ddb', 'get').mockReturnValue({
       scan: scanMock,
       get: getMock,
@@ -145,6 +146,7 @@ describe('DynamodbService', () => {
 
     it('should throw an error in case of no document found', async() => {
 
+      // @ts-ignore
       jest.spyOn(instance, 'ddb', 'get').mockReturnValue({
         query: jest.fn().mockReturnValue({
           promise: jest.fn().mockResolvedValue(undefined)
