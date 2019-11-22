@@ -11,7 +11,7 @@ install:
 
 script:
   - yarn test
-#  - yarn test:integration
+  - yarn test:integration
   - yarn build
 
 after_success:
