@@ -1,7 +1,7 @@
 {
   "name": "@microgamma/datagator",
   "version": "1.11.11",
-  "description": "syntactic sugar for mongodb",
+  "description": "syntactic sugar for CRUD operations with mongodb and dynamodb",
   "author": {
     "email": "cavaliere.davide@gmail.com",
     "name": "Davide Cavaliere",
@@ -93,15 +93,6 @@
     "reporters": [
       "default"
     ],
-    "coverageReporters": [
-      "json",
-      "html"
-    ],
-    "collectCoverageFrom": [
-      "**/*.ts",
-      "!**/index.ts"
-    ],
-    "coverageDirectory": "./coverage/",
     "preset": "@shelf/jest-dynamodb"
   },
   "devDependencies": {
