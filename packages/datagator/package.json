@@ -63,7 +63,8 @@
     "@microgamma/loggator": ">=1.10",
     "@types/mongodb": "^3.1.18",
     "mongodb": "^3.1.10",
-    "reflect-metadata": "^0.1.12"
+    "reflect-metadata": "^0.1.12",
+    "utility-types": "^3.8.0"
   },
   "config": {
     "commitizen": {
@@ -100,6 +101,10 @@
       "**/*.ts",
       "!**/index.ts"
     ],
-    "coverageDirectory": "./coverage/"
+    "coverageDirectory": "./coverage/",
+    "preset": "@shelf/jest-dynamodb"
+  },
+  "devDependencies": {
+    "@shelf/jest-dynamodb": "^1.5.0"
   }
 }
