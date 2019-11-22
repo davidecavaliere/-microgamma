@@ -3,7 +3,7 @@ import { MongodbService } from '../mongodb';
 import { BaseModel } from '../model';
 import { getPersistenceMetadata, Persistence } from './persistence.decorator';
 
-class User extends BaseModel {
+class User extends BaseModel<User> {
   password;
   name;
   email;

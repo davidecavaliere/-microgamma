@@ -1,12 +1,14 @@
 import { getDebugger } from '@microgamma/loggator';
 import { getColumnMetadata } from './column.decorator';
-
+import { Model } from './base-model.types';
 
 const d = getDebugger('microgamma:model');
 
-export class BaseModel {
 
-  constructor(props: Partial<ThisType<BaseModel>>) {
+
+export class BaseModel<T extends BaseModel<T>> {
+
+  constructor(props: Model<T>) {
 
     d('this', this);
     d('Type of props', typeof props);
@@ -15,7 +17,7 @@ export class BaseModel {
 
   }
 
-  public get primaryKeyFieldName() {
+  public get primaryKeyFieldName(): string {
     const colums = getColumnMetadata(this);
 
     let primaryKey;
@@ -31,7 +33,7 @@ export class BaseModel {
     return primaryKey;
   }
 
-  public get primaryKey() {
+  public get primaryKey(): string {
     return this[this.primaryKeyFieldName];
   }
 
@@ -39,21 +41,21 @@ export class BaseModel {
     this[this.primaryKeyFieldName] = value;
   }
 
-  public toJSON() {
+  public toJSON():  Model<T> {
     const columns = getColumnMetadata(this);
 
-    const retvalue: Partial<ThisType<this>> = {};
+    const publicObject = {};
     // tslint:disable-next-line:forin
     for (const field in columns) {
       const options = columns[field];
 
       d(`setting ${field}: ${this[field]},`, options);
       if (!options || (options && !options.private)) {
-        retvalue[field] = this[field];
+        publicObject[field] = this[field];
       }
 
     }
 
-    return retvalue;
+    return publicObject as Model<T>;
   }
 }

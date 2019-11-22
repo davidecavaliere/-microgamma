@@ -1,28 +1,32 @@
-import { getDebugger } from '@microgamma/loggator';
+
 import { DynamoDB } from 'aws-sdk';
 import { BaseModel } from '../model';
 import { DynamoDBPersistenceOptions, getPersistenceMetadata } from '../persistence';
 import { ObjectID } from 'bson';
+import { DocumentClient } from 'aws-sdk/lib/dynamodb/document_client';
+import ExpressionAttributeNameMap = DocumentClient.ExpressionAttributeNameMap;
+import ConditionExpression = DocumentClient.ConditionExpression;
+import { Model } from '../model/base-model.types';
+import { getDebugger } from '@microgamma/loggator';
 
 const d = getDebugger('microgamma:datagator:dynamodb.service');
 
-export abstract class DynamodbService<T extends BaseModel> {
+export abstract class DynamodbService<T extends BaseModel<any>> {
 
+  private suffix = '_PlAcEhOlDeR';
   private metadata: DynamoDBPersistenceOptions;
+  private readonly _ddb: DynamoDB.DocumentClient;
+  private dynamo: DynamoDB;
+
+  protected modelFactory(doc: Partial<Model<T>>): T {
+    const model = this.metadata.model;
+    return new model(doc);
+  }
 
   public tableName: string;
 
-  private _ddb: DynamoDB.DocumentClient;
-
   public get ddb() {
     return this._ddb;
-  }
-
-  private dynamo: DynamoDB;
-
-  protected modelFactory(doc): T {
-    const model = this.metadata.model;
-    return new model(doc);
   }
 
   constructor() {
@@ -31,8 +35,6 @@ export abstract class DynamodbService<T extends BaseModel> {
 
     this.dynamo = new DynamoDB(this.metadata.options);
     this._ddb = new DynamoDB.DocumentClient(this.metadata.options);
-
-    d('endpoint', this.dynamo.endpoint);
   }
 
   public async findAll(query?: DynamoDB.QueryInput) {
@@ -44,9 +46,8 @@ export abstract class DynamodbService<T extends BaseModel> {
     }).promise();
 
     d('resp', resp);
-    const docs = resp.Items;
+    const docs = resp.Items as Array<Model<T>>;
     d('docs', docs);
-
 
     const parsedDocs: any[] = [];
 
@@ -59,31 +60,61 @@ export abstract class DynamodbService<T extends BaseModel> {
     return parsedDocs;
   }
 
-  public async findOne(id: string) {
-    d(`searching document by id ${id}`);
+  public async findOne(doc: Partial<Model<T>>) {
+    d(`searching document by`, doc);
 
-    // TODO have a better solution
-    const emptyModel = this.modelFactory({});
 
-    const query = {
-      TableName: this.tableName,
-      Key: {
-        [emptyModel.primaryKeyFieldName]: id
-      }
-    };
+    // TODO should only handle primary or secondary indexes below code should be a special case of findAll
+
+
+    const parsedDoc = this.modelFactory(doc);
+    d('parsed doc', parsedDoc);
+
+    let query;
+
+    if (doc.hasOwnProperty(parsedDoc.primaryKeyFieldName)) {
+      d('searching by primary key... Shall we also parse over attributes if any?');
+      const keyFieldName = parsedDoc.primaryKeyFieldName;
+
+      query = {
+        TableName: this.tableName,
+        KeyConditionExpression: `#${keyFieldName} = :partitionKeyValue`,
+        ExpressionAttributeNames: {
+          [`#${keyFieldName}`]: keyFieldName
+        },
+        ExpressionAttributeValues: {
+          ':partitionKeyValue': parsedDoc.primaryKey
+        }
+
+      };
+    } else {
+      query = {
+        TableName: this.tableName,
+        KeyConditionExpression: this.getConditionExpression(parsedDoc),
+        ExpressionAttributeNames: this.getAttributeNames(parsedDoc),
+        ExpressionAttributeValues: this.getAttributeValues(parsedDoc)
+      };
+
+    }
+
     d('query', query);
 
-    const data = await this.ddb.get(query).promise();
+    const data = await this.ddb.query(query).promise();
 
-    if (!data) {
+    if (!data || data.Items.length === 0) {
       throw new Error('document not found');
     } else {
       d('found document', data);
-      return this.modelFactory(data.Item);
+
+      if (data.Items.length === 1) {
+        return this.modelFactory(data.Items[0] as Model<T>);
+      } else {
+        throw new Error('more than one document found ')
+      }
     }
   }
 
-  public async create(doc: Partial<T>) {
+  public async create(doc: Model<T>) {
 
     // const parsedDoc = this.modelFactory(doc);
     // TODO add doc validation
@@ -115,39 +146,21 @@ export abstract class DynamodbService<T extends BaseModel> {
    * @param doc
    * @param returnValueType
    */
-  public async update(doc: Partial<T>, returnValueType = 'ALL_NEW') {
-    const suffix = '_PlAcEhOlDeR';
-    
+  public async update(doc: Model<T>, returnValueType = 'ALL_NEW') {
+
     d('doc', doc);
 
     const parsedDoc = this.modelFactory(doc);
 
     d('parsedDoc', parsedDoc);
 
-    const updateExpression: string[] = [];
-    const attributeValues = {};
-    const expressionAttributeNames = {};
+    const updateExpression: string = this.getUpdateExpression(parsedDoc);
+    const attributeValues = this.getAttributeValues(parsedDoc);
+    const expressionAttributeNames = this.getAttributeNames(parsedDoc);
 
-    Object.keys(parsedDoc)
-      .filter((field) => field !== parsedDoc.primaryKeyFieldName)
-      .forEach((field) => {
-        const value = parsedDoc[field];
-
-        if (!value) {
-          // if value is falsy don't create update instructions
-          return;
-        }
-
-        updateExpression.push(`#${field} = :${field}${suffix}`);
-
-        expressionAttributeNames[`#${field}`] = field;
-        attributeValues[`:${field}${suffix}`] = value;
-      });
-
-    d('update expression', updateExpression.join(', '));
+    d('update expression', updateExpression);
     d('attributeValues', attributeValues);
     d('expressionAttributeNames', expressionAttributeNames);
-
 
     const keyCondition = {
       [parsedDoc.primaryKeyFieldName]: parsedDoc.primaryKey
@@ -160,17 +173,16 @@ export abstract class DynamodbService<T extends BaseModel> {
     } = await this.ddb.update({
       TableName: this.tableName,
       Key: keyCondition,
-      UpdateExpression: `SET ${updateExpression.join(', ')}`,
+      UpdateExpression: updateExpression,
       ExpressionAttributeValues: attributeValues,
       ExpressionAttributeNames: expressionAttributeNames,
       ReturnValues: returnValueType
     }).promise();
 
-
-    return this.modelFactory(Attributes);
+    return this.modelFactory(Attributes as Model<T>);
   }
 
-  public async delete(doc: Partial<T>) {
+  public async delete(doc: Model<T>) {
     const _doc = this.modelFactory(doc);
     d('_doc', _doc);
 
@@ -184,5 +196,36 @@ export abstract class DynamodbService<T extends BaseModel> {
       TableName: this.tableName,
       Key: keyCondition
     }).promise();
+  }
+
+  protected getConditionExpression(doc: Partial<T>): ConditionExpression {
+    return Object.keys(doc)
+      .filter((field) => field !== doc.primaryKeyFieldName)
+      .map((field) => {
+        return `#${field} = :${field}${this.suffix}`;
+      }).join(', ');
+  }
+
+  protected getUpdateExpression(doc: Partial<T>): string {
+
+    return `SET ${this.getConditionExpression(doc)}`;
+  }
+
+  protected getAttributeNames(doc: Partial<T>): ExpressionAttributeNameMap {
+    return Object.keys(doc)
+      .filter((field) => field !== doc.primaryKeyFieldName)
+      .reduce((attributeNames, field) => {
+        attributeNames[`#${field}`] = field;
+        return attributeNames;
+      }, {});
+  }
+
+  protected getAttributeValues(doc: Partial<T>) {
+    return Object.keys(doc)
+      .filter((field) => field !== doc.primaryKeyFieldName)
+      .reduce((attributeNames, field) => {
+        attributeNames[`:${field}${this.suffix}`] = doc[field];
+        return attributeNames;
+      }, {});
   }
 }

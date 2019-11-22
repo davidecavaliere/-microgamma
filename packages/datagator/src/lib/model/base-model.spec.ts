@@ -1,13 +1,14 @@
 // tslint:disable:no-expression-statement no-object-mutation
 import { BaseModel } from './base-model';
 import { Column } from './column.decorator';
+import { SetOnlyType } from './base-model.types';
 
-class MyModel extends BaseModel {
+class MyModel extends BaseModel<MyModel> {
 
   @Column({
     primaryKey: true
   })
-  public id: string;
+  public id?: string;
 
   @Column()
   public name: string;
@@ -15,7 +16,15 @@ class MyModel extends BaseModel {
   @Column({
     private: true
   })
-  public password: string;
+  public hashedPassword?: string;
+
+  public set password(value: SetOnlyType<string>) {
+    this.hashedPassword = value.repeat(2);
+  }
+
+  public getId() {
+    return this.id;
+  }
 
 }
 
@@ -39,15 +48,14 @@ describe('Model', () => {
 
     expect(instance).toEqual({
       name: 'my-name',
-      password: 'password'
+      hashedPassword: 'passwordpassword'
     });
 
-    expect(instance.password).toEqual('password');
+    expect(instance.password).toEqual(undefined);
 
   });
 
   it('should serialize to json', () => {
-
 
     expect(JSON.stringify(instance)).toEqual(JSON.stringify({
       name: 'my-name'

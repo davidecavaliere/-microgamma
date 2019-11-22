@@ -3,13 +3,14 @@ import { getDebugger } from '@microgamma/loggator';
 import { BaseModel, Column } from '../model';
 import { Persistence } from '../persistence';
 import { DynamodbService } from './dynamodb.service';
+import { service } from 'aws-sdk/clients/health';
 
 const d = getDebugger('microgamma:datagator:dynamodb.service.spec');
 
 describe('DynamodbService', () => {
 
 
-  class User extends BaseModel {
+  class User extends BaseModel<User> {
 
     @Column({
       primaryKey: true
@@ -64,6 +65,18 @@ describe('DynamodbService', () => {
     })
   });
 
+  const queryMock = jest.fn().mockReturnValue({
+    promise: jest.fn().mockResolvedValue({
+      Items: [{
+        id: 'id',
+        name: 'name',
+        email: 'email',
+        role: 'role',
+        password: 'password'
+      }]
+    })
+  });
+
   // TODO find a real response example
   const putMock = jest.fn().mockReturnValue({
     promise: jest.fn().mockResolvedValue({
@@ -77,7 +90,8 @@ describe('DynamodbService', () => {
     jest.spyOn(instance, 'ddb', 'get').mockReturnValue({
       scan: scanMock,
       get: getMock,
-      put: putMock
+      put: putMock,
+      query: queryMock
     });
 
   });
@@ -108,11 +122,15 @@ describe('DynamodbService', () => {
   describe('#findOne', () => {
 
     it('should call get',  async () => {
-      const resp = await instance.findOne('id');
-      expect(instance.ddb.get).toHaveBeenCalledWith({
+      const resp = await instance.findOne({email: 'any-email'});
+      expect(instance.ddb.query).toHaveBeenCalledWith({
         TableName: persistenceMetadata.tableName,
-        Key: {
-          id: 'id'
+        KeyConditionExpression: '#email = :email_PlAcEhOlDeR',
+        ExpressionAttributeNames: {
+          '#email': 'email'
+        },
+        ExpressionAttributeValues: {
+          ':email_PlAcEhOlDeR': 'any-email'
         }
       });
 
@@ -128,13 +146,13 @@ describe('DynamodbService', () => {
     it('should throw an error in case of no document found', async() => {
 
       jest.spyOn(instance, 'ddb', 'get').mockReturnValue({
-        get: jest.fn().mockReturnValue({
+        query: jest.fn().mockReturnValue({
           promise: jest.fn().mockResolvedValue(undefined)
         })
       });
 
       try {
-        await instance.findOne('id');
+        await instance.findOne({email: 'any-email'});
       } catch (e) {
         expect(e.message).toEqual('document not found');
       }
@@ -158,6 +176,45 @@ describe('DynamodbService', () => {
         Item: result,
         TableName: persistenceMetadata.tableName
       });
+    });
+
+  });
+
+  describe('#getUpdateExpression', () => {
+    it('should return an update expression given a Partial doc', () => {
+      expect(instance['getUpdateExpression']({
+        id: 'an-id',
+        email: 'any-email'
+      })).toEqual('SET #id = :id_PlAcEhOlDeR, #email = :email_PlAcEhOlDeR');
+
+    });
+
+  });
+
+  describe('#getAttributeNames', () => {
+    it('should return attribute names given a Partial doc', () => {
+      expect(instance['getAttributeNames']({
+        id: 'an-id',
+        email: 'any-email'
+      })).toEqual({
+        '#email': 'email',
+        '#id': 'id'
+      });
+
+    });
+
+  });
+  
+  describe('#getAttributeValues', () => {
+    it('should return an attributes values given a Partial doc', () => {
+      expect(instance['getAttributeValues']({
+        id: 'an-id',
+        email: 'any-email'
+      })).toEqual({
+        ':email_PlAcEhOlDeR': 'any-email',
+        ':id_PlAcEhOlDeR': 'an-id'
+      });
+
     });
 
   });

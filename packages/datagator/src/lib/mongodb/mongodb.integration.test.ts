@@ -9,10 +9,10 @@ const d = getDebugger('microgamma:datagator:mongodb.integration');
 
 
 
-describe('mongodb integration test', () => {
+xdescribe('mongodb integration test', () => {
 
 
-  class GroupModel extends BaseModel {
+  class GroupModel extends BaseModel<GroupModel> {
 
     @Column({
       primaryKey: true

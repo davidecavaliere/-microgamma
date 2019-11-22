@@ -5,7 +5,7 @@ import { BaseModel } from './base-model';
 
 type MyString = string;
 
-class TestClass extends BaseModel {
+class TestClass extends BaseModel<TestClass> {
 
   @Column()
   public name: MyString;
@@ -16,9 +16,9 @@ class TestClass extends BaseModel {
   @Column({
     private: true
   })
-  public hashedPassword: string;
+  public hashedPassword?: string;
 
-  public set password(password) {
+  public set password(password: string) {
     this.hashedPassword = password.repeat(2);
   }
 }

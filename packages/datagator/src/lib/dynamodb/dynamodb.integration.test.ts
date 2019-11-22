@@ -4,37 +4,37 @@ import { BaseModel, Column } from '../model';
 import { Persistence } from '../persistence';
 import { DynamodbService } from './dynamodb.service';
 import DynamoDB = require('aws-sdk/clients/dynamodb');
-import anything = jasmine.anything;
+import { SetOnlyType } from '../model/base-model.types';
 
 const d = getDebugger('microgamma:datagator:dynamodb.integration');
 
 describe('DynamoDB integration test', () => {
 
-  class User extends BaseModel {
+  class User extends BaseModel<User> {
 
     @Column({
       primaryKey: true
     })
-    id;
+    id?: string;
 
     @Column({
       private: true
     })
-    public hashedPassword: string;
+    public hashedPassword?: string;
 
-    public set password(password: string) {
+    public set password(password: SetOnlyType<string>) {
       this.hashedPassword = password.repeat(2);
     };
 
     @Column()
-    name;
+    name: string;
     @Column()
-    email;
+    email: string;
     @Column()
-    role;
+    role: string;
 
     @Column()
-    settings: {
+    settings?: {
       [k: string]: any
     };
   }
@@ -43,8 +43,8 @@ describe('DynamoDB integration test', () => {
     tableName: 'users',
     model: User,
     options: {
-      endpoint: 'http://localhost:8080',
-      region: 'localhost'
+      endpoint: 'http://localhost:8000',
+      region: 'local-env'
     }
   };
 
@@ -56,12 +56,12 @@ describe('DynamoDB integration test', () => {
 
   let dynamo;
 
-  beforeAll(() => {
+  beforeAll(async () => {
     instance = new UserPersistenceService();
 
     dynamo = new DynamoDB({
-      endpoint: 'http://localhost:8080',
-      region: 'localhost'
+      endpoint: 'http://localhost:8000',
+      region: 'local-env'
     });
 
     d('dynamo endpoint', dynamo.endpoint);
@@ -70,25 +70,9 @@ describe('DynamoDB integration test', () => {
 
   beforeEach(async () => {
 
-    d('createTable');
-    await dynamo.createTable({
-      TableName: 'users',
-      KeySchema: [{
-        AttributeName: 'id',
-        KeyType: 'HASH'
-      }],
-      AttributeDefinitions: [{
-        AttributeName: 'id',
-        AttributeType: 'S'
-      }],
-      BillingMode: 'PAY_PER_REQUEST'
-    }).promise();
+    const tables = await dynamo.listTables({}).promise();
 
-
-    d('describe table');
-    await dynamo.describeTable({
-      TableName: 'users'
-    }).promise();
+    d('tables', tables);
   });
 
   it('should instantiate', () => {
@@ -123,11 +107,12 @@ describe('DynamoDB integration test', () => {
       userId = resp.primaryKey;
     });
 
+
     it('should find a user by primary key', async () => {
 
-      const {id, ...user} = await instance.findOne(userId);
+      const {id, ...user} = await instance.findOne({id: userId});
 
-      expect(id).toEqual(anything());
+      expect(id).toEqual(expect.anything());
 
       expect(user).toEqual({
         email: 'email_',
@@ -150,6 +135,8 @@ describe('DynamoDB integration test', () => {
         settings: {}
       };
 
+
+
       const resp = await instance.create({
         ...user,
         password: 'password_'
@@ -161,6 +148,8 @@ describe('DynamoDB integration test', () => {
         settings: {},
         hashedPassword: 'password_password_'
       };
+
+
 
       expect(resp).toEqual(new User(expected));
 
@@ -233,10 +222,6 @@ describe('DynamoDB integration test', () => {
         }
       }));
 
-      // const db = await instance.findAll();
-
-      // expect(db).toEqual([]);
-
     });
   });
 
@@ -262,24 +247,9 @@ describe('DynamoDB integration test', () => {
 
       const users = await instance.findAll();
 
-      expect(users).toEqual([]);
+      expect(users.indexOf(doc)).toEqual(-1);
     });
   });
 
-  afterEach(async () => {
-
-    await dynamo.deleteTable({
-      TableName: 'users'
-    }).promise();
-
-    d('table deleted');
-    d('______________________________________')
-    d('______________________________________')
-    d('______________________________________')
-    d('______________________________________')
-    d('______________________________________')
-    d('______________________________________')
-    d('______________________________________')
-  });
 
 });
