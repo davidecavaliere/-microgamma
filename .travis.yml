@@ -18,8 +18,8 @@ before_deploy:
   - echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" >> $HOME/.npmrc 2> /dev/null
 deploy:
   provider: script
-  script: 'yarn publish:changed'
+  script: 'git status && yarn publish:changed'
   skip_cleanup: true
   on:
-    tags: true
+#    tags: true
     all_branches: true
