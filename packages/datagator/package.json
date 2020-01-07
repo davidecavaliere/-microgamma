@@ -1,7 +1,7 @@
 {
   "name": "@microgamma/datagator",
   "version": "1.11.13",
-  "description": "syntactic sugar for CRUD operations with mongodb and dynamodb",
+  "description": "helpers to set connection metadata",
   "author": {
     "email": "cavaliere.davide@gmail.com",
     "name": "Davide Cavaliere",
@@ -13,8 +13,6 @@
   "typings": "lib/index.d.ts",
   "module": "lib/index.js",
   "keywords": [
-    "mongodb",
-    "dynamodb",
     "decorator",
     "orm"
   ],
