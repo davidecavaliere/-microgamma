@@ -16,7 +16,7 @@ describe('mongodb integration test', () => {
     @Column({
       primaryKey: true
     })
-    public id: string;
+    public _id: string;
 
     @Column()
     public name: string;
@@ -76,12 +76,11 @@ describe('mongodb integration test', () => {
       };
 
       const resp = await instance.create(group);
-      console.log('respo', resp);
 
-      expect(resp.toString()).toContain(JSON.stringify({
-        n: 1,
-        ok: 1
-      }));
+      expect(resp).toEqual({
+        _id: expect.anything(),
+        ...group
+      });
     });
 
     it('should delete a group', async () => {

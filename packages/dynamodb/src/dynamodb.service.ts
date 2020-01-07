@@ -1,13 +1,18 @@
-
 import { DynamoDB } from 'aws-sdk';
 import { ObjectID } from 'bson';
 import { DocumentClient } from 'aws-sdk/lib/dynamodb/document_client';
 import ExpressionAttributeNameMap = DocumentClient.ExpressionAttributeNameMap;
 import ConditionExpression = DocumentClient.ConditionExpression;
 import { getDebugger } from '@microgamma/loggator';
-import { BaseModel, DynamoDBPersistenceOptions, getPersistenceMetadata, ModelType } from '@microgamma/datagator';
+import { BaseModel, getPersistenceMetadata, ModelType, PersistenceServiceOptions } from '@microgamma/datagator';
+import { ClientConfiguration } from 'aws-sdk/clients/dynamodb';
 
 const d = getDebugger('microgamma:datagator:dynamodb.service');
+
+export interface DynamoDBPersistenceOptions extends PersistenceServiceOptions {
+  tableName: string;
+  options?: ClientConfiguration;
+}
 
 export abstract class DynamodbService<T extends BaseModel<any>> {
 

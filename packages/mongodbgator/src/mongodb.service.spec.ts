@@ -1,8 +1,9 @@
 // tslint:disable:no-expression-statement no-object-mutation member-access max-classes-per-file
 import { getDebugger } from '@microgamma/loggator';
-import { MongoClient, ObjectID } from 'mongodb';
 import { MongodbService } from './mongodb.service';
 import { BaseModel, Column, Persistence } from '@microgamma/datagator';
+import { ObjectID } from 'bson';
+import { MongoClient } from 'mongodb';
 
 const d = getDebugger('microgamma:persistence.service.spec');
 
@@ -55,18 +56,6 @@ describe('MongodbService', () => {
   it('can be instantiated', () => {
 
     expect(instance).toBeTruthy();
-    // d('instance', instance);
-    // expect(instance instanceof UserPersistenceService).toBeTruthy();
-    // return instance.getClient().then((client) => {
-    //   expect(client.isConnected()).toBeTruthy();
-    //
-    //   instance.findAll().then((docs) => {
-    //     d('docs found', docs);
-    //     expect(docs).toBeTruthy();
-    //   });
-    // }).catch((err) => {
-    //   expect(err).toBeFalsy();
-    // });
 
   });
 

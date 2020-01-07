@@ -1,10 +1,16 @@
 import { getDebugger } from '@microgamma/loggator';
 import { ObjectID } from 'bson';
 import { Collection, MongoClient, MongoClientOptions } from 'mongodb';
-import { BaseModel, getPersistenceMetadata, MongoDBPersistenceOptions } from '@microgamma/datagator';
+import { BaseModel, getPersistenceMetadata, ModelType, PersistenceServiceOptions } from '@microgamma/datagator';
 
 const d = getDebugger('microgamma:persistence:service');
 
+export interface MongoDBPersistenceOptions extends PersistenceServiceOptions {
+  collection: string;
+  uri: string;
+  dbName: string;
+  options?: MongoClientOptions;
+}
 
 interface Query {
   [k: string]: string;
@@ -29,7 +35,7 @@ export abstract class MongodbService<T extends BaseModel<any>> {
 
 
     if (!this._client) {
-      const metadata = getPersistenceMetadata(this) as MongoDBPersistenceOptions;
+      const metadata = getPersistenceMetadata(this) as unknown as MongoDBPersistenceOptions;
       d('got metadata', metadata);
 
       this.uri = metadata.uri;
@@ -79,11 +85,10 @@ export abstract class MongodbService<T extends BaseModel<any>> {
     }
   }
 
-  public async create(doc: T) {
+  public async create(doc: T): Promise<ModelType<T>> {
     // tslint:disable: no-parameter-reassignment
     doc = this.modelFactory(doc);
-    const resp = (await this.getCollection()).insertOne(doc);
-
+    const resp = await (await this.getCollection()).insertOne(doc);
     return resp.ops.pop();
   }
 
