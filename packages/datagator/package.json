@@ -1,6 +1,6 @@
 {
   "name": "@microgamma/datagator",
-  "version": "1.11.13",
+  "version": "1.12.0",
   "description": "helpers to set connection metadata",
   "author": {
     "email": "cavaliere.davide@gmail.com",
