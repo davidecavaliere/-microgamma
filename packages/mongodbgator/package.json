@@ -1,22 +1,20 @@
 {
   "name": "@microgamma/mongodb",
   "version": "1.12.1",
-  "description": "syntactic sugar for CRUD operations with mongodb and dynamodb",
+  "description": "CRUD operations with dynamodb",
   "author": {
     "email": "cavaliere.davide@gmail.com",
     "name": "Davide Cavaliere",
     "url": "www.dcsoftware.io"
   },
-  "homepage": "https://github.com/davidecavaliere/-microgamma/tree/master/packages/datagator",
+  "homepage": "https://github.com/davidecavaliere/-microgamma",
   "license": "MIT",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "module": "lib/index.js",
   "keywords": [
     "mongodb",
-    "dynamodb",
-    "decorator",
-    "orm"
+    "decorator"
   ],
   "scripts": {
     "info": "npm-scripts-info",

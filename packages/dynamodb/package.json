@@ -7,16 +7,14 @@
     "name": "Davide Cavaliere",
     "url": "www.dcsoftware.io"
   },
-  "homepage": "https://github.com/davidecavaliere/-microgamma/tree/master/packages/datagator",
+  "homepage": "https://github.com/davidecavaliere/-microgamma",
   "license": "MIT",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "module": "lib/index.js",
   "keywords": [
-    "mongodb",
     "dynamodb",
-    "decorator",
-    "orm"
+    "decorator"
   ],
   "scripts": {
     "info": "npm-scripts-info",
