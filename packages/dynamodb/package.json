@@ -28,8 +28,8 @@
     "test": "run-s test:unit test:integration",
     "test:unit": "jest",
     "test:unit:watch": "jest --watch",
-    "test:integration": "jest --testRegex integration.test",
-    "test:integration:watch": "jest --watch --testRegex integration.test",
+    "test:integration": "jest --testRegex integration.test --preset @shelf/jest-dynamodb",
+    "test:integration:watch": "yarn test:integration --watch",
     "test:lint": "tslint --project . ",
     "cov:send": "jest --coverage && codecov -F datagator",
     "doc": "run-s doc:html && opn build/docs/index.html",
@@ -91,8 +91,7 @@
     },
     "reporters": [
       "default"
-    ],
-    "preset": "@shelf/jest-dynamodb"
+    ]
   },
   "devDependencies": {
     "@shelf/jest-dynamodb": "^1.5.0"

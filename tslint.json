@@ -35,6 +35,5 @@
     "variable-name": false,
     "member-ordering": false,
     "no-string-literal": false
-
   }
 }

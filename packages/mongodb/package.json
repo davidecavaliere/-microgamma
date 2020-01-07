@@ -29,8 +29,8 @@
     "test": "run-s test:unit test:integration",
     "test:unit": "jest",
     "test:unit:watch": "jest --watch",
-    "test:integration": "jest --testRegex mongodb.integration.test",
-    "test:integration:watch": "jest --watch --testRegex mongodb.integration.test",
+    "test:integration": "jest --testRegex mongodb.integration.test --preset @shelf/jest-mongodb",
+    "test:integration:watch": "yarn test:integration --watch",
     "test:lint": "tslint --project . ",
     "cov:send": "jest --coverage && codecov -F datagator",
     "doc": "run-s doc:html && opn build/docs/index.html",
@@ -91,8 +91,7 @@
     },
     "reporters": [
       "default"
-    ],
-    "preset": "@shelf/jest-mongodb"
+    ]
   },
   "devDependencies": {
     "@shelf/jest-mongodb": "^1.1.3"

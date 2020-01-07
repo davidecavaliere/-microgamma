@@ -1,7 +1,8 @@
 // tslint:disable:no-expression-statement no-object-mutation member-access max-classes-per-file
-import { MongodbService } from '../mongodb';
 import { BaseModel } from '../model';
 import { getPersistenceMetadata, Persistence } from './persistence.decorator';
+
+class PersistenceService<T> {}
 
 class User extends BaseModel<User> {
   password;
@@ -18,7 +19,7 @@ const metadata =  {
 };
 
 @Persistence(metadata)
-class UserPersistenceService extends MongodbService<User> {}
+class UserPersistenceService extends PersistenceService<User> {}
 
 describe('@Persistence', () => {
   let instance: UserPersistenceService;
