@@ -1,7 +1,7 @@
-import { BaseModel, Column } from '../model';
-import { Persistence } from '../persistence';
+
 import { MongodbService } from './mongodb.service';
 import { getDebugger } from '@microgamma/loggator';
+import { BaseModel, Column, Persistence } from '@microgamma/datagator';
 
 const d = getDebugger('microgamma:datagator:mongodb.integration');
 

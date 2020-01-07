@@ -1,9 +1,8 @@
 // tslint:disable:no-expression-statement no-object-mutation member-access max-classes-per-file
 import { getDebugger } from '@microgamma/loggator';
 import { MongoClient, ObjectID } from 'mongodb';
-import { BaseModel, Column } from '../model';
-import { Persistence } from '../persistence';
 import { MongodbService } from './mongodb.service';
+import { BaseModel, Column, Persistence } from '@microgamma/datagator';
 
 const d = getDebugger('microgamma:persistence.service.spec');
 

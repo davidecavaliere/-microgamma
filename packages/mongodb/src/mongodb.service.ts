@@ -1,8 +1,7 @@
 import { getDebugger } from '@microgamma/loggator';
 import { ObjectID } from 'bson';
 import { Collection, MongoClient, MongoClientOptions } from 'mongodb';
-import { BaseModel } from '../model';
-import { getPersistenceMetadata, MongoDBPersistenceOptions } from '../persistence';
+import { BaseModel, getPersistenceMetadata, MongoDBPersistenceOptions } from '@microgamma/datagator';
 
 const d = getDebugger('microgamma:persistence:service');
 

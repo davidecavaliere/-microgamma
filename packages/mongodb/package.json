@@ -1,5 +1,5 @@
 {
-  "name": "@microgamma/datagator",
+  "name": "@microgamma/mongodb",
   "version": "1.11.12",
   "description": "syntactic sugar for CRUD operations with mongodb and dynamodb",
   "author": {
@@ -26,8 +26,11 @@
     "fix:prettier": "prettier \"src/**/*.ts\" --write",
     "fix:tslint": "tslint --fix --project .",
     "start:dynamodb": "node ../../scripts/start-dynamodb-local.js",
-    "test": "jest",
-    "test:watch": "jest --watch",
+    "test": "run-s test:unit test:integration",
+    "test:unit": "jest",
+    "test:unit:watch": "jest --watch",
+    "test:integration": "jest --testRegex mongodb.integration.test",
+    "test:integration:watch": "jest --watch --testRegex mongodb.integration.test",
     "test:lint": "tslint --project . ",
     "cov:send": "jest --coverage && codecov -F datagator",
     "doc": "run-s doc:html && opn build/docs/index.html",
@@ -57,8 +60,10 @@
   },
   "dependencies": {
     "@microgamma/loggator": "^1.11.12",
-    "reflect-metadata": "^0.1.12",
-    "utility-types": "^3.8.0"
+    "@microgamma/datagator": "^1.11.11",
+    "@types/mongodb": "^3.1.18",
+    "mongodb": "^3.1.10",
+    "reflect-metadata": "^0.1.12"
   },
   "config": {
     "commitizen": {
@@ -86,6 +91,10 @@
     },
     "reporters": [
       "default"
-    ]
+    ],
+    "preset": "@shelf/jest-mongodb"
+  },
+  "devDependencies": {
+    "@shelf/jest-mongodb": "^1.1.3"
   }
 }
