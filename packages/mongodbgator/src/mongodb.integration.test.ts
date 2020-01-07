@@ -58,17 +58,6 @@ describe('mongodb integration test', () => {
     expect(instance).toBeTruthy();
   });
 
-  it('should throw an error if cannot connect', async () => {
-    try {
-      const list = await instance.findAll();
-
-    } catch (e) {
-      expect(e.toString()).toContain('MongoNetworkError');
-    }
-
-
-  });
-
   describe('read-write-read-delete-read', () => {
 
     it('should return empty array', async () => {
@@ -87,6 +76,7 @@ describe('mongodb integration test', () => {
       };
 
       const resp = await instance.create(group);
+      console.log('respo', resp);
 
       expect(resp.toString()).toContain(JSON.stringify({
         n: 1,

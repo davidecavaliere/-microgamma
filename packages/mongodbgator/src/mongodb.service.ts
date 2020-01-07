@@ -82,7 +82,9 @@ export abstract class MongodbService<T extends BaseModel<any>> {
   public async create(doc: T) {
     // tslint:disable: no-parameter-reassignment
     doc = this.modelFactory(doc);
-    return (await this.getCollection()).insertOne(doc);
+    const resp = (await this.getCollection()).insertOne(doc);
+
+    return resp.ops.pop();
   }
 
   public async update(doc) {
