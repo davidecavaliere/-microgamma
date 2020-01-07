@@ -60,7 +60,7 @@
   },
   "dependencies": {
     "@microgamma/loggator": "^1.11.12",
-    "@microgamma/datagator": "^1.11.11",
+    "@microgamma/datagator": "^1.11.13",
     "@types/mongodb": "^3.1.18",
     "mongodb": "^3.1.10",
     "reflect-metadata": "^0.1.12"

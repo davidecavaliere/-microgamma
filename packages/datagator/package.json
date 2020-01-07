@@ -1,6 +1,6 @@
 {
   "name": "@microgamma/datagator",
-  "version": "1.11.12",
+  "version": "1.11.13",
   "description": "syntactic sugar for CRUD operations with mongodb and dynamodb",
   "author": {
     "email": "cavaliere.davide@gmail.com",
