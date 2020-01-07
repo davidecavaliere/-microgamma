@@ -2,8 +2,7 @@
 import { getDebugger } from '@microgamma/loggator';
 import { DynamodbService } from './dynamodb.service';
 import DynamoDB = require('aws-sdk/clients/dynamodb');
-import { BaseModel, Column, Persistence } from '@microgamma/datagator';
-import { SetOnlyType } from '@microgamma/datagator/lib/lib/model/base-model.types';
+import { BaseModel, Column, Persistence, SetOnlyType } from '@microgamma/datagator';
 
 const d = getDebugger('microgamma:datagator:dynamodb.integration');
 

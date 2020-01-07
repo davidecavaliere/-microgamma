@@ -5,8 +5,7 @@ import { DocumentClient } from 'aws-sdk/lib/dynamodb/document_client';
 import ExpressionAttributeNameMap = DocumentClient.ExpressionAttributeNameMap;
 import ConditionExpression = DocumentClient.ConditionExpression;
 import { getDebugger } from '@microgamma/loggator';
-import { BaseModel, DynamoDBPersistenceOptions, getPersistenceMetadata } from '@microgamma/datagator';
-import { Model } from '@microgamma/datagator/lib/lib/model/base-model.types';
+import { BaseModel, DynamoDBPersistenceOptions, getPersistenceMetadata, ModelType } from '@microgamma/datagator';
 
 const d = getDebugger('microgamma:datagator:dynamodb.service');
 
@@ -17,7 +16,7 @@ export abstract class DynamodbService<T extends BaseModel<any>> {
   private readonly _ddb: DynamoDB.DocumentClient;
   private dynamo: DynamoDB;
 
-  protected modelFactory(doc: Partial<Model<T>>): T {
+  protected modelFactory(doc: Partial<ModelType<T>>): T {
     const model = this.metadata.model;
     return new model(doc);
   }
@@ -45,7 +44,7 @@ export abstract class DynamodbService<T extends BaseModel<any>> {
     }).promise();
 
     d('resp', resp);
-    const docs = resp.Items as Array<Model<T>>;
+    const docs = resp.Items as Array<ModelType<T>>;
     d('docs', docs);
 
     const parsedDocs: any[] = [];
@@ -59,7 +58,7 @@ export abstract class DynamodbService<T extends BaseModel<any>> {
     return parsedDocs;
   }
 
-  public async findOne(doc: Partial<Model<T>>) {
+  public async findOne(doc: Partial<ModelType<T>>) {
     d(`searching document by`, doc);
 
 
@@ -106,14 +105,14 @@ export abstract class DynamodbService<T extends BaseModel<any>> {
       d('found document', data);
 
       if (data.Items.length === 1) {
-        return this.modelFactory(data.Items[0] as Model<T>);
+        return this.modelFactory(data.Items[0] as ModelType<T>);
       } else {
         throw new Error('more than one document found ')
       }
     }
   }
 
-  public async create(doc: Model<T>) {
+  public async create(doc: ModelType<T>) {
 
     // const parsedDoc = this.modelFactory(doc);
     // TODO add doc validation
@@ -145,7 +144,7 @@ export abstract class DynamodbService<T extends BaseModel<any>> {
    * @param doc
    * @param returnValueType
    */
-  public async update(doc: Model<T>, returnValueType = 'ALL_NEW') {
+  public async update(doc: ModelType<T>, returnValueType = 'ALL_NEW') {
 
     d('doc', doc);
 
@@ -178,10 +177,10 @@ export abstract class DynamodbService<T extends BaseModel<any>> {
       ReturnValues: returnValueType
     }).promise();
 
-    return this.modelFactory(Attributes as Model<T>);
+    return this.modelFactory(Attributes as ModelType<T>);
   }
 
-  public async delete(doc: Model<T>) {
+  public async delete(doc: ModelType<T>) {
     const _doc = this.modelFactory(doc);
     d('_doc', _doc);
 
