@@ -1,7 +1,7 @@
 {
-  "name": "@microgamma/datagator",
+  "name": "@microgamma/dynamodb",
   "version": "1.11.12",
-  "description": "syntactic sugar for CRUD operations with mongodb and dynamodb",
+  "description": "CRUD operations with dynamodb",
   "author": {
     "email": "cavaliere.davide@gmail.com",
     "name": "Davide Cavaliere",
@@ -25,13 +25,11 @@
     "fix": "run-s fix:*",
     "fix:prettier": "prettier \"src/**/*.ts\" --write",
     "fix:tslint": "tslint --fix --project .",
-    "start:dynamodb": "node ../../scripts/start-dynamodb-local.js",
     "test": "run-s test:unit test:integration",
     "test:unit": "jest",
     "test:unit:watch": "jest --watch",
-    "test:integration": "jest --testRegex dynamodb.integration.test",
-    "test:integration:mongodb": "jest --testRegex mongodb.integration.test",
-    "test:integration:watch": "jest --watch --testRegex dynamodb.integration.test",
+    "test:integration": "jest --testRegex integration.test",
+    "test:integration:watch": "jest --watch --testRegex integration.test",
     "test:lint": "tslint --project . ",
     "cov:send": "jest --coverage && codecov -F datagator",
     "doc": "run-s doc:html && opn build/docs/index.html",
@@ -60,6 +58,7 @@
     "node": ">=8.9"
   },
   "dependencies": {
+    "@microgamma/datagator": "^1.11.11",
     "@microgamma/loggator": "^1.11.12",
     "@types/mongodb": "^3.1.18",
     "mongodb": "^3.1.10",
@@ -93,9 +92,9 @@
     "reporters": [
       "default"
     ],
-    "preset": "@shelf/jest-mongodb"
+    "preset": "@shelf/jest-dynamodb"
   },
   "devDependencies": {
-    "@shelf/jest-mongodb": "^1.1.3"
+    "@shelf/jest-dynamodb": "^1.5.0"
   }
 }

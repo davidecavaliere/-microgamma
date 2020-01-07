@@ -1,5 +1,3 @@
-// tslint:disable:max-classes-per-file
-import { MongoMemoryServer } from 'mongodb-memory-server';
 import { BaseModel, Column } from '../model';
 import { Persistence } from '../persistence';
 import { MongodbService } from './mongodb.service';
@@ -8,8 +6,9 @@ import { getDebugger } from '@microgamma/loggator';
 const d = getDebugger('microgamma:datagator:mongodb.integration');
 
 
+d('mongodb', process.env.MONGO_URL);
 
-xdescribe('mongodb integration test', () => {
+fdescribe('mongodb integration test', () => {
 
 
   class GroupModel extends BaseModel<GroupModel> {
@@ -75,12 +74,16 @@ xdescribe('mongodb integration test', () => {
     let mongoServer;
 
     beforeAll(async () => {
-      d('starting mongo');
-      mongoServer = new MongoMemoryServer({
-        debug: true
-      });
-      const mongoUri = await mongoServer.getConnectionString();
-      d('mongoUri', mongoUri);
+      // d('starting mongo');
+      // mongoServer = new MongoMemoryServer({
+      //   debug: true,
+      //   instance: {
+      //     port: 27017
+      //   }
+      //
+      // });
+      // const mongoUri = await mongoServer.getConnectionString();
+      // d('mongoUri', mongoUri);
     });
 
     afterAll(async () => {

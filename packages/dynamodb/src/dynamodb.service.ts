@@ -1,13 +1,12 @@
 
 import { DynamoDB } from 'aws-sdk';
-import { BaseModel } from '../model';
-import { DynamoDBPersistenceOptions, getPersistenceMetadata } from '../persistence';
 import { ObjectID } from 'bson';
 import { DocumentClient } from 'aws-sdk/lib/dynamodb/document_client';
 import ExpressionAttributeNameMap = DocumentClient.ExpressionAttributeNameMap;
 import ConditionExpression = DocumentClient.ConditionExpression;
-import { Model } from '../model/base-model.types';
 import { getDebugger } from '@microgamma/loggator';
+import { BaseModel, DynamoDBPersistenceOptions, getPersistenceMetadata } from '@microgamma/datagator';
+import { Model } from '@microgamma/datagator/lib/lib/model/base-model.types';
 
 const d = getDebugger('microgamma:datagator:dynamodb.service');
 

@@ -1,9 +1,8 @@
 // tslint:disable:no-expression-statement no-object-mutation member-access max-classes-per-file
 import { getDebugger } from '@microgamma/loggator';
-import { BaseModel, Column } from '../model';
-import { Persistence } from '../persistence';
 import { DynamodbService } from './dynamodb.service';
 import { service } from 'aws-sdk/clients/health';
+import { BaseModel, Column, Persistence } from '@microgamma/datagator';
 
 const d = getDebugger('microgamma:datagator:dynamodb.service.spec');
 

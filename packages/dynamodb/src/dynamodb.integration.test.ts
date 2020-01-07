@@ -1,10 +1,9 @@
 // tslint:disable:no-expression-statement no-object-mutation member-access max-classes-per-file
 import { getDebugger } from '@microgamma/loggator';
-import { BaseModel, Column } from '../model';
-import { Persistence } from '../persistence';
 import { DynamodbService } from './dynamodb.service';
 import DynamoDB = require('aws-sdk/clients/dynamodb');
-import { SetOnlyType } from '../model/base-model.types';
+import { BaseModel, Column, Persistence } from '@microgamma/datagator';
+import { SetOnlyType } from '@microgamma/datagator/lib/lib/model/base-model.types';
 
 const d = getDebugger('microgamma:datagator:dynamodb.integration');
 
