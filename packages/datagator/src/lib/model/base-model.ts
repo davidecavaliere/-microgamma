@@ -1,6 +1,6 @@
 import { getDebugger } from '@microgamma/loggator';
 import { getColumnMetadata } from './column.decorator';
-import { Model } from './base-model.types';
+import { ModelType } from './base-model.types';
 
 const d = getDebugger('microgamma:model');
 
@@ -8,7 +8,7 @@ const d = getDebugger('microgamma:model');
 
 export class BaseModel<T extends BaseModel<T>> {
 
-  constructor(props: Model<T>) {
+  constructor(props: ModelType<T>) {
 
     d('this', this);
     d('Type of props', typeof props);
@@ -41,7 +41,7 @@ export class BaseModel<T extends BaseModel<T>> {
     this[this.primaryKeyFieldName] = value;
   }
 
-  public toJSON():  Model<T> {
+  public toJSON():  ModelType<T> {
     const columns = getColumnMetadata(this);
 
     const publicObject = {};
@@ -56,6 +56,6 @@ export class BaseModel<T extends BaseModel<T>> {
 
     }
 
-    return publicObject as Model<T>;
+    return publicObject as ModelType<T>;
   }
 }

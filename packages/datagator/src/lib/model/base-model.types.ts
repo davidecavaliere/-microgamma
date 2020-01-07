@@ -21,5 +21,5 @@ export type ExtractRealTypeFromSetOnly<T extends Object> = {
 
 export type OptionalSetOnlyProperties<T extends object> = Partial<Pick<T, SetOnlyProperties<T>>>;
 
-export type Model<T extends BaseModel<T>> = OmitSetOnlyFields<OmitFunctionKeys<OmitBaseComponents<T>>> & ExtractRealTypeFromSetOnly<OptionalSetOnlyProperties<T>>;
+export type ModelType<T extends BaseModel<T>> = OmitSetOnlyFields<OmitFunctionKeys<OmitBaseComponents<T>>> & ExtractRealTypeFromSetOnly<OptionalSetOnlyProperties<T>>;
 
