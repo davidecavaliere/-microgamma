@@ -1,6 +1,6 @@
 {
   "name": "@microgamma/dynamodb",
-  "version": "1.12.1",
+  "version": "1.12.2",
   "description": "CRUD operations with dynamodb",
   "author": {
     "email": "cavaliere.davide@gmail.com",
