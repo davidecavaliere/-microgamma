@@ -8,7 +8,7 @@ import { getSingleton } from '@microgamma/digator';
 
 const d = getDebugger('microgamma:apigator:lambda');
 
-export const LambdaMetadata = Symbol('Lambda');
+export const LambdaMetadata = Symbol.for('Lambda');
 
 export interface LambdaOptions {
   name?: string;

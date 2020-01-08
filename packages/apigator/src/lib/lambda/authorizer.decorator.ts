@@ -7,7 +7,7 @@ import { getSingleton } from '@microgamma/digator';
 
 const d = getDebugger('microgamma:apigator:authorizer');
 
-export const AuthorizerMetadata = Symbol('Authorizer');
+export const AuthorizerMetadata = Symbol.for('Authorizer');
 
 export interface AuthorizerOptions {
   name: string;

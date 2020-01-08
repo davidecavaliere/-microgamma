@@ -4,7 +4,7 @@ import debug, { IDebugger } from 'debug';
 import 'reflect-metadata';
 
 
-export const debuggerMetadata = Symbol('debug');
+export const debuggerMetadata = Symbol.for('debug');
 let namespace;
 const d = debug;
 

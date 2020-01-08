@@ -3,7 +3,7 @@ import { getDebugger } from '@microgamma/loggator';
 
 const d = getDebugger('microgamma:model:decorator');
 
-const ModelMetadata = Symbol('Model');
+const ModelMetadata = Symbol.for('Model');
 
 export interface ModelOptions {
   readonly name: string;

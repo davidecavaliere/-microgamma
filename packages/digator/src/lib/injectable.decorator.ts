@@ -8,7 +8,7 @@ export type Constructor = new (...args: string[]) => any;
 
 const injectables: { [className: string]: Constructor } = {};
 
-const InjectableMetadata = Symbol('Injectable');
+const InjectableMetadata = Symbol.for('Injectable');
 
 export interface InjectableOptions {
   [k: string]: any

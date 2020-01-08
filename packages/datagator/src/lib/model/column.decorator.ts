@@ -2,7 +2,7 @@ import { getDebugger } from '@microgamma/loggator';
 
 const d = getDebugger('microgamma:column:decorator');
 
-export const ColumnMetadata = Symbol('Column');
+export const ColumnMetadata = Symbol.for('Column');
 
 export interface ColumnOptions {
   regex?: RegExp;

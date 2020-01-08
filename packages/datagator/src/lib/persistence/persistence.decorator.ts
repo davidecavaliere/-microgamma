@@ -2,7 +2,7 @@ import { getDebugger } from '@microgamma/loggator';
 
 const d = getDebugger('microgamma:persistence:decorator');
 
-const PersistenceMetadata = Symbol('Persistence');
+const PersistenceMetadata = Symbol.for('Persistence');
 
 export interface PersistenceServiceOptions {
   options?: any;

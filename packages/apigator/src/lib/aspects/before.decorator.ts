@@ -5,7 +5,7 @@ import { getDebugger } from '@microgamma/loggator';
 
 const d = getDebugger('microgamma:aspects:before');
 
-export const BeforeMetadataSymbol = Symbol('Before');
+export const BeforeMetadataSymbol = Symbol.for('Before');
 
 export type BeforeFn = (...args: any[]) => Promise<any>;
 
