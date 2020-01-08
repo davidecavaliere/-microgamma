@@ -32,10 +32,10 @@ export class ServerlessApigator {
 
   };
 
-  private servicePath: string;
-  private entrypoint: string;
-  private serviceName: string;
-  private buildFolder: string;
+  private readonly servicePath: string;
+  private readonly entrypoint: string;
+  private readonly serviceName: string;
+  private readonly buildFolder: string;
 
   constructor(private serverless: any, private options: any = {}) {
 
