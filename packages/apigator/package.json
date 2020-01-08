@@ -1,6 +1,6 @@
 {
   "name": "@microgamma/apigator",
-  "version": "1.12.0",
+  "version": "1.12.3",
   "description": "syntactic sugar for λ",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -41,8 +41,8 @@
     "prepare-release": "run-s all version doc:publish"
   },
   "dependencies": {
-    "@microgamma/digator": "^1.11.12",
-    "@microgamma/loggator": "^1.11.12",
+    "@microgamma/digator": "^1.12.3",
+    "@microgamma/loggator": "^1.12.3",
     "@types/aws-lambda": "^8.10.11",
     "reflect-metadata": "^0.1.12"
   },

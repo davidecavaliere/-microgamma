@@ -1,6 +1,6 @@
 {
   "name": "@microgamma/datagator",
-  "version": "1.12.1",
+  "version": "1.12.3",
   "description": "helpers to set connection metadata",
   "author": {
     "email": "cavaliere.davide@gmail.com",
@@ -54,7 +54,7 @@
     "node": ">=8.9"
   },
   "dependencies": {
-    "@microgamma/loggator": "^1.11.12",
+    "@microgamma/loggator": "^1.12.3",
     "reflect-metadata": "^0.1.12",
     "utility-types": "^3.8.0"
   },

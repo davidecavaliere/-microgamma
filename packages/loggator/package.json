@@ -1,6 +1,6 @@
 {
   "name": "@microgamma/loggator",
-  "version": "1.11.12",
+  "version": "1.12.3",
   "description": "visionmedia/debug wrapped like a candy for typescript",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
