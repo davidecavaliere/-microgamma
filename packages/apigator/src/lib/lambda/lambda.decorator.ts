@@ -156,6 +156,8 @@ export function Lambda(options: LambdaOptions) {
           return args[0];
         }
 
+        // TODO returning the string `argument not found` is silly.
+        // should return undefined and be defensive when pathParams, body
         return pathParams[arg] || body[arg] || headerParams[arg] || args[0][arg] || `argument ${arg} not found`;
       });
       d('mapped args are', newArgs);
