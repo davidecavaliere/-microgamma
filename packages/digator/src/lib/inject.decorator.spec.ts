@@ -83,6 +83,12 @@ describe('inject decorator', () => {
       expect(getSingleton(TestClassA) instanceof TestClassA).toBeTruthy();
     });
 
+    it('should instantiate a singleton with the given implementation', () => {
+      class TestClassToBeMocked {}
+      class MockOfTestClassToBeMocked extends TestClassToBeMocked {}
+
+      expect(getSingleton(TestClassToBeMocked, MockOfTestClassToBeMocked) instanceof MockOfTestClassToBeMocked).toBeTruthy();
+    });
   });
 
 });

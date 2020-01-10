@@ -1,6 +1,5 @@
 // tslint:disable: no-object-mutation no-if-statement readonly-array no-mixed-interface object-literal-shorthand only-arrow-functions
 
-import { Constructor, getInjectable, getInjectables } from './';
 import { getDebugger } from '@microgamma/loggator';
 
 const d = getDebugger('microgamma:di:inject');
@@ -22,19 +21,19 @@ export function Inject(classDef): PropertyDecorator {
   }
 }
 
-export function getSingleton(className) {
+export function getSingleton(className, implementation = null) {
 
   const name = typeof className === 'string' ? className : className.name;
 
   d('searching singleton for', className);
 
 
-  if (!singletons[className.name]) {
-    d( `${className.name} singleton not found. creating....`);
-    singletons[className.name] = new className();
+  if (!singletons[name]) {
+    d( `${name} singleton not found. creating....`);
+    singletons[name] = implementation ? new implementation() : new className();
   }
   //
-  return singletons[className.name];
+  return singletons[name];
 }
 
 export function getSingletons() {
