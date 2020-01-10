@@ -109,7 +109,7 @@ export function Lambda(options: LambdaOptions) {
 
       const event: APIGatewayEvent = getApiGatewayEvent(args);
 
-      d('request context is', event.requestContext);
+      d('event is', event);
 
 
       /*
