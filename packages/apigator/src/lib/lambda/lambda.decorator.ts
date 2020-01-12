@@ -5,6 +5,7 @@ import { APIGatewayEvent } from 'aws-lambda';
 import { getArguments } from '../utils';
 import { getDebugger } from '@microgamma/loggator';
 import { getSingleton } from '@microgamma/digator';
+import { getBodyMetadata, getHeaderMetadata, getPathMetadata } from '../parameters/parameters.decorator';
 
 const d = getDebugger('microgamma:apigator:lambda');
 
@@ -120,12 +121,23 @@ export function Lambda(options: LambdaOptions) {
        */
 
       // extract body
+      const bodyParams = getBodyMetadata(instance, key);
+      d('@BodyParams', bodyParams);
+
       const body = extractBody(args);
       d('body is', body);
 
       // extract path params
+      const pathAnnotatedParams = getPathMetadata(instance, key);
+      d('@PathParams', pathAnnotatedParams);
+
       const pathParams = extractPathParams(args);
       d('path params are', pathParams);
+
+      // extract header params
+      const headerAnnotatedParams = getHeaderMetadata(instance, key);
+      d('@HeaderParams', headerAnnotatedParams);
+
 
       const headerParams = extractHeaderParams(args);
       d('header params are', headerParams);
@@ -140,27 +152,56 @@ export function Lambda(options: LambdaOptions) {
       // See https://www.mongodb.com/blog/post/serverless-development-with-nodejs-aws-lambda-mongodb-atlas
       args[1].callbackWaitsForEmptyEventLoop = false;
 
+      const newArgs = new Array(functionArgumentsNames.length);
+      d('annotated new args', newArgs);
+
+      Object.keys(pathAnnotatedParams).forEach((param) => {
+        d('scanning', param);
+        const index = pathAnnotatedParams[param];
+        d('with index', index);
+        newArgs[index] = pathParams[param];
+
+      });
+
+      Object.keys(bodyParams).forEach((param) => {
+        d('scanning', param);
+        const index = bodyParams[param];
+        d('with index', index);
+        newArgs[index] = body;
+
+      });
+
+      Object.keys(headerAnnotatedParams).forEach((param) => {
+        d('scanning', param);
+        const index = headerAnnotatedParams[param];
+        d('with index', index);
+        newArgs[index] = headerParams[param];
+
+      });
+
+
 
       // here we need to extract the values we're expecting as arguments of our function from the real argument passed.
-      const newArgs = functionArgumentsNames.map((arg) => {
-        d('arg is', arg);
-        if (arg === 'body') {
-          return body;
-        }
-
-        if (arg === 'context') {
-          return args[1];
-        }
-
-        if (arg === 'event') {
-          return args[0];
-        }
-
-        // TODO returning the string `argument not found` is silly.
-        // should return undefined and be defensive when pathParams, body
-        return pathParams[arg] || body[arg] || headerParams[arg] || args[0][arg] || `argument ${arg} not found`;
-      });
-      d('mapped args are', newArgs);
+      // const newArgs = functionArgumentsNames.map((arg) => {
+      //   d('arg is', arg);
+      //   if (arg === 'body') {
+      //     return body;
+      //   }
+      //
+      //   if (arg === 'context') {
+      //     return args[1];
+      //   }
+      //
+      //   if (arg === 'event') {
+      //     return args[0];
+      //   }
+      //
+      //   // TODO returning the string `argument not found` is silly.
+      //   // should return undefined and be defensive when pathParams, body
+      //   return pathParams[arg] || body[arg] || headerParams[arg] || args[0][arg] || `argument ${arg} not found`;
+      // });
+      // d('mapped args are', newArgs);
+      d('annotatoed args are', newArgs);
 
 
       try {

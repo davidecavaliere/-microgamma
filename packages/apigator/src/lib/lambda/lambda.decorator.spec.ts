@@ -2,6 +2,7 @@
 import { getLambdaMetadata, getLambdaMetadataFromClass, Lambda, LambdaOptions } from './lambda.decorator';
 import { Endpoint } from '../../';
 import { Injectable } from '@microgamma/digator';
+import { Body, Header, Path } from '../parameters/parameters.decorator';
 
 const option1: LambdaOptions = {
   method: 'get',
@@ -25,8 +26,12 @@ class TestClass {
   public readonly toTestAccessToInstance: string = 'base';
 
   @Lambda(option1)
-  public findAll(arg1, arg2, arg3) {
-    return this.toTestAccessToInstance + arg1 + arg2 + arg3;
+  public findAll(@Body() arg1, @Path('pathArg1') arg2, @Header('Authorization') arg3) {
+    return {
+      base: this.toTestAccessToInstance,
+      body: arg1,
+      other: arg2 + arg3
+    }
   }
 
   @Lambda(option2)
@@ -36,7 +41,7 @@ class TestClass {
 }
 
 
-describe('lambda.decorator', () => {
+describe('@Lambda', () => {
   let instance;
 
   beforeEach(() => {
@@ -60,13 +65,28 @@ describe('lambda.decorator', () => {
         path: {
           arg1: 1,
           arg2: 2,
-          arg3: 3
+          arg3: 3,
+          pathArg1: 'my-value'
+        },
+        body: {
+          a: 'b',
+          c: 'd'
+        },
+        headers: {
+          Authorization: 'abcdefghilmnopqrstuvz'
         }
       },
       { context: 'a' } // context
     ]);
 
-    expect(resp).toEqual('base123');
+    expect(resp).toEqual({
+      base: 'base',
+      body: {
+        a: 'b',
+        c: 'd'
+      },
+      other: 'my-valueabcdefghilmnopqrstuvz'
+    });
 
   });
 
