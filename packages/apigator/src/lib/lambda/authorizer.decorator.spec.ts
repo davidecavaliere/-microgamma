@@ -40,7 +40,7 @@ class TestClass {
 }
 
 
-describe('authorizer decorator', () => {
+describe('@Authorizer', () => {
   let instance;
 
   beforeEach(() => {
