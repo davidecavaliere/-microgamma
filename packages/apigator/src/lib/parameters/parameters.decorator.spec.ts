@@ -5,7 +5,7 @@ describe('@Path', () => {
   class TestClass {
     public readonly toTestAccessToInstance: string = 'base';
 
-    public findAll(@Path('query') arg1, @Body('projection') arg2, @Header('other') arg3) {
+    public findAll(@Path('query') arg1, @Body() arg2, @Header('other') arg3) {
       return this.toTestAccessToInstance + arg1 + arg2 + arg3;
     }
 
@@ -30,7 +30,7 @@ describe('@Path', () => {
       other: 2
     });
     expect(getBodyMetadata(instance, 'findAll')).toEqual({
-      projection: 1
+      body: 1
     });
   });
 
