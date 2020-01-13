@@ -12,7 +12,7 @@
     "clean": "trash packages/*/lib coverage",
     "test": "run-s test:lint test:unit",
     "test:unit": "jest --coverage",
-    "test:integration": "DEBUG=microgamma:*integration* lerna run test:integration --stream",
+    "test:integration": "lerna run test:integration --stream",
     "test:watch": "jest --watch",
     "test:lint": "tslint --project . ",
     "cov:send": "codecov",
