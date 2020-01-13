@@ -8,11 +8,23 @@ describe('EndpointMock', () => {
 
   class TestClass {
     @Lambda({})
-    public index(@Path('test') test, @Body() body, @Header('test') headerTest) {}
+    public index(@Path('test') test, @Body() body, @Header('test') headerTest) {
+      return [test, body, headerTest].join('-');
+    }
 
     @Lambda({})
-    public post() {}
-  }
+    public post() {
+      return 'nothing';
+    }
+
+    @Lambda({})
+    public create(@Body() body, @Header('principalId') owner) {
+      return {
+        ...body,
+        owner
+      }
+    }
+    }
 
 
 
@@ -27,12 +39,25 @@ describe('EndpointMock', () => {
   });
 
   describe('spy on lambdas', () => {
-    it('should spy on any lambda defined', () => {
+    it('should spy on any lambda defined', async () => {
 
-      instance.index('test', 'body', 'headerTest');
+      const index = await instance.index('test', 'body', 'headerTest');
       expect(instance.index).toHaveBeenCalledWith('test', 'body', 'headerTest');
-      instance.post();
+      expect(index).toEqual('test-body-headerTest');
+      const post = await instance.post();
       expect(instance.post).toHaveBeenCalled();
+      expect(post).toEqual('nothing');
+
+      const resp = await instance.create({
+        name: 'a-name',
+        users: []
+      }, 'owner-id');
+
+      expect(resp).toEqual({
+        name: 'a-name',
+        users: [],
+        owner: 'owner-id'
+      });
     });
 
   });

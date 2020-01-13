@@ -38,7 +38,7 @@ export function EndpointMock(serviceClass) {
       });
 
       Object.keys(body).forEach((key) => {
-        const index = pathParams[key];
+        const index = body[key];
 
         event['body'] = args[index];
 
