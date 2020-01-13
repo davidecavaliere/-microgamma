@@ -1,4 +1,4 @@
-// tslint:disable:only-arrow-functions readonly-array prefer- no-if-statement no-object-mutation no-this no-this-assignment
+// tslint:disable:only-arrow-functions readonly-array prefer- no-if-statement no-object-mutation no-this no-this-assignment no-shadowed-variable
 
 import 'reflect-metadata';
 import { APIGatewayEvent } from 'aws-lambda';
@@ -8,6 +8,9 @@ import { getSingleton } from '@microgamma/digator';
 import { getBodyMetadata, getHeaderMetadata, getPathMetadata } from '../parameters/parameters.decorator';
 
 const d = getDebugger('microgamma:apigator:lambda');
+
+type Parameters<T> = T extends (... args: infer T) => any ? T : never;
+type ReturnType<T> = T extends (... args: any[]) => infer T ? T : never;
 
 export const LambdaMetadata = Symbol.for('Lambda');
 
@@ -155,6 +158,7 @@ export function Lambda(options: LambdaOptions) {
       const newArgs = new Array(functionArgumentsNames.length);
       d('annotated new args', newArgs);
 
+      // TODO: refactor here and decide what to do when a param cannot be found where is expected
       Object.keys(pathAnnotatedParams).forEach((param) => {
         d('scanning', param);
         const index = pathAnnotatedParams[param];
@@ -179,28 +183,6 @@ export function Lambda(options: LambdaOptions) {
 
       });
 
-
-
-      // here we need to extract the values we're expecting as arguments of our function from the real argument passed.
-      // const newArgs = functionArgumentsNames.map((arg) => {
-      //   d('arg is', arg);
-      //   if (arg === 'body') {
-      //     return body;
-      //   }
-      //
-      //   if (arg === 'context') {
-      //     return args[1];
-      //   }
-      //
-      //   if (arg === 'event') {
-      //     return args[0];
-      //   }
-      //
-      //   // TODO returning the string `argument not found` is silly.
-      //   // should return undefined and be defensive when pathParams, body
-      //   return pathParams[arg] || body[arg] || headerParams[arg] || args[0][arg] || `argument ${arg} not found`;
-      // });
-      // d('mapped args are', newArgs);
       d('annotatoed args are', newArgs);
 
 
