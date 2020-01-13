@@ -85,15 +85,15 @@ export abstract class MongodbService<T extends BaseModel<any>> {
     }
   }
 
-  public async create(doc: T): Promise<ModelType<T>> {
-    // tslint:disable: no-parameter-reassignment
-    doc = this.modelFactory(doc);
-    const resp = await (await this.getCollection()).insertOne(doc);
+  public async create(doc: ModelType<T>): Promise<ModelType<T>> {
+    const parsedDoc = this.modelFactory(doc);
+    const resp = await (await this.getCollection()).insertOne(parsedDoc);
     return resp.ops.pop();
   }
 
-  public async update(doc) {
-    const objId = new ObjectID(doc._id);
+  public async update(doc: Partial<T>) {
+    const parseDoc = this.modelFactory(doc);
+    const objId = new ObjectID(parseDoc.primaryKey);
 
     return (await this.getCollection()).findOneAndUpdate({_id: objId}, doc);
 
