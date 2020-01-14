@@ -1,8 +1,6 @@
 // tslint:disable:no-expression-statement no-object-mutation max-classes-per-file
-
-import { getInjectable, getInjectableMetadata, getInjectables, getSingletons, Inject, Injectable } from './';
+import { getInjectable, getInjectableMetadata, getInjectables, getSingletons, Injectable } from '../';
 import { getDebugger } from '@microgamma/loggator';
-import any = jasmine.any;
 import anything = jasmine.anything;
 
 const d = getDebugger('microgamma:inject:decorator:spec');
@@ -15,7 +13,7 @@ class TestClassB {}
 
 describe('@Injectable', () => {
 
-  it('should make injectables avaible for injection', () => {
+  it('should make injectables available for injection', () => {
     expect(getInjectable(TestClassA)).toEqual(TestClassA);
     expect(getInjectable(TestClassB)).toEqual(TestClassB);
   });
@@ -30,11 +28,10 @@ describe('@Injectable', () => {
 
   it('should throw an error if injectable cannot be found', () => {
 
-    try {
-      getInjectable(class AClass {});
-    } catch (e) {
-      expect(e.message).toContain('AClass');
-    }
+    expect(() => {
+      getInjectable(class ACLass {
+      });
+    }).toThrowError('is not available for injection. Did you forget to annotate it with @Injectable?');
 
   });
 

@@ -1,2 +1,2 @@
-export * from './injectable.decorator';
-export * from './inject.decorator';
+export * from './injctable/injectable.decorator';
+export * from './inject/inject.decorator';

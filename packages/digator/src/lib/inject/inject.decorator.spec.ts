@@ -1,55 +1,55 @@
 // tslint:disable:no-expression-statement no-object-mutation max-classes-per-file
 
 
-import { getInjectable, getSingleton, getSingletons, Inject, Injectable } from './';
 import { getDebugger } from '@microgamma/loggator';
+import {Injectable, getInjectable, getSingletons, getSingleton, Inject} from '../';
 
-const d = getDebugger('microgamma:inject:decorator:spec');
+const d = getDebugger('microgamma:inject.decorator.spec');
 
-@Injectable()
-class TestClassA {
-  constructor() {
-    d('this is the constructor of TestClassA');
+
+describe('@Inject', () => {
+
+  @Injectable()
+  class TestClassA {
+    constructor() {
+      d('this is the constructor of TestClassA');
+    }
+
+    public sayHello(className: string) {
+      d(`Hello from A to ${className}`);
+    }
+  }
+  @Injectable()
+  class TestClassB {
+    constructor() {
+      d('this is the constructor of TestClassB');
+    }
+
+    public sayHello(className: string) {
+      d(`Hello from B to ${className}`);
+    }
   }
 
-  public sayHello(className: string) {
-    d(`Hello from A to ${className}`);
-  }
-}
-@Injectable()
-class TestClassB {
-  constructor() {
-    d('this is the constructor of TestClassB');
-  }
+  class Consumer {
 
-  public sayHello(className: string) {
-    d(`Hello from B to ${className}`);
-  }
-}
+    @Inject(TestClassA)
+    public testClassA;
 
-class Consumer {
+    @Inject(TestClassA)
+    public testClassA2: TestClassA;
 
-  @Inject(TestClassA)
-  public testClassA;
+    @Inject(TestClassB)
+    public testClassB: TestClassB;
 
-  @Inject(TestClassA)
-  public testClassA2: TestClassA;
+    constructor() {
+      d('this is the constructor of Consumer');
+      this.testClassA.sayHello('consumer');
+      this.testClassB.sayHello('Consumer');
+    }
 
-  @Inject(TestClassB)
-  public testClassB: TestClassB;
-
-  constructor() {
-    d('this is the constructor of Consumer');
-    this.testClassA.sayHello('consumer');
-    this.testClassB.sayHello('Consumer');
   }
 
-}
-
-describe('@Injectable', () => {
-
-
-  it('should make injectables avaible for injection', () => {
+  it('should make injectables available for injection', () => {
     expect(getInjectable(TestClassA)).toEqual(TestClassA);
     expect(getInjectable(TestClassB)).toEqual(TestClassB);
   });
@@ -57,13 +57,6 @@ describe('@Injectable', () => {
   it('injectables should not be instantiated yet', () => {
     expect(getSingletons()).toEqual({});
   });
-
-});
-
-
-
-describe('inject decorator', () => {
-
 
   it('if consumer is not instantiated injectable should be neither', () => {
     expect(getSingletons()).toEqual({});
@@ -89,7 +82,9 @@ describe('inject decorator', () => {
 
       expect(getSingleton(TestClassToBeMocked, MockOfTestClassToBeMocked) instanceof MockOfTestClassToBeMocked).toBeTruthy();
     });
+
   });
+
 
 });
 

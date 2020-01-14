@@ -1,8 +1,9 @@
 // tslint:disable: no-object-mutation no-if-statement readonly-array no-mixed-interface object-literal-shorthand only-arrow-functions
 
 import { getDebugger } from '@microgamma/loggator';
+import { getInjectable } from '../';
 
-const d = getDebugger('microgamma:di:inject');
+const d = getDebugger('microgamma:di:inject.decorator');
 
 const singletons: { [className: string]: any } = {};
 
@@ -10,11 +11,13 @@ const singletons: { [className: string]: any } = {};
 export function Inject(classDef): PropertyDecorator {
   return <TFunction extends Function>(target: TFunction, propertyKey) => {
 
+    const klass = getInjectable(classDef);
+    d({klass});
+
     // lazy injection of the singleton when it's needed
     Object.defineProperty(target, propertyKey, {
       get: () => {
-
-        return getSingleton(classDef);
+        return getSingleton(klass);
       }
     });
 

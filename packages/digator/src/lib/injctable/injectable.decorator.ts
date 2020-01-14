@@ -1,12 +1,11 @@
 // tslint:disable: no-object-mutation no-if-statement readonly-array no-mixed-interface
 import 'reflect-metadata';
 import { getDebugger } from '@microgamma/loggator';
+import { ClassType } from '../types';
 
 const d = getDebugger('microgamma:di:injectable');
 
-export type Constructor = new (...args: string[]) => any;
-
-const injectables: { [className: string]: Constructor } = {};
+const injectables: Map<string, ClassType> = new Map<string, ClassType>();
 
 const InjectableMetadata = Symbol.for('Injectable');
 
@@ -16,10 +15,10 @@ export interface InjectableOptions {
 
 export function Injectable(options?: InjectableOptions) {
 
-  return <TFunction extends Constructor>(target: TFunction) => {
+  return <TFunction extends ClassType>(target: TFunction) => {
     d('preparing', target.name, 'for injection');
 
-    injectables[target.name] = target;
+    injectables.set(target.name, target);
     Reflect.metadata(InjectableMetadata, options)(target);
   };
 }
@@ -30,18 +29,22 @@ export function getInjectableMetadata(instance) {
   return Reflect.getMetadata(InjectableMetadata, instance.constructor);
 }
 
-export function getInjectable(className: string | Function): Constructor {
+export function getInjectable(className: string | Function): ClassType {
   const name = className instanceof Function ? className.name : className;
 
   d('getting constructor for', name);
-  if (!injectables[name]) {
+  if (!injectables.get(name)) {
     throw Error(`${name} is not available for injection. Did you forget to annotate it with @Injectable?`);
   }
 
-  return injectables[name];
+  return injectables.get(name);
 }
 
 export function getInjectables() {
-  return injectables;
+  const _injectables = {};
+  injectables.forEach((value, key) => {
+    _injectables[key] = value;
+  });
+  return _injectables;
 }
 
