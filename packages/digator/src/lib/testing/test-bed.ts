@@ -6,7 +6,7 @@ const d = getDebugger('microgamma:test-bed');
 
 export class TestBed {
 
-  private singletons = new Map<ClassType<any>, any>();
+  // private singletons = new Map<ClassType<any>, any>();
 
   constructor(config: TestBedConfiguration) {
     d('creating testBed');
@@ -14,24 +14,24 @@ export class TestBed {
     config.providers.forEach((provider: SingletonDefinition) => {
 
       if (provider instanceof Function) {
-        this.getSingleton(provider);
+        getSingleton(provider);
       } else {
         const provide = provider.provide;
         const useClass = provider.useClass;
-        this.getSingleton(provide, useClass);
+        getSingleton(provide, useClass);
       }
     });
 
   }
-
-  private getSingleton<T>(provide: ClassType<T>, useClass = provide): T {
-
-    d('searching singleton for', provide);
-
-    if (!this.singletons.get(provide)) {
-      this.singletons.set(provide, new useClass());
-    }
-
-    return this.singletons.get(provide);
-  }
+  //
+  // private getSingleton<T>(provide: ClassType<T>, useClass = provide): T {
+  //
+  //   d('searching singleton for', provide);
+  //
+  //   if (!this.singletons.get(provide)) {
+  //     this.singletons.set(provide, new useClass());
+  //   }
+  //
+  //   return this.singletons.get(provide);
+  // }
 }
