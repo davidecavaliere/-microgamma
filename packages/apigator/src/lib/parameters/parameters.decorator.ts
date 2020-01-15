@@ -3,7 +3,7 @@
 import 'reflect-metadata';
 import { getDebugger } from '@microgamma/loggator';
 
-const d = getDebugger('microgamma:apigator:path-parameter');
+const d = getDebugger('microgamma:apigator:parameter');
 
 export const PathParameterMetadata = Symbol.for('Path');
 export const HeaderParameterMetadata = Symbol.for('Header');
