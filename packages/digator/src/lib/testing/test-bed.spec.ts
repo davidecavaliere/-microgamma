@@ -5,7 +5,7 @@ import { getSingletons } from '../';
 
 const d = getDebugger('microgamma:test-bed.spec');
 
-xdescribe('TestBed', () => {
+describe('TestBed', () => {
   let testBed: TestBed;
 
   class TestClassA {

@@ -1,5 +1,5 @@
 import { getDebugger } from '@microgamma/loggator';
-import { ClassType, SingletonDefinition, TestBedConfiguration } from './test-bed.types';
+import { SingletonDefinition, TestBedConfiguration } from './test-bed.types';
 import { getSingleton } from '../';
 
 const d = getDebugger('microgamma:test-bed');
