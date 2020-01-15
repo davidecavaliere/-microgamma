@@ -9,7 +9,14 @@ export interface ClassType<InstanceType extends {} = {}> extends Function {
   prototype: InstanceType
 }
 
-export const Mocked = <BaseClass extends ClassType<{}>, BaseInstance = InstanceType<BaseClass>>(base: BaseClass, mockOwnMethod = true): BaseClass =>
+export interface MockedOptions {
+  mockOwnMethods: boolean;
+  mockParentMethods: boolean;
+}
+
+export const Mocked = <BaseClass extends ClassType<{}>, BaseInstance = InstanceType<BaseClass>>(base: BaseClass, {
+  mockOwnMethods, mockParentMethods
+}: MockedOptions = { mockOwnMethods: true, mockParentMethods: false}): BaseClass =>
 
   class extends base {
 
@@ -27,10 +34,14 @@ export const Mocked = <BaseClass extends ClassType<{}>, BaseInstance = InstanceT
       this.mockClass(base.prototype);
 
       const proto = Object.getPrototypeOf(base.prototype);
-      this['tableName'] = 'test_table_name';
+      // this['tableName'] = 'test_table_name';
 
-      d('mocking parents methods');
-      this.mockClass(proto);
+
+      // TODO: see if there is a way to check wether base is a "primitive" class or not
+      if (mockParentMethods) {
+        d('mocking parents methods');
+        this.mockClass(proto);
+      }
 
     }
 
@@ -39,7 +50,11 @@ export const Mocked = <BaseClass extends ClassType<{}>, BaseInstance = InstanceT
         .filter((fn) => fn !== 'constructor')
         .forEach((fn) => {
           d('mocking', fn);
+          // BE AWARE: if TestClass does not extends any other class then trying to do the below
+          // will throw an error because prototype of primitive object "{}" cannot be set!
+
           prototype[fn] = this.mock
+
         });
     }
   };
