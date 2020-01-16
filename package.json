@@ -17,7 +17,7 @@
     "test:lint": "tslint --project . ",
     "cov:send": "codecov",
     "prerelease": "run-s build",
-    "release": "lerna version",
+    "release": "lerna version --conventional-commits",
     "publish:changed": "lerna publish from-package --yes",
     "doc": "run-s doc:html && opn build/docs/index.html",
     "doc:html": "typedoc packages/**/src/lib --target ES6 --mode modules --out docs --exclude \"**/*+(index|.spec|.e2e).ts\" --external-modulemap '.*packages/(.+)/.*'",
