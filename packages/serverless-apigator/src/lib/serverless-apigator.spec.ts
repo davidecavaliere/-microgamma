@@ -16,7 +16,9 @@ const serverless = {
   service: {
     service: 'my-service',
     custom: {
-      entrypoint: 'my-entrypoint'
+      apigator: {
+        entrypoint: 'my-entrypoint'
+      }
     },
     functions: {}
   }
@@ -85,7 +87,7 @@ describe('ServerlessApigator Plugin', () => {
   });
 
   it('should set entry point path', () => {
-    expect(plugin.entrypoint).toEqual(serverless.service.custom.entrypoint);
+    expect(plugin.entrypoint).toEqual('my-entrypoint');
   });
 
   it('#addFunctionToService', () => {

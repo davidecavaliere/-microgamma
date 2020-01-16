@@ -40,7 +40,7 @@ export class ServerlessApigator {
   constructor(private serverless: any, private options: any = {}) {
 
     this.options = options;
-    const customOptions = serverless.service.custom;
+    const customOptions = serverless.service.custom.apigator;
 
     this.servicePath = serverless.config.servicePath;
     debug('servicePath:', this.servicePath);
@@ -53,11 +53,11 @@ export class ServerlessApigator {
     debug('awsService name', awsService);
     debug('stage', this.options.stage);
 
-    if (!serverless.service.custom.entrypoint) {
+    if (!customOptions.entrypoint) {
       throw new Error('you shall provide path to your entrypoint');
     }
 
-    this.entrypoint = serverless.service.custom.entrypoint;
+    this.entrypoint = customOptions.entrypoint;
     debug('entrypoint', this.entrypoint);
 
   }
