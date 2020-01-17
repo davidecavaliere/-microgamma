@@ -9,27 +9,33 @@ export class ServerlessApigator {
   public hooks: any = {
     'before:package:initialize': () => {
       debug('before:package:initialize');
-
       return this.configureFunctions(true);
     },
-
-    'before:invoke:local:invoke': () => {
-      debug('before:invoke:local:invoke');
+    'before:invoke:local:loadEnvVars': () => {
+      debug('before:invoke:local:loadEnvVars');
+      // this hook is not useful see hack for invoke:local
+      // return this.configureFunctions();
+    },
+    'before:invoke:invoke': () => {
+      debug('before:invoke');
       return this.configureFunctions();
     },
-
+    // when this hook runs it already too late
+    'before:invoke:local:invoke': () => {
+      debug('before:invoke:local:invoke');
+      // this hook is not useful see hack for invoke:local
+      // return this.configureFunctions();
+    },
     // adding hook to make it work with serverless-offline plugin
     'offline:start:init': () => {
       debug('offline:init');
       return this.configureFunctions();
     },
-
     // adding hook to fix aws:info:display
     'before:info:info': () => {
       debug('offline:init');
       return this.configureFunctions();
     }
-
   };
 
   private readonly servicePath: string;
@@ -60,6 +66,16 @@ export class ServerlessApigator {
     this.entrypoint = customOptions.entrypoint;
     debug('entrypoint', this.entrypoint);
 
+    if (serverless.pluginManager && this.serverless.pluginManager.cliCommands) {
+
+      const [command, subCommand] = serverless.pluginManager.cliCommands;
+
+      // hack to fix invoke:local hook
+      if (command === 'invoke' && subCommand === 'local') {
+        // hook does not work, sick!
+        this.configureFunctions();
+      }
+    }
   }
 
   public async configureFunctions(forDeployment = false) {
@@ -71,7 +87,7 @@ export class ServerlessApigator {
 
     const module = await this.importModule(modulePath);
 
-    this.serverless.cli.log('Injecting configuration');
+    this.serverless.cli.log('Apigator: Injecting configuration');
     debug('module found', module);
 
     const endpoint = module.default;
@@ -85,11 +101,11 @@ export class ServerlessApigator {
 
     const authorizerFn = getAuthorizerMetadataFromClass(endpoint);
 
-    this.serverless.cli.log('Parsing Apigator Service definitions');
+    this.serverless.cli.log('Apigator: Parsing Apigator Service definitions');
 
     if (authorizerFn) {
       debug('auth function found', authorizerFn);
-      this.serverless.cli.log('Setting up custom authorizer');
+      this.serverless.cli.log('Apigator: Setting up custom authorizer');
       this.addFunctionToService(endpointMetadata, authorizerFn, forDeployment);
 
     }
@@ -104,7 +120,7 @@ export class ServerlessApigator {
       debug(this.serverless.service.functions[lambda.name].events);
     }
 
-    this.serverless.cli.log(`${lambdas.length} functions configured`);
+    this.serverless.cli.log(`Apigator: ${lambdas.length} functions configured`);
   }
 
 
