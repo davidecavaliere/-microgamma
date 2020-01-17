@@ -9,27 +9,33 @@ export class ServerlessApigator {
   public hooks: any = {
     'before:package:initialize': () => {
       debug('before:package:initialize');
-
       return this.configureFunctions(true);
     },
-
-    'before:invoke:local:invoke': () => {
-      debug('before:invoke:local:invoke');
+    'before:invoke:local:loadEnvVars': () => {
+      debug('before:invoke:local:loadEnvVars');
+      // this hook is not useful see hack for invoke:local
+      // return this.configureFunctions();
+    },
+    'before:invoke:invoke': () => {
+      debug('before:invoke');
       return this.configureFunctions();
     },
-
+    // when this hook runs it already too late
+    'before:invoke:local:invoke': () => {
+      debug('before:invoke:local:invoke');
+      // this hook is not useful see hack for invoke:local
+      // return this.configureFunctions();
+    },
     // adding hook to make it work with serverless-offline plugin
     'offline:start:init': () => {
       debug('offline:init');
       return this.configureFunctions();
     },
-
     // adding hook to fix aws:info:display
     'before:info:info': () => {
       debug('offline:init');
       return this.configureFunctions();
     }
-
   };
 
   private readonly servicePath: string;
@@ -60,6 +66,16 @@ export class ServerlessApigator {
     this.entrypoint = customOptions.entrypoint;
     debug('entrypoint', this.entrypoint);
 
+    if (serverless.pluginManager && this.serverless.pluginManager.cliCommands) {
+
+      const [command, subCommand] = serverless.pluginManager.cliCommands;
+
+      // hack to fix invoke:local hook
+      if (command === 'invoke' && subCommand === 'local') {
+        // hook does not work, sick!
+        this.configureFunctions();
+      }
+    }
   }
 
   public async configureFunctions(forDeployment = false) {

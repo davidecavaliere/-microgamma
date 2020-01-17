@@ -163,6 +163,77 @@ describe('ServerlessApigator Plugin', () => {
     });
   });
 
+  describe('invoke:local hack', () => {
+
+    // running yarn sls invoke -f functionName --stage dev will throw an error
+    // because the hook 'before:invoke:local:loadEnvVars' will check for functionnName
+    // before servelerss-apigator plugin is able to configure it.
+    // To fix it we check if the command invoke local has been passed and then run the configuration
+    // of the lambdas from the constructor
+
+    const _options = {
+      cli: {
+        log: d
+      },
+      config: {
+        servicePath: 'my-path',
+      },
+      service: {
+        service: 'my-service',
+        custom: {
+          apigator: {
+            entrypoint: 'my-entrypoint'
+          }
+        },
+        functions: {}
+      },
+      pluginManager: {
+        cliCommands: ['invoke', 'local']
+      }
+    };
+
+    let _plugin: ServerlessApigator;
+
+    beforeEach(() => {
+      spyOn(ServerlessApigator.prototype, 'importModule').and.callFake(async () => {
+        return { default: TestClass };
+
+      });
+
+      _plugin = new ServerlessApigator(_options, { stage: 'dev'});
+
+    });
+
+    it('should have configured functions', () => {
+      expect(_options.service.functions).toEqual({
+        authorizer: {
+          events: [],
+          handler: 'my-entrypoint.authorizer',
+          name: 'my-service-dev-authorizer'
+        },
+        'lambda-name-1': {
+          events: [{
+            http: {
+              cors: true,
+              integration: 'lambda',
+              method: 'get',
+              path: '/',
+              private: false
+            }
+          }],
+          handler: 'my-entrypoint.lambda-name-1',
+          name: 'my-service-dev-lambda-name-1'
+        },
+        name: {
+          events: [],
+          handler: 'my-entrypoint.name',
+          name: 'my-service-dev-name'
+        }
+      });
+
+    });
+
+  });
 
 });
 
