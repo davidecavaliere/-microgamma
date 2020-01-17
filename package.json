@@ -50,7 +50,7 @@
     "tslint": "^5.10.0",
     "tslint-config-prettier": "^1.17.0",
     "tslint-immutable": "^4.5.4",
-    "typescript": "3.6",
+    "typescript": "3.5",
     "yarn": "^1.12.3"
   },
   "jest": {
