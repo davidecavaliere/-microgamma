@@ -87,7 +87,7 @@ export class ServerlessApigator {
 
     const module = await this.importModule(modulePath);
 
-    this.serverless.cli.log('Injecting configuration');
+    this.serverless.cli.log('Apigator: Injecting configuration');
     debug('module found', module);
 
     const endpoint = module.default;
@@ -101,11 +101,11 @@ export class ServerlessApigator {
 
     const authorizerFn = getAuthorizerMetadataFromClass(endpoint);
 
-    this.serverless.cli.log('Parsing Apigator Service definitions');
+    this.serverless.cli.log('Apigator: Parsing Apigator Service definitions');
 
     if (authorizerFn) {
       debug('auth function found', authorizerFn);
-      this.serverless.cli.log('Setting up custom authorizer');
+      this.serverless.cli.log('Apigator: Setting up custom authorizer');
       this.addFunctionToService(endpointMetadata, authorizerFn, forDeployment);
 
     }
@@ -120,7 +120,7 @@ export class ServerlessApigator {
       debug(this.serverless.service.functions[lambda.name].events);
     }
 
-    this.serverless.cli.log(`${lambdas.length} functions configured`);
+    this.serverless.cli.log(`Apigator: ${lambdas.length} functions configured`);
   }
 
 
