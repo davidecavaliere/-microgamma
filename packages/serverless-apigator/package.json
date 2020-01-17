@@ -44,8 +44,7 @@
     "node": ">=8.9"
   },
   "dependencies": {
-    "@microgamma/loggator": "^1.12.3",
-    "@types/aws-sdk": "^2.7.0"
+    "@microgamma/loggator": "^1.12.3"
   },
   "config": {
     "commitizen": {
