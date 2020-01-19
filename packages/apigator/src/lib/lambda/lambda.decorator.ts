@@ -6,6 +6,7 @@ import { getArguments } from '../utils';
 import { getDebugger } from '@microgamma/loggator';
 import { getSingleton } from '@microgamma/digator';
 import { getBodyMetadata, getHeaderMetadata, getPathMetadata } from '../parameters/parameters.decorator';
+import { AwsEventHandler } from './handler/aws-event-handler';
 
 const d = getDebugger('microgamma:apigator:lambda');
 
@@ -32,26 +33,9 @@ export function Lambda(options: LambdaOptions) {
   // serverless-apigator sets integration = 'lambda' if integration is not define
   options.integration = options.integration || 'lambda';
 
-  function getApiGatewayEvent(args): APIGatewayEvent {
-    // TODO add check
-    return args[0];
-  }
-
-  function extractBody(args) {
-
-    return getApiGatewayEvent(args).body;
-  }
-
-  function extractPathParams(args) {
-
-    return options.integration === 'lambda' ? getApiGatewayEvent(args).path : getApiGatewayEvent(args).pathParameters;
-  }
-
-  function extractHeaderParams(args) {
-    return getApiGatewayEvent(args).headers;
-  }
-
   return (target: any, key: string, descriptor) => {
+    const handler: AwsEventHandler = getSingleton(AwsEventHandler);
+    d({ handler });
     d('target', target);
     d('function name', key);
 
@@ -111,9 +95,9 @@ export function Lambda(options: LambdaOptions) {
       d('method metadata', methodMetadata);
 
 
-      const event: APIGatewayEvent = getApiGatewayEvent(args);
-
-      d('event is', event);
+      // const event: APIGatewayEvent = handler.getApiGatewayEvent(args);
+      //
+      // d('event is', event);
 
 
       /*
@@ -127,14 +111,14 @@ export function Lambda(options: LambdaOptions) {
       const bodyParams = getBodyMetadata(instance, key);
       d('@BodyParams', bodyParams);
 
-      const body = extractBody(args);
+      const body = handler.getBody(args);
       d('body is', body);
 
       // extract path params
       const pathAnnotatedParams = getPathMetadata(instance, key);
       d('@PathParams', pathAnnotatedParams);
 
-      const pathParams = extractPathParams(args);
+      const pathParams = handler.getPathParams(args);
       d('path params are', pathParams);
 
       // extract header params
@@ -142,7 +126,7 @@ export function Lambda(options: LambdaOptions) {
       d('@HeaderParams', headerAnnotatedParams);
 
 
-      const headerParams = extractHeaderParams(args);
+      const headerParams = handler.getHeaderParams(args);
       d('header params are', headerParams);
 
       // extract query params
