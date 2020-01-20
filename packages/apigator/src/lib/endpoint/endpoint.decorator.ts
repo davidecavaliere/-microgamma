@@ -1,7 +1,7 @@
 import 'reflect-metadata';
-import { setImplementation } from '@microgamma/digator';
 import { LambdaHandler } from '../lambda/handler/lambda-handler';
 import { AwsEventHandler } from '../lambda/handler/aws-event-handler';
+import { setInjectable } from '@microgamma/digator';
 
 const EndpointMetadata = Symbol.for('Endpoint');
 
@@ -16,13 +16,14 @@ export interface EndpointOptions {
 export function Endpoint(options: EndpointOptions): ClassDecorator {
   // Set default Handlers, if user provides a different implementation it will overwritten below
   // defaults to AwsLambdaHandler
-  setImplementation({
-    provide: LambdaHandler,
-    implementation: AwsEventHandler
-  });
 
   if (options.providers) {
-    options.providers.forEach(setImplementation);
+    options.providers.forEach(setInjectable);
+  } else {
+    setInjectable({
+      provide: LambdaHandler,
+      implementation: AwsEventHandler
+    });
   }
 
   return <TFunction extends Function>(target: TFunction) => {

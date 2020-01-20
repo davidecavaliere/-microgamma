@@ -1,6 +1,6 @@
 import { getDebugger } from '@microgamma/loggator';
 import { SingletonDefinition, TestBedConfiguration } from './test-bed.types';
-import { setImplementation } from '../';
+import { setInjectable } from '../';
 
 const d = getDebugger('microgamma:test-bed');
 
@@ -13,7 +13,7 @@ export class TestBed {
 
       const provide = provider.provide;
       const useClass = provider.useClass;
-      setImplementation({provide, implementation: useClass});
+      setInjectable({provide, implementation: useClass});
     });
 
   }

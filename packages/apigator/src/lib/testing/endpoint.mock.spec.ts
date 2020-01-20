@@ -1,7 +1,7 @@
 // tslint:disable:no-empty
 import { Body, EndpointMock, Header, Lambda, Path } from '@microgamma/apigator';
 
-describe('EndpointMock', () => {
+xdescribe('EndpointMock', () => {
 
   let mockedClass;
   let instance: TestClass;

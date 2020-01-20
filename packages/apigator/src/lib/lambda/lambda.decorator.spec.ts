@@ -3,45 +3,65 @@ import { getLambdaMetadata, getLambdaMetadataFromClass, Lambda, LambdaOptions } 
 import { bootstrap, Endpoint } from '../../';
 import { Injectable } from '@microgamma/digator';
 import { Body, Header, Path } from '../parameters/parameters.decorator';
+import { LambdaHandler } from './handler/lambda-handler';
+import { getDebugger } from '@microgamma/loggator';
 
-const option1: LambdaOptions = {
-  method: 'get',
-  name: 'lambda-name-1',
-  path: '/'
-};
+const d = getDebugger('microgamma:apigator:lambda.decorator.spec');
 
-const option2: LambdaOptions = {
-  method: 'get',
-  name: 'lambda-name-2',
-  path: ':id',
-  integration: 'lambda-proxy'
-};
+describe('@Lambda', () => {
 
-@Endpoint({
-  name: 'endpoint'
-})
-@Injectable()
-class TestClass {
+  const option1: LambdaOptions = {
+    method: 'get',
+    name: 'lambda-name-1',
+    path: '/'
+  };
 
-  public readonly toTestAccessToInstance: string = 'base';
+  const option2: LambdaOptions = {
+    method: 'get',
+    name: 'lambda-name-2',
+    path: ':id',
+    integration: 'lambda-proxy'
+  };
 
-  @Lambda(option1)
-  public findAll(@Body() arg1, @Path('pathArg1') arg2, @Header('Authorization') arg3) {
-    return {
-      base: this.toTestAccessToInstance,
-      body: arg1,
-      other: arg2 + arg3
+  @Endpoint({
+    name: 'endpoint',
+    providers: [{
+      provide: LambdaHandler,
+      // tslint:disable-next-line:max-classes-per-file
+      implementation: class LambdaTestHandler extends LambdaHandler {
+        constructor() {
+          super();
+          d('constructing', this);
+        }
+
+        // tslint:disable-next-line:no-shadowed-variable
+        public async runOriginalFunction(originalFunction, instance, newArgs, originalArgs?): Promise<any> {
+          return originalFunction.apply(instance, originalArgs);
+        }
+      }
+    }]
+  })
+  @Injectable()
+  class TestClass {
+
+    public readonly toTestAccessToInstance: string = 'base';
+
+    @Lambda(option1)
+    public findAll(@Body() arg1, @Path('pathArg1') arg2, @Header('Authorization') arg3) {
+      return {
+        base: this.toTestAccessToInstance,
+        body: arg1,
+        other: arg2 + arg3
+      }
+    }
+
+    @Lambda(option2)
+    public findOne() {
+      return 1;
     }
   }
 
-  @Lambda(option2)
-  public findOne() {
-    return 1;
-  }
-}
 
-
-describe('@Lambda', () => {
   let instance;
 
   beforeEach(() => {
@@ -60,24 +80,10 @@ describe('@Lambda', () => {
 
   it('findAll method should return 2: promised', async () => {
 
-    const resp = await instance.findAll.apply(instance, [
-      { // aws event
-        path: {
-          arg1: 1,
-          arg2: 2,
-          arg3: 3,
-          pathArg1: 'my-value'
-        },
-        body: {
-          a: 'b',
-          c: 'd'
-        },
-        headers: {
-          Authorization: 'abcdefghilmnopqrstuvz'
-        }
-      },
-      { context: 'a' } // context
-    ]);
+    const resp = await instance.findAll({
+      a: 'b',
+      c: 'd'
+    }, 'my-value', 'abcdefghilmnopqrstuvz');
 
     expect(resp).toEqual({
       base: 'base',

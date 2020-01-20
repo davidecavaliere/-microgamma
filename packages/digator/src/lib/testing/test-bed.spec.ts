@@ -1,7 +1,8 @@
 // tslint:disable: max-classes-per-file
 import { TestBed } from './test-bed';
 import { getDebugger } from '@microgamma/loggator';
-import { getSingleton, getSingletons } from '../';
+import { getInjectables, getSingleton, getSingletons } from '../';
+import Test = jest.Test;
 
 const d = getDebugger('microgamma:test-bed.spec');
 
@@ -40,16 +41,19 @@ describe('TestBed', () => {
     expect(testBed).toBeTruthy();
   });
 
-  it('should have instantiated the services defined in the providers array', () => {
-    expect(getSingletons()).toEqual({
-      TestClassB: expect.anything()
+  it('should set the implementation provided', () => {
+    const injectables = getInjectables();
+
+    expect(injectables).toEqual({
+      TestClassB: MockImplementationTestClassB
     });
+
   });
 
-  it('should have created an instance of the provided mock implementation', () => {
-    const singletons = getSingletons();
+  it('should return the mocked implementation', () => {
+    const singleton = getSingleton(TestClassB);
 
-    expect(singletons['TestClassB']).toEqual(MockImplementationTestClassB);
+    expect(singleton instanceof MockImplementationTestClassB).toBeTruthy();
 
   });
 
@@ -69,7 +73,7 @@ describe('TestBed', () => {
     });
 
     it('should provide the second implementation', () => {
-      expect(getSingleton(TestClassB)).toEqual(MockImplementationTestClassBSecond);
+      expect(getSingleton(TestClassB) instanceof MockImplementationTestClassBSecond).toBeTruthy();
 
     });
   });

@@ -23,8 +23,6 @@ export function Injectable(options?: InjectableOptions) {
   };
 }
 
-
-
 export function getInjectableMetadata(instance) {
   return Reflect.getMetadata(InjectableMetadata, instance.constructor);
 }
@@ -48,3 +46,15 @@ export function getInjectables() {
   return _injectables;
 }
 
+export function setInjectable({ provide, implementation }) {
+  d('setting implementation');
+  d({ provide });
+  d({ implementation });
+
+
+
+  d('resetting implementation for', provide, 'with', implementation);
+
+  injectables.set(provide.name, implementation);
+
+}

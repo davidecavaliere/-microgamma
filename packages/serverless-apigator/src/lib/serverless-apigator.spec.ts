@@ -3,6 +3,7 @@
 import { ServerlessApigator } from './serverless-apigator';
 import { Authorizer, bootstrap, Endpoint, EndpointOptions, Lambda, LambdaOptions } from '@microgamma/apigator';
 import { getDebugger } from '@microgamma/loggator';
+import { Injectable } from '@microgamma/digator';
 
 const d = getDebugger('microgamma:serverless-apigator.spec');
 
@@ -36,6 +37,7 @@ const option1: LambdaOptions = {
 };
 
 @Endpoint(options)
+@Injectable()
 class TestClass {
   @Lambda(option1)
   public findAll(arg1, arg2, arg3) {

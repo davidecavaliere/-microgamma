@@ -2,7 +2,7 @@
 
 
 import { getDebugger } from '@microgamma/loggator';
-import {Injectable, getInjectable, getSingletons, getSingleton, Inject} from '../';
+import { Injectable, getInjectable, getSingletons, getSingleton, Inject, setInjectable } from '../';
 
 const d = getDebugger('microgamma:inject.decorator.spec');
 
@@ -77,10 +77,17 @@ describe('@Inject', () => {
     });
 
     it('should instantiate a singleton with the given implementation', () => {
+      @Injectable()
       class TestClassToBeMocked {}
+
       class MockOfTestClassToBeMocked extends TestClassToBeMocked {}
 
-      expect(getSingleton(TestClassToBeMocked, MockOfTestClassToBeMocked) instanceof MockOfTestClassToBeMocked).toBeTruthy();
+      setInjectable({
+        provide: TestClassToBeMocked,
+        implementation: MockOfTestClassToBeMocked
+      });
+
+      expect(getSingleton(TestClassToBeMocked) instanceof MockOfTestClassToBeMocked).toBeTruthy();
     });
 
   });

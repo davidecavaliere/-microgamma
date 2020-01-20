@@ -42,7 +42,7 @@ export function Lambda(options: LambdaOptions) {
     descriptor.value = async function () {
       const functionArgumentsNames = getArguments(originalFunction);
 
-      const handler: LambdaHandler = getSingleton(AwsEventHandler);
+      const handler: LambdaHandler = getSingleton(LambdaHandler);
 
       const args = arguments;
 
@@ -164,7 +164,7 @@ export function Lambda(options: LambdaOptions) {
       d('re-mapped args are', newArgs);
 
       try {
-        const retValue = await handler.runOriginalFunction(originalFunction, instance, newArgs); // originalFunction.apply(instance, newArgs);
+        const retValue = await handler.runOriginalFunction(originalFunction, instance, newArgs, args); // originalFunction.apply(instance, newArgs);
 
         d('retValue', retValue);
 
