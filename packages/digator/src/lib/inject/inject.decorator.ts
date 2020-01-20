@@ -24,7 +24,7 @@ export function Inject(classDef): PropertyDecorator {
   }
 }
 
-export function getSingleton(className, implementation = null) {
+export function getSingleton<T>(className, implementation = null): T {
 
   const name = typeof className === 'string' ? className : className.name;
 
