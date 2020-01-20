@@ -2,12 +2,10 @@
 
 export interface SingletonType<T = any> extends Function { new(...args: any[]): T; }
 
-export interface SingletonWithImplementation {
+export interface SingletonDefinition {
   provide: SingletonType,
   useClass: SingletonType
 }
-
-export type SingletonDefinition =  SingletonWithImplementation | SingletonType;
 
 export interface TestBedConfiguration {
   providers: SingletonDefinition[];

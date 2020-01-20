@@ -1,7 +1,7 @@
 // tslint:disable: max-classes-per-file
 import { TestBed } from './test-bed';
 import { getDebugger } from '@microgamma/loggator';
-import { getSingletons } from '../';
+import { getSingleton, getSingletons } from '../';
 
 const d = getDebugger('microgamma:test-bed.spec');
 
@@ -28,7 +28,6 @@ describe('TestBed', () => {
   beforeEach(() => {
     testBed = new TestBed({
       providers: [
-        TestClassA,
         {
           provide: TestClassB,
           useClass: MockImplementationTestClassB
@@ -43,7 +42,6 @@ describe('TestBed', () => {
 
   it('should have instantiated the services defined in the providers array', () => {
     expect(getSingletons()).toEqual({
-      TestClassA: expect.anything(),
       TestClassB: expect.anything()
     });
   });
@@ -51,8 +49,29 @@ describe('TestBed', () => {
   it('should have created an instance of the provided mock implementation', () => {
     const singletons = getSingletons();
 
-    expect(singletons['TestClassB'] instanceof MockImplementationTestClassB).toBeTruthy();
+    expect(singletons['TestClassB']).toEqual(MockImplementationTestClassB);
 
+  });
+
+  describe('a second TestBed which provides a different implementation is create', () => {
+
+    class MockImplementationTestClassBSecond {}
+
+    beforeEach(() => {
+      // tslint:disable-next-line:no-unused-expression
+      new TestBed({
+        providers: [{
+          provide: TestClassB,
+          useClass: MockImplementationTestClassBSecond
+        }]
+      })
+
+    });
+
+    it('should provide the second implementation', () => {
+      expect(getSingleton(TestClassB)).toEqual(MockImplementationTestClassBSecond);
+
+    });
   });
 
 });
