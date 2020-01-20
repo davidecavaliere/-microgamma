@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.14.6-beta.0](https://github.com/davidecavaliere/-microgamma/compare/v1.14.5...v1.14.6-beta.0) (2020-01-20)
+
+
+### Features
+
+* **apigator:** @Endpoint sets default LambdaHadler and provides option to override it ([18c0df4](https://github.com/davidecavaliere/-microgamma/commit/18c0df4a864435000efa190ca9dea60eeddb18d0))
+* **apigator:** @Lambda uses provided handler to handle params retrive and mapping ([c3b8c30](https://github.com/davidecavaliere/-microgamma/commit/c3b8c30e9d0d06107d441ed98deecb51a78531d4))
+* **apigator:** adding Lambda handler and AwsEventHanlder ([45f25b4](https://github.com/davidecavaliere/-microgamma/commit/45f25b4aa078468502562dbcc803ab1b1fe79207))
+* **digator:** adding function to set singleton implementation ([e8944d4](https://github.com/davidecavaliere/-microgamma/commit/e8944d4edfeeab7aa9967a3d9d6f817fb52cd4e3))
+* **digator:** TestBed should use setImplementation ([2ca9231](https://github.com/davidecavaliere/-microgamma/commit/2ca92318f44ad7ca46478102fa445746ef820e05))
+
+
+
+
+
 ## [1.14.5](https://github.com/davidecavaliere/-microgamma/compare/v1.14.4...v1.14.5) (2020-01-17)
 
 

@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.14.6-beta.0](https://github.com/davidecavaliere/-microgamma/compare/v1.14.5...v1.14.6-beta.0) (2020-01-20)
+
+
+### Features
+
+* **apigator:** @Endpoint sets default LambdaHadler and provides option to override it ([18c0df4](https://github.com/davidecavaliere/-microgamma/commit/18c0df4a864435000efa190ca9dea60eeddb18d0))
+* **apigator:** @Lambda uses provided handler to handle params retrive and mapping ([c3b8c30](https://github.com/davidecavaliere/-microgamma/commit/c3b8c30e9d0d06107d441ed98deecb51a78531d4))
+* **apigator:** adding Lambda handler and AwsEventHanlder ([45f25b4](https://github.com/davidecavaliere/-microgamma/commit/45f25b4aa078468502562dbcc803ab1b1fe79207))
+
+
+
+
+
 ## [1.14.3](https://github.com/davidecavaliere/-microgamma/compare/v1.14.2...v1.14.3) (2020-01-15)
 
 **Note:** Version bump only for package @microgamma/apigator
