@@ -1,6 +1,6 @@
 // tslint:disable:no-expression-statement no-object-mutation
 import { getLambdaMetadata, getLambdaMetadataFromClass, Lambda, LambdaOptions } from './lambda.decorator';
-import { Endpoint } from '../../';
+import { bootstrap, Endpoint } from '../../';
 import { Injectable } from '@microgamma/digator';
 import { Body, Header, Path } from '../parameters/parameters.decorator';
 
@@ -45,7 +45,7 @@ describe('@Lambda', () => {
   let instance;
 
   beforeEach(() => {
-    instance = new TestClass();
+    instance = bootstrap(TestClass);
 
   });
 

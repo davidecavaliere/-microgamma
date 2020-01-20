@@ -7,6 +7,8 @@ import { getDebugger } from '@microgamma/loggator';
 import { getSingleton } from '@microgamma/digator';
 import { getBodyMetadata, getHeaderMetadata, getPathMetadata } from '../parameters/parameters.decorator';
 import { AwsEventHandler } from './handler/aws-event-handler';
+import { LambdaHandler } from './handler/lambda-handler';
+import { getEndpointMetadataFromClass } from '@microgamma/apigator';
 
 const d = getDebugger('microgamma:apigator:lambda');
 
@@ -27,17 +29,12 @@ export interface LambdaOptions {
 }
 
 
-
 export function Lambda(options: LambdaOptions) {
 
   // serverless-apigator sets integration = 'lambda' if integration is not define
   options.integration = options.integration || 'lambda';
 
   return (target: any, key: string, descriptor) => {
-    const handler: AwsEventHandler = getSingleton(AwsEventHandler);
-    d({ handler });
-    d('target', target);
-    d('function name', key);
 
     options.name = options.name || key;
 
@@ -47,9 +44,12 @@ export function Lambda(options: LambdaOptions) {
     Reflect.defineMetadata(LambdaMetadata, lambdas, target);
 
     const originalFunction = descriptor.value;
-    const functionArgumentsNames = getArguments(originalFunction);
 
     descriptor.value = async function () {
+      const functionArgumentsNames = getArguments(originalFunction);
+
+      const handler: LambdaHandler = getSingleton(AwsEventHandler);
+
       const args = arguments;
 
       // here we have an array of string with names of arguments.
@@ -129,15 +129,15 @@ export function Lambda(options: LambdaOptions) {
       const headerParams = handler.getHeaderParams(args);
       d('header params are', headerParams);
 
-      // extract query params
-      // TBD
+      // TODO: extract query params
 
-      // being able to alter the context
-      // TBD
+      // TODO: being able to alter the context or pass context to originalFunction
 
       // Make sure to add this so you can re-use `conn` between function calls.
       // See https://www.mongodb.com/blog/post/serverless-development-with-nodejs-aws-lambda-mongodb-atlas
-      args[1].callbackWaitsForEmptyEventLoop = false;
+      if (args[1] && args[1].hasOwnProperty('callbackWaitsForEmptyEventLoop')) {
+        args[1].callbackWaitsForEmptyEventLoop = false;
+      }
 
       const newArgs = new Array(functionArgumentsNames.length);
       d('annotated new args', newArgs);
@@ -167,8 +167,7 @@ export function Lambda(options: LambdaOptions) {
 
       });
 
-      d('annotatoed args are', newArgs);
-
+      d('re-mapped args are', newArgs);
 
       try {
         const retValue = await originalFunction.apply(instance, newArgs);
@@ -194,11 +193,11 @@ export function Lambda(options: LambdaOptions) {
 
       }
 
-
     };
 
     return descriptor;
-  };
+  }
+
 }
 
 export function getLambdaMetadata(instance) {
