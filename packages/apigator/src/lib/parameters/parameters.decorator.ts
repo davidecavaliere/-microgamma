@@ -22,6 +22,7 @@ export function Path(options: PathParameterOptions): ParameterDecorator {
     d('stored metadata', stored);
 
     // TODO: check for key already exists
+    // TODO: allow optional options and get path part name from function (target[key]) signature
     stored[options] = index;
 
     Reflect.defineMetadata(PathParameterMetadata, stored, target, key);

@@ -13,6 +13,10 @@ describe('@Path', () => {
       return this.toTestAccessToInstance + arg1 + arg2 + arg3;
     }
 
+    // public useDefaultNames(@Path() id, @Path() email) {
+    //   return id + email;
+    // }
+
   }
 
   let instance: TestClass;
@@ -32,6 +36,15 @@ describe('@Path', () => {
     expect(getBodyMetadata(instance, 'findAll')).toEqual({
       body: 1
     });
+  });
+
+  xit('should use varName when no value is passed', () => {
+    expect(getPathMetadata(instance, 'useDefaultNames')).toEqual({
+      id: 0,
+      email: 1
+    });
+
+
   });
 
 });
