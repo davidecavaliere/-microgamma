@@ -1,22 +1,23 @@
-import { APIGatewayEvent } from 'aws-lambda';
+import { APIGatewayEvent, APIGatewayEventRequestContext } from 'aws-lambda';
 import { LambdaHandler } from './lambda-handler';
+
+type AwsLambdaArguments = [APIGatewayEvent, APIGatewayEventRequestContext];
 
 export class AwsEventHandler extends LambdaHandler {
 
-  private getApiGatewayEvent(args): APIGatewayEvent {
-    return args[0];
+  public getBody([event, context]: AwsLambdaArguments): {} {
+    return event.body;
   }
 
-  public getBody(args): {} {
-    return this.getApiGatewayEvent(args).body;
-  }
-
-  public getPathParams(args) {
-    const event: APIGatewayEvent = this.getApiGatewayEvent(args);
+  public getPathParams([event, context]: AwsLambdaArguments): {} {
     return event.path || event.pathParameters;
   }
 
-  public getHeaderParams(args) {
-    return this.getApiGatewayEvent(args).headers;
+  public getHeaderParams([event, context]: AwsLambdaArguments): {} {
+    return event.headers;
+  }
+
+  public async runOriginalFunction<T extends (...args: any[]) => any, RetType = ReturnType<T>>(originalFunction, instance, newArgs): Promise<RetType> {
+    return originalFunction.apply(instance, newArgs);
   }
 }
