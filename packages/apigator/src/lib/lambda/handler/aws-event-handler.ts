@@ -1,9 +1,7 @@
-import { Injectable } from '@microgamma/digator';
 import { APIGatewayEvent } from 'aws-lambda';
+import { LambdaHandler } from './lambda-handler';
 
-@Injectable()
-export class AwsEventHandler {
-
+export class AwsEventHandler extends LambdaHandler {
 
   private getApiGatewayEvent(args): APIGatewayEvent {
     return args[0];
