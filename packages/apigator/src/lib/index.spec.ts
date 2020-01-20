@@ -4,24 +4,22 @@
 import { bootstrap, Endpoint, Lambda } from '../';
 import { Injectable } from '@microgamma/digator';
 
-
-
-@Endpoint({
-  name: 'test-service'
-})
-@Injectable()
-class TestClass {
-  @Lambda({
-    method: 'get',
-    name: 'manifest',
-    path: '/'
-  })
-  public manifest() {
-    return 'this is the manifest';
-  }
-}
-
 describe('bootstrap', () => {
+
+  @Endpoint({
+    name: 'test-service'
+  })
+  @Injectable()
+  class TestClass {
+    @Lambda({
+      method: 'get',
+      name: 'manifest',
+      path: '/'
+    })
+    public manifest() {
+      return 'this is the manifest';
+    }
+  }
 
   let inst;
 
