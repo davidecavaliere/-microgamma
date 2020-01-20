@@ -1,19 +1,14 @@
 // tslint:disable:only-arrow-functions readonly-array prefer- no-if-statement no-object-mutation no-this no-this-assignment no-shadowed-variable
 
 import 'reflect-metadata';
-import { APIGatewayEvent } from 'aws-lambda';
 import { getArguments } from '../utils';
 import { getDebugger } from '@microgamma/loggator';
 import { getSingleton } from '@microgamma/digator';
 import { getBodyMetadata, getHeaderMetadata, getPathMetadata } from '../parameters/parameters.decorator';
 import { AwsEventHandler } from './handler/aws-event-handler';
 import { LambdaHandler } from './handler/lambda-handler';
-import { getEndpointMetadataFromClass } from '@microgamma/apigator';
 
 const d = getDebugger('microgamma:apigator:lambda');
-
-type Parameters<T> = T extends (... args: infer T) => any ? T : never;
-type ReturnType<T> = T extends (... args: any[]) => infer T ? T : never;
 
 export const LambdaMetadata = Symbol.for('Lambda');
 
@@ -39,7 +34,6 @@ export function Lambda(options: LambdaOptions) {
     options.name = options.name || key;
 
     const lambdas = getLambdaMetadata(target).concat(options);
-    // d('lambdas: ', lambdas);
 
     Reflect.defineMetadata(LambdaMetadata, lambdas, target);
 
