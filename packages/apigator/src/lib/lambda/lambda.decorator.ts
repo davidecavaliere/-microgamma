@@ -164,7 +164,7 @@ export function Lambda(options: LambdaOptions) {
       d('re-mapped args are', newArgs);
 
       try {
-        const retValue = await originalFunction.apply(instance, newArgs);
+        const retValue = await handler.runOriginalFunction(originalFunction, instance, newArgs); // originalFunction.apply(instance, newArgs);
 
         d('retValue', retValue);
 
