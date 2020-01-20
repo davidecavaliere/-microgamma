@@ -42,3 +42,15 @@ export function getSingleton<T>(className, implementation = null): T {
 export function getSingletons() {
   return singletons;
 }
+
+export function setImplementation({ provide, implementation }) {
+  d('setting implementation');
+  d({ provide });
+  d({ implementation });
+
+  const name = typeof provide === 'string' ? provide : provide.name;
+
+  d('resetting implementation for', provide, 'with', implementation);
+
+  singletons[name] = implementation;
+}
