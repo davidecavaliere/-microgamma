@@ -1,9 +1,9 @@
 import { APIGatewayEvent, APIGatewayEventRequestContext } from 'aws-lambda';
-import { LambdaHandler } from './lambda-handler';
+import { LambdaDefaultHandler } from './';
 
 type AwsLambdaArguments = [APIGatewayEvent, APIGatewayEventRequestContext];
 
-export class AwsEventHandler extends LambdaHandler {
+export class AwsEventHandler extends LambdaDefaultHandler {
 
   public getBody([event, context]: AwsLambdaArguments): {} {
     return event.body;
@@ -17,7 +17,13 @@ export class AwsEventHandler extends LambdaHandler {
     return event.headers;
   }
 
-  public async runOriginalFunction<T extends (...args: any[]) => any, RetType = ReturnType<T>>(originalFunction, instance, newArgs): Promise<RetType> {
-    return originalFunction.apply(instance, newArgs);
+  public async runOriginalFunction(originalFunction, instance, newArgs) {
+    try {
+
+      return originalFunction.apply(instance, newArgs);
+
+    } catch (e) {
+      throw this.handleError(e);
+    }
   }
 }

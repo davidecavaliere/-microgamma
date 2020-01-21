@@ -3,8 +3,9 @@ import { getLambdaMetadata, getLambdaMetadataFromClass, Lambda, LambdaOptions } 
 import { bootstrap, Endpoint } from '../../';
 import { Injectable } from '@microgamma/digator';
 import { Body, Header, Path } from '../parameters/parameters.decorator';
-import { LambdaHandler } from './handler/lambda-handler';
+import { LambdaDefaultHandler } from './handler';
 import { getDebugger } from '@microgamma/loggator';
+import { LambdaTestingHandler } from '../testing';
 
 const d = getDebugger('microgamma:apigator:lambda.decorator.spec');
 
@@ -26,19 +27,8 @@ describe('@Lambda', () => {
   @Endpoint({
     name: 'endpoint',
     providers: [{
-      provide: LambdaHandler,
-      // tslint:disable-next-line:max-classes-per-file
-      implementation: class LambdaTestHandler extends LambdaHandler {
-        constructor() {
-          super();
-          d('constructing', this);
-        }
-
-        // tslint:disable-next-line:no-shadowed-variable
-        public async runOriginalFunction(originalFunction, instance, newArgs, originalArgs?): Promise<any> {
-          return originalFunction.apply(instance, originalArgs);
-        }
-      }
+      provide: LambdaDefaultHandler,
+      implementation: LambdaTestingHandler
     }]
   })
   @Injectable()

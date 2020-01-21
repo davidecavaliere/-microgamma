@@ -1,6 +1,5 @@
 import 'reflect-metadata';
-import { LambdaHandler } from '../lambda/handler/lambda-handler';
-import { AwsEventHandler } from '../lambda/handler/aws-event-handler';
+import { AwsEventHandler, LambdaDefaultHandler } from '../lambda/handler';
 import { setInjectable } from '@microgamma/digator';
 
 const EndpointMetadata = Symbol.for('Endpoint');
@@ -21,7 +20,7 @@ export function Endpoint(options: EndpointOptions): ClassDecorator {
     options.providers.forEach(setInjectable);
   } else {
     setInjectable({
-      provide: LambdaHandler,
+      provide: LambdaDefaultHandler,
       implementation: AwsEventHandler
     });
   }

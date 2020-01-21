@@ -5,8 +5,7 @@ import { getArguments } from '../utils';
 import { getDebugger } from '@microgamma/loggator';
 import { getSingleton } from '@microgamma/digator';
 import { getBodyMetadata, getHeaderMetadata, getPathMetadata } from '../parameters/parameters.decorator';
-import { AwsEventHandler } from './handler/aws-event-handler';
-import { LambdaHandler } from './handler/lambda-handler';
+import { LambdaDefaultHandler } from './handler';
 
 const d = getDebugger('microgamma:apigator:lambda');
 
@@ -26,7 +25,7 @@ export interface LambdaOptions {
 
 export function Lambda(options: LambdaOptions) {
 
-  // serverless-apigator sets integration = 'lambda' if integration is not define
+  // serverless-apigator sets integration = 'lambda' if integration is not defined
   options.integration = options.integration || 'lambda';
 
   return (target: any, key: string, descriptor) => {
@@ -42,7 +41,7 @@ export function Lambda(options: LambdaOptions) {
     descriptor.value = async function () {
       const functionArgumentsNames = getArguments(originalFunction);
 
-      const handler: LambdaHandler = getSingleton(LambdaHandler);
+      const handler: LambdaDefaultHandler = getSingleton(LambdaDefaultHandler);
 
       const args = arguments;
 
@@ -56,7 +55,7 @@ export function Lambda(options: LambdaOptions) {
         then here we have ['id']
 
        */
-      d('functionArgumentsNames ', functionArgumentsNames);
+      d({ functionArgumentsNames });
 
 
       /*
@@ -80,19 +79,12 @@ export function Lambda(options: LambdaOptions) {
         [Function: callback] ]
 
        */
-      d('actual args are: ', args);
 
       const instance = getSingleton(target.constructor);
-      d('current instance is:', instance);
+      d({instance});
 
       const methodMetadata = getLambdaMetadata(instance);
-      d('method metadata', methodMetadata);
-
-
-      // const event: APIGatewayEvent = handler.getApiGatewayEvent(args);
-      //
-      // d('event is', event);
-
+      d({methodMetadata});
 
       /*
           At this point args is an array
@@ -103,25 +95,25 @@ export function Lambda(options: LambdaOptions) {
 
       // extract body
       const bodyParams = getBodyMetadata(instance, key);
-      d('@BodyParams', bodyParams);
+      d({bodyParams});
 
       const body = handler.getBody(args);
-      d('body is', body);
+      d({body});
 
       // extract path params
       const pathAnnotatedParams = getPathMetadata(instance, key);
-      d('@PathParams', pathAnnotatedParams);
+      d({pathAnnotatedParams});
 
       const pathParams = handler.getPathParams(args);
-      d('path params are', pathParams);
+      d({pathParams});
 
       // extract header params
       const headerAnnotatedParams = getHeaderMetadata(instance, key);
-      d('@HeaderParams', headerAnnotatedParams);
+      d({headerAnnotatedParams});
 
 
       const headerParams = handler.getHeaderParams(args);
-      d('header params are', headerParams);
+      d({headerParams});
 
       // TODO: extract query params
 
@@ -134,58 +126,27 @@ export function Lambda(options: LambdaOptions) {
       }
 
       const newArgs = new Array(functionArgumentsNames.length);
-      d('annotated new args', newArgs);
 
       // TODO: refactor here and decide what to do when a param cannot be found where is expected
-      Object.keys(pathAnnotatedParams).forEach((param) => {
-        d('scanning', param);
-        const index = pathAnnotatedParams[param];
-        d('with index', index);
-        newArgs[index] = pathParams[param];
 
+      Object.keys(pathAnnotatedParams).forEach((param) => {
+        const index = pathAnnotatedParams[param];
+        newArgs[index] = pathParams[param];
       });
 
       Object.keys(bodyParams).forEach((param) => {
-        d('scanning', param);
         const index = bodyParams[param];
-        d('with index', index);
         newArgs[index] = body;
-
       });
 
       Object.keys(headerAnnotatedParams).forEach((param) => {
-        d('scanning', param);
         const index = headerAnnotatedParams[param];
-        d('with index', index);
         newArgs[index] = headerParams[param];
-
       });
 
-      d('re-mapped args are', newArgs);
+      d({newArgs});
 
-      try {
-        const retValue = await handler.runOriginalFunction(originalFunction, instance, newArgs, args); // originalFunction.apply(instance, newArgs);
-
-        d('retValue', retValue);
-
-        return retValue;
-      } catch (e) {
-
-        d('something is going on', e);
-
-        if (e instanceof Error) {
-          if (e.message.match(/^\[[0-9]{3,}\](.)+/)) {
-            throw e;
-          } else {
-            throw Error(`[500] ${e.message}`);
-          }
-
-        }
-
-        // encapsulate any other type of error
-        throw Error(e);
-
-      }
+      return handler.runOriginalFunction(originalFunction, instance, newArgs, args);
 
     };
 
