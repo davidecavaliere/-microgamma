@@ -1,31 +1,45 @@
 import { EndpointOptions, getAuthorizerMetadataFromClass, getEndpointMetadataFromClass, getLambdaMetadataFromClass, LambdaOptions } from '@microgamma/apigator';
 import { getDebugger } from '@microgamma/loggator';
+import * as path from 'path';
+import * as Serverless from 'serverless';
 
 
 const debug = getDebugger('microgamma:serverless-apigator');
+
+/**
+ *
+ */
+export interface ServerlessApigatorOptions {
+  /**
+   * @Deprecated
+   */
+  buildFolder: string;
+  entrypoint: string;
+  service: string;
+}
 
 export class ServerlessApigator {
 
   public hooks: any = {
     'before:package:initialize': () => {
       debug('before:package:initialize');
-      return this.configureFunctions(true);
+      return this.configureFunctions();
     },
-    'before:invoke:local:loadEnvVars': () => {
-      debug('before:invoke:local:loadEnvVars');
-      // this hook is not useful see hack for invoke:local
-      // return this.configureFunctions();
-    },
+    // 'before:invoke:local:loadEnvVars': () => {
+    //   debug('before:invoke:local:loadEnvVars');
+    //   // this hook is not useful see hack for invoke:local
+    //   // return this.configureFunctions();
+    // },
     'before:invoke:invoke': () => {
       debug('before:invoke');
       return this.configureFunctions();
     },
     // when this hook runs it already too late
-    'before:invoke:local:invoke': () => {
-      debug('before:invoke:local:invoke');
-      // this hook is not useful see hack for invoke:local
-      // return this.configureFunctions();
-    },
+    // 'before:invoke:local:invoke': () => {
+    //   debug('before:invoke:local:invoke');
+    //   // this hook is not useful see hack for invoke:local
+    //   // return this.configureFunctions();
+    // },
     // adding hook to make it work with serverless-offline plugin
     'offline:start:init': () => {
       debug('offline:init');
@@ -42,56 +56,91 @@ export class ServerlessApigator {
   private readonly entrypoint: string;
   private readonly serviceName: string;
   private readonly buildFolder: string;
+  private readonly serviceClass: string;
 
-  constructor(private serverless: any, private options: any = {}) {
+  constructor(private serverless: any, private options: Serverless.Options) {
 
     this.options = options;
-    const customOptions = serverless.service.custom.apigator;
+    const customOptions: ServerlessApigatorOptions = serverless.service.custom.apigator || {
+      buildFolder: null,
+      entrypoint: 'handler',
+      service: ''
+    };
 
     this.servicePath = serverless.config.servicePath;
     debug('servicePath:', this.servicePath);
 
-    this.buildFolder = customOptions.buildFolder;
-    debug('build folder', this.buildFolder);
-
-    const awsService = serverless.service.service;
-    this.serviceName = awsService;
-    debug('awsService name', awsService);
-    debug('stage', this.options.stage);
-
-    if (!customOptions.entrypoint) {
-      throw new Error('you shall provide path to your entrypoint');
+    if (!customOptions.buildFolder) {
+      throw new Error('buildFolder should not be empty');
     }
 
+    this.buildFolder = customOptions.buildFolder;
+
+    if (this.buildFolder.startsWith(this.servicePath)) {
+      throw new Error('buildFolder should be a relative path such as is set in tsconfig.json `outDir`')
+    }
+
+    debug('build folder', this.buildFolder);
+
+    // if (this.buildFolder) {
+    //   // this.log('Option buildFolder is deprecated');
+    // } else {
+    //
+    //   // TODO: we should allow comments in tsconfig. The below throws error because of them
+    //   // we should read the file manually and parse the string before converting to json object.
+    //   // when we can do that enable the warning above
+    //   // const tsconfig = require(path.join(this.servicePath, 'tsconfig.json'));
+    //   // debug({ tsconfig });
+    //
+    // }
+
+
+
     this.entrypoint = customOptions.entrypoint;
+
     debug('entrypoint', this.entrypoint);
 
-    if (serverless.pluginManager && this.serverless.pluginManager.cliCommands) {
+    // if not specified assume will load index.js
+    this.serviceClass = customOptions.service || '';
 
-      const [command, subCommand] = serverless.pluginManager.cliCommands;
+    this.serviceName = serverless.service.getServiceName();
 
-      // hack to fix invoke:local hook
-      if (command === 'invoke' && subCommand === 'local') {
-        // hook does not work, sick!
-        this.configureFunctions();
-      }
+    const [command, subCommand] = serverless.pluginManager.cliCommands;
+
+    // hack to fix invoke:local hook
+    if (command === 'invoke' && subCommand === 'local') {
+      // hook does not work, sick!
+      this.configureFunctions();
     }
   }
 
-  public async configureFunctions(forDeployment = false) {
-    const modulePath = `${this.buildFolder}`;
-    // `${this.servicePath}/${this.entrypoint}`;
+  public async configureFunctions() {
+
+    const modulePath = path.join(this.servicePath, this.buildFolder, this.serviceClass);
 
     debug('importing service definition from', modulePath);
 
-
     const module = await this.importModule(modulePath);
 
-    this.serverless.cli.log('Apigator: Injecting configuration');
+    this.log('Injecting configuration');
     debug('module found', module);
 
-    const endpoint = module.default;
+    let endpoint;
 
+    if (module.default) {
+      endpoint = module.default;
+    } else {
+      // service definition does not export as default.
+      // there should only one service defined
+      const keys = Object.keys(module);
+      debug({ keys });
+
+      if (keys.length !== 1) {
+        throw new Error('Service file should export only one element');
+      }
+
+      endpoint = module[keys[0]];
+    }
 
     const endpointMetadata: EndpointOptions = getEndpointMetadataFromClass(endpoint);
     debug('Endpoint', endpointMetadata);
@@ -101,34 +150,33 @@ export class ServerlessApigator {
 
     const authorizerFn = getAuthorizerMetadataFromClass(endpoint);
 
-    this.serverless.cli.log('Apigator: Parsing Apigator Service definitions');
+    this.log('Parsing Apigator Service definitions');
 
     if (authorizerFn) {
       debug('auth function found', authorizerFn);
-      this.serverless.cli.log('Apigator: Setting up custom authorizer');
-      this.addFunctionToService(endpointMetadata, authorizerFn, forDeployment);
+      this.log('Setting up custom authorizer');
+      this.addFunctionToService(endpointMetadata, authorizerFn);
 
     }
 
     for (const lambda of lambdas) {
       debug('configuring lambda', lambda);
 
-      this.addFunctionToService(endpointMetadata, lambda, forDeployment);
+      this.addFunctionToService(endpointMetadata, lambda);
 
-      debug('functions are');
-      debug(this.serverless.service.functions[lambda.name]);
-      debug(this.serverless.service.functions[lambda.name].events);
     }
 
-    this.serverless.cli.log(`Apigator: ${lambdas.length} functions configured`);
+    debug({ functions: this.serverless.service.functions });
+
+    this.log(`${lambdas.length} functions configured`);
   }
 
 
-  public async importModule(path: string) {
-    return import(path);
+  public async importModule(_path: string) {
+    return import(_path);
   }
 
-  public addFunctionToService(endpoint: EndpointOptions, lambda: LambdaOptions, forDeployment = false) {
+  public addFunctionToService(endpoint: EndpointOptions, lambda: LambdaOptions) {
     const functionName = lambda.name;
 
     const basePath = endpoint.basePath || '';
@@ -146,8 +194,7 @@ export class ServerlessApigator {
 
     const privateLambda = lambda.hasOwnProperty('private') ? !!lambda.private: !!endpoint.private;
 
-    let entrypoint = this.entrypoint;
-    const path = basePath + lambda.path;
+    const url = basePath + lambda.path;
     const method = lambda.method;
     const authorizer = lambda.hasOwnProperty('authorizer') ? lambda.authorizer : null;
 
@@ -158,7 +205,7 @@ export class ServerlessApigator {
     };
 
     if (lambda.path) {
-      httpEvent.path = path;
+      httpEvent.path = url;
     }
 
     if (method) {
@@ -169,12 +216,7 @@ export class ServerlessApigator {
       httpEvent.authorizer = authorizer;
     }
 
-    if (forDeployment) {
-
-      entrypoint = entrypoint.split('/').filter((pathPart) => {
-        return pathPart !== '..';
-      }).join('/');
-    }
+    const entrypoint = path.join(this.buildFolder, this.entrypoint);
 
     const lambdaDef = {
       name: fullFunctionName,
@@ -189,10 +231,17 @@ export class ServerlessApigator {
       lambdaDef['events'] = [];
     }
 
-    this.serverless.service.functions[lambda.name] = lambdaDef;
+    this.serverless.service['functions'][lambda.name] = lambdaDef;
 
-    debug('function configured', this.serverless.service.functions[lambda.name]);
+    // this.serverless.service.setFunctionNames({ [lambda.name]: lambdaDef });
+
+    debug('function configured', this.serverless.service['functions'][lambda.name]);
 
   }
+
+  private log(message) {
+    this.serverless.cli.log(`Apigator: ${message}`);
+  }
+
 
 }

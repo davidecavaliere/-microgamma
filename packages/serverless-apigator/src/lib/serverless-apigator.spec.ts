@@ -1,65 +1,68 @@
 // tslint:disable:no-expression-statement no-object-mutation
-
 import { ServerlessApigator } from './serverless-apigator';
 import { Authorizer, bootstrap, Endpoint, EndpointOptions, Lambda, LambdaOptions } from '@microgamma/apigator';
 import { getDebugger } from '@microgamma/loggator';
 import { Injectable } from '@microgamma/digator';
+import { Options } from 'serverless';
+import * as path from 'path';
 
 const d = getDebugger('microgamma:serverless-apigator.spec');
 
-const serverless = {
-  cli: {
-    log: d
-  },
-  config: {
-    servicePath: 'my-path',
-  },
-  service: {
-    service: 'my-service',
-    custom: {
-      apigator: {
-        entrypoint: 'my-entrypoint'
-      }
+describe('ServerlessApigator', () => {
+
+  const serverless = {
+    cli: {
+      log: d
     },
-    functions: {}
+    config: {
+      servicePath: '/absolute/path/to/my-service',
+    },
+    service: {
+      getServiceName: () => 'my-service',
+      custom: {
+        apigator: {
+          entrypoint: 'my-entrypoint',
+          buildFolder: 'lib'
+        }
+      },
+      functions: {}
+    },
+    pluginManager: {
+      cliCommands: []
+    }
+  };
+
+  const options: EndpointOptions = {
+    name: 'endpoint-name'
+  };
+
+  const option1: LambdaOptions = {
+    method: 'get',
+    name: 'lambda-name-1',
+    path: '/'
+  };
+
+  @Endpoint(options)
+  @Injectable()
+  class TestClass {
+    @Lambda(option1)
+    public findAll(arg1, arg2, arg3) {
+      return arg1 + arg2 + arg3;
+    }
+
+    @Lambda({
+      name: 'name'
+    })
+    public functionA(arg1, arg2, arg3) {
+      return arg1 + arg2 + arg3;
+    }
+
+    @Authorizer()
+    public authorizer() {
+      return true;
+    }
   }
-};
 
-
-const options: EndpointOptions = {
-  name: 'endpoint-name'
-};
-
-const option1: LambdaOptions = {
-  method: 'get',
-  name: 'lambda-name-1',
-  path: '/'
-};
-
-@Endpoint(options)
-@Injectable()
-class TestClass {
-  @Lambda(option1)
-  public findAll(arg1, arg2, arg3) {
-    return arg1 + arg2 + arg3;
-  }
-
-  @Lambda({
-    name: 'name'
-  })
-  public functionA(arg1, arg2, arg3) {
-    return arg1 + arg2 + arg3;
-  }
-
-  @Authorizer()
-  public authorizer() {
-    return true;
-  }
-}
-
-
-
-describe('ServerlessApigator Plugin', () => {
 
   let plugin;
 
@@ -68,12 +71,39 @@ describe('ServerlessApigator Plugin', () => {
   beforeEach(() => {
     myModule = bootstrap(TestClass);
 
-    plugin = new ServerlessApigator(serverless, { stage: 'test' });
+    // tslint:disable-next-line:no-object-literal-type-assertion
+    plugin = new ServerlessApigator(serverless, { stage: 'test' } as Options);
 
     spyOn(plugin, 'importModule').and.callFake(async () => {
       return { default: TestClass };
 
     });
+  });
+
+  it('should throw an error if buildFolder is missing in custom options', () => {
+
+    expect(() => {
+      // tslint:disable-next-line:no-unused-expression no-object-literal-type-assertion
+      new ServerlessApigator({
+        cli: {
+          log: d
+        },
+        config: {
+          servicePath: '/absolute/path/to/my-service',
+        },
+        service: {
+          getServiceName: () => 'my-service',
+          custom: {
+          },
+          functions: {}
+        },
+        pluginManager: {
+          cliCommands: []
+        }
+        // tslint:disable-next-line:no-object-literal-type-assertion
+      }, {stage: 'test'} as Options);
+    }).toThrowError('buildFolder should not be empty');
+
   });
 
   it('serverless-apigator', () => {
@@ -85,7 +115,7 @@ describe('ServerlessApigator Plugin', () => {
   });
 
   it('should set service name', () => {
-    expect(plugin.serviceName).toEqual(serverless.service.service);
+    expect(plugin.serviceName).toEqual('my-service');
   });
 
   it('should set entry point path', () => {
@@ -104,7 +134,7 @@ describe('ServerlessApigator Plugin', () => {
 
     expect(serverless.service.functions['my-lambda']).toEqual({
       name: 'my-service-test-my-lambda',
-      handler: 'my-entrypoint.my-lambda',
+      handler: 'lib/my-entrypoint.my-lambda',
       events: [{
         http: {
           path: 'root/:id',
@@ -123,7 +153,7 @@ describe('ServerlessApigator Plugin', () => {
       d('here we have the functions');
       expect(serverless.service.functions['lambda-name-1']).toEqual({
         name: 'my-service-test-lambda-name-1',
-        handler: 'my-entrypoint.lambda-name-1',
+        handler: 'lib/my-entrypoint.lambda-name-1',
         events: [{
           http: {
             path: '/',
@@ -144,7 +174,7 @@ describe('ServerlessApigator Plugin', () => {
 
       expect(serverless.service.functions['name']).toEqual({
         name: 'my-service-test-name',
-        handler: 'my-entrypoint.name',
+        handler: 'lib/my-entrypoint.name',
         events: []
       });
       done();
@@ -158,7 +188,7 @@ describe('ServerlessApigator Plugin', () => {
 
       expect(serverless.service.functions['authorizer']).toEqual({
         name: 'my-service-test-authorizer',
-        handler: 'my-entrypoint.authorizer',
+        handler: 'lib/my-entrypoint.authorizer',
         events: []
       });
       done();
@@ -173,18 +203,20 @@ describe('ServerlessApigator Plugin', () => {
     // To fix it we check if the command invoke local has been passed and then run the configuration
     // of the lambdas from the constructor
 
-    const _options = {
+    const _serverless = {
       cli: {
-        log: d
+        log: (message: string) => null
       },
       config: {
         servicePath: 'my-path',
       },
+      // tslint:disable-next-line:no-object-literal-type-assertion
       service: {
-        service: 'my-service',
+        getServiceName: () => 'my-service',
         custom: {
           apigator: {
-            entrypoint: 'my-entrypoint'
+            entrypoint: 'my-entrypoint',
+            buildFolder: 'lib'
           }
         },
         functions: {}
@@ -202,15 +234,16 @@ describe('ServerlessApigator Plugin', () => {
 
       });
 
-      _plugin = new ServerlessApigator(_options, { stage: 'dev'});
+      // tslint:disable-next-line:no-object-literal-type-assertion
+      _plugin = new ServerlessApigator(_serverless, { stage: 'dev'} as Options);
 
     });
 
     it('should have configured functions', () => {
-      expect(_options.service.functions).toEqual({
+      expect(_serverless.service.functions).toEqual({
         authorizer: {
           events: [],
-          handler: 'my-entrypoint.authorizer',
+          handler: 'lib/my-entrypoint.authorizer',
           name: 'my-service-dev-authorizer'
         },
         'lambda-name-1': {
@@ -223,12 +256,12 @@ describe('ServerlessApigator Plugin', () => {
               private: false
             }
           }],
-          handler: 'my-entrypoint.lambda-name-1',
+          handler: 'lib/my-entrypoint.lambda-name-1',
           name: 'my-service-dev-lambda-name-1'
         },
         name: {
           events: [],
-          handler: 'my-entrypoint.name',
+          handler: 'lib/my-entrypoint.name',
           name: 'my-service-dev-name'
         }
       });
@@ -237,6 +270,32 @@ describe('ServerlessApigator Plugin', () => {
 
   });
 
+  describe('hooks', () => {
+
+    beforeEach(() => {
+      spyOn(plugin, 'configureFunctions');
+    });
+
+    it('should configure functions before:package:initialize', () => {
+      plugin.hooks['before:package:initialize']();
+      expect(plugin.configureFunctions).toHaveBeenCalled();
+    });
+    
+    it('should configure functions before:invoke:invoke', () => {
+      plugin.hooks['before:invoke:invoke']();
+      expect(plugin.configureFunctions).toHaveBeenCalled();
+    });
+    
+    it('should configure functions offline:start:init', () => {
+      plugin.hooks['offline:start:init']();
+      expect(plugin.configureFunctions).toHaveBeenCalled();
+    });
+
+    it('should configure functions before:info:info', () => {
+      plugin.hooks['before:info:info']();
+      expect(plugin.configureFunctions).toHaveBeenCalled();
+    });
+  })
 });
 
 
