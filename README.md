@@ -183,10 +183,3 @@ You can hit your lambda at `localhost:3000`
 ## Use with Serverless Framework
 
 See [serverless-apigator](https://github.com/davidecavaliere/-microgamma/blob/master/packages/serverless-apigator/README.md) for more information.
-
-  ---
-- [datagator](https://github.com/davidecavaliere/-microgamma/blob/master/packages/datagator/README.md) - a set of decorators and abstract classes to simplify interaction with MongoDB from you AWS lambda function
-- [digator](https://github.com/davidecavaliere/-microgamma/blob/master/packages/digator/README.md) - the simplest di container around
-- [loggator](https://github.com/davidecavaliere/-microgamma/blob/master/packages/loggator/README.md) - a wrapper for visionmedia's debug
----
-
