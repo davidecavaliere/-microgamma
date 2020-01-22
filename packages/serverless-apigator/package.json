@@ -32,7 +32,7 @@
     "prebuild": "yarn clean",
     "build": "tsc -p tsconfig.json",
     "test": "jest --coverage",
-    "test:integration": "jest --testRegex integration.test",
+    "test:_integration": "jest --testRegex integration.test",
     "test:integration:watch": "yarn test:integration --watch",
     "test:watch": "jest --watch",
     "test:lint": "tslint --project . "
