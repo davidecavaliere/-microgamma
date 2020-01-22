@@ -2,11 +2,11 @@
 
 Microgamma is a framework for api development in Typescript. It allows to create endpoints in the form of classes. Annotate them with `@Endpoint` and `@Lambda` with metadata that can be retrived at runtime to bind them to providers such as AWS Lambda, Express.js, Google Functions, Azure Function and potentially any.
 
-> At the moment the only provider available is AWS with their Lambda service and Express.js see [use with express.js](#use-with-express.js)
+> At the moment the only provider available are AWS with their Lambda service and Express.js see [use with express.js](#use-with-express.js)
 > A [serverless](https://serverless.com/) plugin is provided. It uses the metadata  within the classes to __create at runtime__ the serverless configuration. In other words the developer won't need to worry about adding/editing `serverless.yml` functions section.  See [serverless-apigator](#serverless-apigator)
 
 ## How to use it
-### Install
+ Install
 ```
 yarn add @microgamma/apigator
 ```
@@ -53,7 +53,7 @@ lambdas.forEach((lambda) => console.log({lambda}));
 }
 */
 ```
-Usually the developer won't need to do the above though.
+Usually you won't need to do the above though.
 
 ### @Lambda
 The `@Lambda` decorator stores the provided metadata and wraps the annotated method inside an asyncronious function. At runtime the function's real arguments may vary: i.e.: if it's called as an Aws Lamdbda its arguments will be `event, context` whether if called within express they will be `request, response`. To handle the differences between enviroments we use a service called `LambdaDefaultHandler`. By default the `AwsEventHandler` is used. To use a different handler it must be specified in the `@Endpoint` decorator (see below).
@@ -102,7 +102,7 @@ Retrieves a value from the path and assign it to the annotated argument
 ```typescript
 @Lambda({
   method: 'GET',
-  path: '/me/:name'
+  path: '/me/{name}'
 })
 public me(@Path('name') user) {
   return `Hello ${user}`;
@@ -140,6 +140,18 @@ yarn add express @types/express
 ```
 Set `ExpressEventHanlder` as described above.
 
+Be aware that express uses the `:param` notation for path parameters so the lambda path need to be such as
+
+```typescript
+@Lambda({
+  method: 'GET',
+  path: '/me/:name'
+})
+public me(@Path('name') user) {
+  return `Hello ${user}`;
+}
+```
+
 Create `server.ts` file:
 
 ```typescript
@@ -168,13 +180,13 @@ yarn ts-node server.ts
 ```
 You can hit your lambda at `localhost:3000`
 
- ## Use with Serverless Framework
+## Use with Serverless Framework
 
+See [serverless-apigator](https://github.com/davidecavaliere/-microgamma/blob/master/packages/serverless-apigator/README.md) for more information.
 
   ---
 - [datagator](https://github.com/davidecavaliere/-microgamma/blob/master/packages/datagator/README.md) - a set of decorators and abstract classes to simplify interaction with MongoDB from you AWS lambda function
 - [digator](https://github.com/davidecavaliere/-microgamma/blob/master/packages/digator/README.md) - the simplest di container around
 - [loggator](https://github.com/davidecavaliere/-microgamma/blob/master/packages/loggator/README.md) - a wrapper for visionmedia's debug
-- [serverless-apigator](https://github.com/davidecavaliere/-microgamma/blob/master/packages/serverless-apigator/README.md) - a plugin for the serverless framework that takes advantages of the apigator decorators to avoid yml configuration
 ---
 
