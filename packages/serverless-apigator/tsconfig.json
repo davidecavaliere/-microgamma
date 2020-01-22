@@ -4,6 +4,9 @@
     "outDir": "lib",
     "rootDir": "src"
   },
+  "exclude": [
+    "**/*.spec.ts"
+  ],
   "references": [
     { "path": "../loggator" },
     { "path": "../apigator"}
