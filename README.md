@@ -3,7 +3,7 @@
 Microgamma is a framework for api development in Typescript. It allows to create endpoints in the form of classes. Annotate them with `@Endpoint` and `@Lambda` with metadata that can be retrived at runtime to bind them to providers such as AWS Lambda, Express.js, Google Functions, Azure Function and potentially any.
 
 > At the moment the only provider available are AWS with their Lambda service and Express.js see [use with express.js](#use-with-express.js)
-> A [serverless](https://serverless.com/) plugin is provided. It uses the metadata  within the classes to __create at runtime__ the serverless configuration. In other words the developer won't need to worry about adding/editing `serverless.yml` functions section.  See [serverless-apigator](#serverless-apigator)
+> A [serverless](https://serverless.com/) plugin is provided. It uses the metadata  within the classes to __create at runtime__ the serverless configuration. In other words the developer won't need to worry about adding/editing `serverless.yml` functions section.  See [serverless-apigator](https://github.com/davidecavaliere/-microgamma/blob/master/packages/serverless-apigator/README.md)
 
 ## How to use it
  Install
