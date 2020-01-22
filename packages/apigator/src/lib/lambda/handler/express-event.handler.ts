@@ -1,4 +1,4 @@
-import { LambdaDefaultHandler } from './lambda-default.handler';
+import { LambdaDefaultHandler } from './';
 
 export class ExpressEventHandler extends LambdaDefaultHandler {
 
