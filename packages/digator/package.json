@@ -1,6 +1,6 @@
 {
   "name": "@microgamma/digator",
-  "version": "1.15.0",
+  "version": "1.15.2",
   "description": "Handcrafted DI container",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -41,7 +41,7 @@
     "prepare-release": "run-s all version doc:publish"
   },
   "dependencies": {
-    "@microgamma/loggator": "^1.12.3",
+    "@microgamma/loggator": "^1.15.2",
     "reflect-metadata": "^0.1.12"
   },
   "jest": {

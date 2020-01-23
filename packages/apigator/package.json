@@ -1,6 +1,6 @@
 {
   "name": "@microgamma/apigator",
-  "version": "1.15.0",
+  "version": "1.15.2",
   "description": "typescript decorators for api development",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -41,8 +41,8 @@
     "prepare-release": "run-s all version doc:publish"
   },
   "dependencies": {
-    "@microgamma/digator": "^1.15.0",
-    "@microgamma/loggator": "^1.12.3",
+    "@microgamma/digator": "^1.15.2",
+    "@microgamma/loggator": "^1.15.2",
     "@types/aws-lambda": "^8.10.11",
     "reflect-metadata": "^0.1.12"
   },
