@@ -44,5 +44,10 @@
             "@microgamma/*": ["./*/src"]
         }
     },
-    "exclude": ["node_modules"]
+    "exclude": [
+        "node_modules",
+        "packages/*/src/**/*.spec.ts",
+        "packages/*/src/**/*.test.ts"
+
+    ]
 }
