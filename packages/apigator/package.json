@@ -1,7 +1,7 @@
 {
   "name": "@microgamma/apigator",
   "version": "1.15.0",
-  "description": "syntactic sugar for λ",
+  "description": "typescript decorators for api development",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "module": "lib/index.js",
@@ -16,7 +16,7 @@
     "name": "Davide Cavaliere",
     "url": "www.dcsoftware.io"
   },
-  "homepage": "https://github.com/davidecavaliere/-microgamma/tree/master/packages/apigator",
+  "homepage": "https://github.com/davidecavaliere/-microgamma",
   "license": "MIT",
   "keywords": [
     "typescript",

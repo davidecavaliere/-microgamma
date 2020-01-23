@@ -1,7 +1,7 @@
 {
   "name": "@microgamma/digator",
   "version": "1.15.0",
-  "description": "easiest simplest dependency injection container around",
+  "description": "Handcrafted DI container",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "module": "lib/index.js",
@@ -23,7 +23,7 @@
     "name": "Davide Cavaliere",
     "url": "www.dcsoftware.io"
   },
-  "homepage": "https://github.com/davidecavaliere/-microgamma/tree/master/packages/apigator",
+  "homepage": "https://github.com/davidecavaliere/-microgamma",
   "scripts": {
     "prebuild": "run-s clean",
     "build": "tsc -p tsconfig.json",
@@ -66,10 +66,16 @@
     "reporters": [
       "default"
     ],
+    "coverageReporters": [
+      "json",
+      "html"
+    ],
     "collectCoverageFrom": [
       "**/*.ts",
-      "!**/index.ts"
+      "!**/index.ts",
+      "!**/*.dev.ts",
+      "!src/integration/*"
     ],
-    "coverageDirectory": "./coverage/"
+    "coverageDirectory": "../../coverage/"
   }
 }

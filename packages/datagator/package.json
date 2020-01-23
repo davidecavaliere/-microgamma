@@ -1,18 +1,19 @@
 {
   "name": "@microgamma/datagator",
   "version": "1.12.3",
-  "description": "helpers to set connection metadata",
+  "description": "Abstract ORM foundations",
   "author": {
     "email": "cavaliere.davide@gmail.com",
     "name": "Davide Cavaliere",
     "url": "www.dcsoftware.io"
   },
-  "homepage": "https://github.com/davidecavaliere/-microgamma/tree/master/packages/datagator",
+  "homepage": "https://github.com/davidecavaliere/-microgamma",
   "license": "MIT",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "module": "lib/index.js",
   "keywords": [
+    "typescript",
     "decorator",
     "orm"
   ],
@@ -84,6 +85,17 @@
     },
     "reporters": [
       "default"
-    ]
+    ],
+    "coverageReporters": [
+      "json",
+      "html"
+    ],
+    "collectCoverageFrom": [
+      "**/*.ts",
+      "!**/index.ts",
+      "!**/*.dev.ts",
+      "!src/integration/*"
+    ],
+    "coverageDirectory": "../../coverage/"
   }
 }
