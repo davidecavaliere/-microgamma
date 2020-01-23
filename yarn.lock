@@ -6938,15 +6938,6 @@ npm-run-path@^2.0.0:
   dependencies:
     path-key "^2.0.0"
 
-npm-scripts-info@^0.3.6:
-  version "0.3.9"
-  resolved "https://registry.yarnpkg.com/npm-scripts-info/-/npm-scripts-info-0.3.9.tgz#464e4178218e454564adca7ba71925bc71a4973d"
-  integrity sha512-r3kftwUxThTxQoZ+RoR8xVIL1FOmqpCM6+7BH6jR4HPdigNbBs9Bg1nt3Qrqn2b8jj4NrE69+kWE3EkmNxkmkg==
-  dependencies:
-    chalk "^2.3.0"
-    meow "^4.0.0"
-    unquote "^1.1.0"
-
 npmlog@^4.1.2:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/npmlog/-/npmlog-4.1.2.tgz#08a7f2a8bf734604779a9efa4ad5cc717abb954b"
@@ -9403,11 +9394,6 @@ universalify@^0.1.0:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/universalify/-/universalify-0.1.2.tgz#b646f69be3942dabcecc9d6639c80dc105efaa66"
   integrity sha512-rBJeI5CXAlmy1pV+617WB9J63U6XcazHHF2f2dbJix4XzpUF0RS3Zbj0FGIOCAva5P/d/GBOYaACQ1w+0azUkg==
-
-unquote@^1.1.0:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/unquote/-/unquote-1.1.1.tgz#8fded7324ec6e88a0ff8b905e7c098cdc086d544"
-  integrity sha1-j97XMk7G6IoP+LkF58CYzcCG1UQ=
 
 unset-value@^1.0.0:
   version "1.0.0"
