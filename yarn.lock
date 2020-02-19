@@ -1229,13 +1229,13 @@
     graphlib "^2.1.7"
     traverse "^0.6.6"
 
-"@shelf/jest-dynamodb@^1.5.0":
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/@shelf/jest-dynamodb/-/jest-dynamodb-1.6.0.tgz#a5eacfef2946ee9d514859b1fa9f080b1ce134cb"
-  integrity sha512-cRkB3HO/eLgvFvp+2ozf+CdaAT8QrbxVEQ8NmJfRrcO0bU+sKRE7IUndP4veSWrxIw/LysDl41d3zAhbGhED4A==
+"@shelf/jest-dynamodb@^1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@shelf/jest-dynamodb/-/jest-dynamodb-1.7.0.tgz#94d6cc08984f2449db951a7ba8fcd1883f330c32"
+  integrity sha512-ASm/b43lXCgu8xmyIuth+iYp28JSVzn5GPuUq769AWveHMpuSUVESKSMpR0xrAlado4kxzqs0eupQOcuZamaeA==
   dependencies:
     cwd "0.10.0"
-    debug "^4.1.1"
+    debug "4.1.1"
     dynamodb-local "0.0.31"
 
 "@shelf/jest-mongodb@^1.1.3":
