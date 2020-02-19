@@ -21,12 +21,12 @@ export abstract class DynamodbService<T extends BaseModel<any>> {
   private readonly _ddb: DynamoDB.DocumentClient;
   private dynamo: DynamoDB;
 
-  protected modelFactory(doc: Partial<ModelType<T>>): T {
-    const model = this.metadata.model;
+  public tableName: string;
+
+  protected modelFactory(doc): T {
+    const model = getPersistenceMetadata(this).model;
     return new model(doc);
   }
-
-  public tableName: string;
 
   public get ddb() {
     return this._ddb;
@@ -117,7 +117,7 @@ export abstract class DynamodbService<T extends BaseModel<any>> {
     }
   }
 
-  public async create(doc: ModelType<T>) {
+  public async create(doc: ModelType<T>): Promise<T> {
 
     // const parsedDoc = this.modelFactory(doc);
     // TODO add doc validation
