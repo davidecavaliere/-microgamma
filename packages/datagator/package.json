@@ -57,7 +57,7 @@
   "dependencies": {
     "@microgamma/loggator": "^1.15.3",
     "reflect-metadata": "^0.1.12",
-    "utility-types": "^3.8.0"
+    "utility-types": "^3.10.0"
   },
   "config": {
     "commitizen": {

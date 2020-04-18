@@ -1,5 +1,5 @@
-import { Brand, Diff, Omit, ValuesType } from 'utility-types';
 import { BaseModel } from '@microgamma/datagator';
+import { Brand, Diff, Omit, ValuesType } from 'utility-types';
 
 export type SetOnlyType<T> = Brand<T, 'SET_ONLY'>;
 
