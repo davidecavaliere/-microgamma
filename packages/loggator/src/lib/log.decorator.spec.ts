@@ -1,5 +1,5 @@
 // tslint:disable:no-expression-statement, max-classes-per-file
-import { Log, setNamespace } from './log.decorator';
+import { Log, Logger, setNamespace } from './log.decorator';
 
 
 setNamespace('myNamespace');
@@ -7,7 +7,7 @@ setNamespace('myNamespace');
 class TestClass {
 
   @Log()
-  private $l;
+  private $l: Logger;
 
   constructor() {
     // this.$l.d('constructing', this);

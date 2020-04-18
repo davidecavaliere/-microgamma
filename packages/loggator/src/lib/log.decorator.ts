@@ -4,6 +4,11 @@ import debug, { IDebugger } from 'debug';
 import 'reflect-metadata';
 
 
+export interface Logger {
+  d: (...args: any) => void
+}
+
+
 export const debuggerMetadata = Symbol.for('debug');
 let namespace;
 const d = debug;
