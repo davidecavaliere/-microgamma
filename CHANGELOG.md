@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.16.0](https://github.com/microgamma/microgamma/compare/v1.15.3...v1.16.0) (2020-04-18)
+
+
+### Bug Fixes
+
+* fixing issues with monngodb and dynamodb extending base persistence ([41aa4f1](https://github.com/microgamma/microgamma/commit/41aa4f12af18af02dda70ffb623b5374728bec52))
+
+
+### Features
+
+* **digator:** adding before and after aspects ([7b375ec](https://github.com/microgamma/microgamma/commit/7b375ecab6ab5413d2f7bc998c4d536d547decee))
+
+
+
+
+
 ## [1.15.3](https://github.com/davidecavaliere/-microgamma/compare/v1.15.2...v1.15.3) (2020-01-23)
 
 **Note:** Version bump only for package microgamma

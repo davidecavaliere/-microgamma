@@ -1,6 +1,6 @@
 {
   "name": "@microgamma/datagator",
-  "version": "1.15.3",
+  "version": "1.16.0",
   "description": "Abstract ORM foundations",
   "author": {
     "email": "cavaliere.davide@gmail.com",
@@ -55,7 +55,7 @@
     "node": ">=8.9"
   },
   "dependencies": {
-    "@microgamma/loggator": "^1.15.3",
+    "@microgamma/loggator": "^1.16.0",
     "reflect-metadata": "^0.1.12",
     "utility-types": "^3.10.0"
   },

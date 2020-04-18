@@ -1,6 +1,6 @@
 {
   "name": "@microgamma/serverless-apigator",
-  "version": "1.15.3",
+  "version": "1.16.0",
   "description": "serverless plugin to defer configuration using typescript's decorators",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -41,7 +41,7 @@
     "node": ">=8.9"
   },
   "dependencies": {
-    "@microgamma/loggator": "^1.15.3",
+    "@microgamma/loggator": "^1.16.0",
     "@types/serverless": "^1.18.4"
   },
   "config": {

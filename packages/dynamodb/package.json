@@ -1,6 +1,6 @@
 {
   "name": "@microgamma/dynamodb",
-  "version": "1.15.3",
+  "version": "1.16.0",
   "description": "DynamoDB persistence engine",
   "author": {
     "email": "cavaliere.davide@gmail.com",
@@ -32,8 +32,8 @@
     "node": ">=8.9"
   },
   "dependencies": {
-    "@microgamma/datagator": "^1.15.3",
-    "@microgamma/loggator": "^1.15.3",
+    "@microgamma/datagator": "^1.16.0",
+    "@microgamma/loggator": "^1.16.0",
     "reflect-metadata": "^0.1.12",
     "utility-types": "^3.8.0"
   },
